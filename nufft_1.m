@@ -18,7 +18,7 @@ t_vec = (2:2:24)/(M^2);
 q = -10000:10000;
 l = length(q);
 for t = t_vec
-    gf = @(x) sum(exp(-((x*ones(1,l)-2*pi*q).^2)/(4*t)));
+    gf = @(x) sum(exp((-1/4*t)*((x*ones(1,l)-2*pi*q).^2)));
 
     %Compute the convolution f*g -> ft
     ft = zeros(1,Mr);
