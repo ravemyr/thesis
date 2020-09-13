@@ -1,59 +1,54 @@
 close all
 %Non-uniform FFT
 
-%Generate f and x
-N = 256;
+%Preamble, generate f and x
+N = 1024;
+rng(0)
 data = rand(1,N)*2*pi;
 data = sort(data);
-fun = @(x) sin(x);
+fun = @(x) x+x.^2;
 fj = fun(data);
-
 res_norm = [];
-res_fft_slow = [];
-%Dimension and tau
-M = N/2;
-Mr = 2*M;
-t_vec = (2:2:24)/(M^2);
-% Gaussian kernel - infinite sum not feasible numerically
-q = -10000:10000;
-l = length(q);
-for t = t_vec
-    gf = @(x) sum(exp(-((x*ones(1,l)-2*pi*q).^2)/(4*t)));
 
+%Dimension and tau
+M = 4*N;
+Mr = 2*M;
+t_vec = [1,6,12]/(M^2);
+
+% Gaussian kernel - infinite sum not feasible numerically
+% q = -40000:40000;
+% l = length(q);
+%gf = @(x,p) sum(exp((-1/(4*p))*((x'*ones(1,l)-2*pi*ones(length(x),1)*q).^2)),2)';
+
+%Comparative computation/Validation
+valid = zeros(1,M);
+for k = 1:M
+    valid(k) = sum(fj.*exp(-1i*(k-1-M/2)*data))/N;
+end
+
+%Comppute NUFFT for different t, given fj, x and Mr
+for t = t_vec
+    
     %Compute the convolution f*g -> ft
     ft = zeros(1,Mr);
     for j = 0:Mr-1
-        for jj = 1:N
-            ft(j+1) = ft(j+1) + fj(jj)*gf(2*pi*j/Mr - data(jj));
-        end 
+        ft(j+1) = sum(fj.*gtau(2*pi*j/Mr - data,t));
     end
 
-    %Perform fft on ft - Matlab built in function
-    ff = fft(ft)/length(ft);
-    fft_sum = zeros(1,Mr);
-    for k = -Mr/2:Mr/2-1
-        fft_sum(k+Mr/2+1) = sum(ft.*exp(-1i*k*2*pi*(0:Mr-1)/Mr))/Mr;
-    end
-    fft_sol = norm(ff-fft_sum);
-
-
+    %Perform fft on ft - Matlab built in function with k-shift
+    ff = fft(ft.*exp(-1i*pi*2*(0:Mr-1)*(-Mr/2)/Mr))/Mr;
+    
+    %Matlab gives F(k) where 0<=k<N-1, adjust size due to oversampling
+    p = Mr/M; %Assumes Mr>M
+    ff = ff(1+(p-1)*M/2:(p+1)*M/2);
+    
     %Adjustment multiplication (negative exponential renders better results?)
-    fff = sqrt(pi/t)*exp(t*(0:Mr-1).^2).*ff;
-    fff_slow = sqrt(pi/t)*exp(t*(-Mr/2:Mr/2-1).^2).*fft_sum;
-
-    %Comparative computation/Validation
-    valid = zeros(1,Mr);
-    for k = 1:Mr
-        valid(k) = (1/N)*sum(fj.*exp(-1i*(k-1-Mr/2)*data));
-    end
+    fff = sqrt(pi/t)*exp(t*(-M/2:M/2-1).^2).*ff/N;
 
     %Compute 2-norm of error
-
     a = norm(fff-valid);
     res_norm = [res_norm a];
-    a = norm(fff_slow-valid);
-    res_fft_slow = [res_fft_slow a];
 end
-loglog(t_vec,res_fft_slow)
-figure
 loglog(t_vec,res_norm)
+figure
+plot(0:2*pi/(Mr-1):2*pi,ft)
