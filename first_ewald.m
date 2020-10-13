@@ -2,17 +2,17 @@
 %Emanuel Ravemyr 21-9-2020
 
 %Preamble
-N = 16;
+N = 64;
 M = 4*N;
 d = 1;
 L = 1;
-P = 2;
+P = 9;
 Q = zeros(N,1);
 x = rand(N,d)*L;
-q = (1:N).*rand(1,N);
+q = (-N/2:N/2-1).*rand(1,N);
 %Grid size h, length L
 L = 1;
-h = 1/M;
+h = L/M;
 % w = hP/2
 %Validation computation
 for j =1:N
@@ -41,7 +41,7 @@ end
 
 %Compute the real sum
 R = zeros(N,1);
-xi = 100;
+xi = 0.01;
 
 for i = 1:N
     for ii = 1:N
@@ -52,16 +52,17 @@ for i = 1:N
 end
 
 %k-space sum
-w = h*(M-1)/2;
-m = sqrt(M);
+w = h*P/2;
+m = sqrt(P);
 eta = (2*xi*w/m)^2; %Optimal choice for Gaussian: (2wxi/m)^2
-k = M/2;
+k = (1:M)'*2*pi/L;
+
 %Uniform grid on [0,L)^d
 p = zeros(M,d);
 if(d==2)
     for i = 1:sqrt(M)
         for ii = 1:sqrt(M)
-            p((i-1)*8 + ii,:) = [i]/(sqrt(M)+1);
+            p((i-1)*8 + ii,:) = [i,ii]/(sqrt(M)+1);
         end
     end
 elseif(d ==1)
@@ -75,11 +76,11 @@ if(d==2)
 elseif(d==1)
     FHa = fft(Ha);
 end
-F = FHa*exp(-(1-eta)*k^2/(4*xi^2))/k^2;
+F = FHa.*exp(-(1-eta)*(k.^2)/(4*xi^2))./(k.^2);
 if(d==2)
     FHb = ifft2(F);
 elseif(d==1)
-    FHb = fft(F);
+    FHb = ifft(F);
 end
 Hb = zeros(M,1);
 if(d==2)
@@ -92,16 +93,19 @@ elseif(d==1)
     Hb = FHb;
 end
 T = zeros(N,1);
+
 for i = 1:N
+    phi = zeros(M,1);
     for ii = 1:M
-        phi = Hb(ii)*((2*xi^2/(pi*eta))^(3/2)).*exp((-2*(xi^2)*(norm(p(ii,:)-x(i,:)))^2)/eta);
-        T(i) = 4*pi*h*(sum(phi(2:M-1))+(phi(M)+phi(1))/2);
+        phi(ii) = phi(ii) + Hb(ii)*((2*xi^2/(pi*eta))^(3/2))*exp((-2*(xi^2)*(norm(p(ii,:)-x(i,:)))^2)/eta);
     end
+    T(i) = 4*pi*h*(sum(phi(2:M-1))+(phi(M)+phi(1))/2);
 end
+
 Fin = R+T;
 norm(Fin-Q)
 plot(Fin)
 figure
 plot(Q)
 figure
-plot(abs(Q-Fin))
+plot(abs(Fin-Q))
