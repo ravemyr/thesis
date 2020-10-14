@@ -26,7 +26,6 @@ elseif(d==1)
            elseif(pos+ii<1)
                pos = pos + M;
            end
-           pos
             f(pos+ii) = f(pos+ii) + q(i)*((2*xi^2)/(pi*eta))^(3/2) ...
             *exp(-2*xi^2*(norm(mesh(pos+ii,:)-points(i,:))^2)/eta);
        end

@@ -3,13 +3,13 @@
 
 %Preamble
 N = 64;
-M = 4*N;
+M = 8*N;
 d = 1;
 L = 1;
-P = 9;
+P = 13;
 Q = zeros(N,1);
 x = rand(N,d)*L;
-q = (-N/2:N/2-1).*rand(1,N);
+q = ones(1,N)+(rand(1,N)>0.5)*-2;
 %Grid size h, length L
 L = 1;
 h = L/M;
@@ -49,6 +49,7 @@ for i = 1:N
             R(i) = R(i) + q(ii)*erfc(xi*norm(x(i,:)-x(ii,:)))*A(i,ii)/(norm(x(i,:)-x(ii,:)));
         end
     end
+    R(i) = R(i) - 2*xi*q(i)/sqrt(pi);
 end
 
 %k-space sum
@@ -104,6 +105,7 @@ end
 
 Fin = R+T;
 norm(Fin-Q)
+
 plot(Fin)
 figure
 plot(Q)
