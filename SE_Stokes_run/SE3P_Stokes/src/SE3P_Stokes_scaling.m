@@ -31,7 +31,11 @@ if strcmp(opt.window, 'gaussian')
     [F1, F2, F3] = ndgrid(f1.^2, f2.^2, f3.^2);
     F = F1.*F2.*F3; % tensor product of spatial directions
     F = 1./F;
-    Z = F .* (1 + KK / 4 * opt.xi^2) .* exp(-KK / (4 * opt.xi^2)) ./ (KK .* KK); %This part changes with KB/Stokeslet
+%     pre.F = F;
+    Q = (KK / 4 * opt.xi^2);
+    Z = F .* 8*pi.*(1 + Q) .* exp(-Q) ./ (KK .* KK); 
+%     G = se3p_k_scaling_kaiser({H1,H2,H3},opt,pre);
+%     G1 = G{1}; G2 = G{2}; G3 = G{3};
   else
     error('Precomputed Fourier transform necessary for the %s window', opt.window);
 %   end

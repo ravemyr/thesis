@@ -11,22 +11,13 @@ function SE_static = SE3P_Laplace_gridding_precomp(x, opt)
 x = recenter_points(x, opt.box);
 
 if strcmp(opt.window, 'gaussian')
-  if opt.force
-    [zx, zy, zz, zfx, zfy, zfz, idx] = SE_fgg_expand_all_force_mex(x,opt);
-  else
-    [zx, zy, zz, idx] = SE_fgg_expand_all_mex(x,opt);
-  end
+  [zx, zy, zz, idx] = SE_fgg_expand_all_mex(x,opt);
   SE_static.zs = SE_fgg_base_gaussian_mex(opt);
 else
-  if opt.force
-    [zx, zy, zz, zfx, zfy, zfz, idx] = SE_fkg_expand_all_force_mex(x,opt);
-  else
-    [zx, zy, zz, idx] = SE_fkg_expand_all_mex(x,opt);
-  end
+  [zx, zy, zz, idx] = SE_fkg_expand_all_mex(x,opt);
 end
 
 [idx, s] = sort(idx);
-x = x(s,:);
 zx = zx(1:opt.P,s);
 zy = zy(1:opt.P,s);
 zz = zz(1:opt.P,s);
@@ -37,12 +28,3 @@ SE_static.zz = zz;
 SE_static.idx = idx;
 SE_static.perm = s';
 SE_static.iperm(s) = 1:length(s);
-
-if opt.force
-  zfx = zfx(1:opt.P,s);
-  zfy = zfy(1:opt.P,s);
-  zfz = zfz(1:opt.P,s);
-  SE_static.zfx = zfx;
-  SE_static.zfy = zfy;
-  SE_static.zfz = zfz;
-end

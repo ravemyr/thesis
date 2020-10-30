@@ -6,7 +6,6 @@ rng(1);
 N = 100; % number of source particles
 L = 1; % box side length
 box = [L L L]; % periodic box
-[x, f] = NEW_vector_system(N, box); % random sources
 Neval = N; % number of evaluation points
 
 % Ewald parameters
@@ -19,7 +18,6 @@ P = 5:2:25; % support
 m = [5 6.5 8]; % shape
 
 % grid
-opt.M = 32*box
 opt.box = box;
 
 %Ewald params
