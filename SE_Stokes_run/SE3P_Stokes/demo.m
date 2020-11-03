@@ -6,7 +6,6 @@ rng(1);
 N = 100; % number of source particles
 L = 1; % box side length
 box = [L L L]; % periodic box
-Neval = N; % number of evaluation points
 
 % Ewald parameters
 
@@ -14,16 +13,13 @@ Neval = N; % number of evaluation points
 %%
 close all
 
-P = 5:2:25; % support 
-m = [5 6.5 8]; % shape
-
 % grid
 opt.box = box;
 
 %Ewald params
-M0 = 28; % Set M0=M/L, the rest is automatic
+M0 = 28; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*opt.box;
-opt.xi = pi*M0/12;
+opt.xi = M0*pi/12;
 
 % charge-neutral system
 [x, f] = SE_charged_system(N,box,'vector');
@@ -39,7 +35,7 @@ ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
 tDirReal = toc(t);
 
 %%
-windows = {'gaussian', 'kaiser_exact', 'kaiser_poly'};
+windows = {'gaussian', 'kaiser_exact'};%, 'kaiser_poly'};
 for w=1:numel(windows)
   fprintf('3P Stokes Spectral Ewald, window: %s\n', windows{w});
   opt.window = windows{w};
@@ -47,7 +43,7 @@ for w=1:numel(windows)
     opt.P = 32;
     if isfield(opt, 'betaP'), rmfield(opt, 'betaP'); end
   else
-    opt.P = 16;
+    opt.P = 32;
     opt.betaP = 2.5;
   end
   if strcmp(windows{w}, 'kaiser_poly')

@@ -6,17 +6,11 @@ rng(1);
 N = 100; % number of source particles
 L = 1; % box side length
 box = [L L L]; % periodic box
-[x, f] = NEW_vector_system(N, box); % random sources
 Neval = N; % number of evaluation points
 
 % Ewald parameters
-M0 = 28; % Set M0=M/L, the rest is automatic
 
-opt.box = box;
-opt.M = M0*opt.box;
-opt.xi = pi*M0/12;
-opt.rc = 6/opt.xi;
-assert(opt.rc <= L, 'rc (%g) cannot be larger than L (%g)', opt.rc, L);
+
 %%
 close all
 
@@ -24,15 +18,12 @@ P = 5:2:25; % support
 m = [5 6.5 8]; % shape
 
 % grid
-opt.M = 32*box
 opt.box = box;
 
 %Ewald params
-M0 = 28; % Set M0=M/L, the rest is automatic
+M0 = 28; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*opt.box;
-opt.xi = pi*M0/12;
-opt.rc = 6/opt.xi;
-assert(opt.rc <= L, 'rc (%g) cannot be larger than L (%g)', opt.rc, L);
+opt.xi = M0*pi/12;
 
 % charge-neutral system
 [x, f] = SE_charged_system(N,box,'vector');
@@ -48,15 +39,15 @@ ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
 tDirReal = toc(t);
 
 %%
-windows = {'gaussian', 'kaiser_exact', 'kaiser_poly'};
+windows = {'gaussian', 'kaiser_exact'};%, 'kaiser_poly'};
 for w=1:numel(windows)
-  fprintf('3P Laplace Spectral Ewald, window: %s\n', windows{w});
+  fprintf('3P Stokes Spectral Ewald, window: %s\n', windows{w});
   opt.window = windows{w};
   if strcmp(windows{w}, 'gaussian')
     opt.P = 32;
     if isfield(opt, 'betaP'), rmfield(opt, 'betaP'); end
   else
-    opt.P = 16;
+    opt.P = 32;
     opt.betaP = 2.5;
   end
   if strcmp(windows{w}, 'kaiser_poly')
@@ -70,4 +61,25 @@ for w=1:numel(windows)
   fprintf('  RMS error: %.16g\n', rms_error);
   fprintf('  Time: %g s (Fourier), %g s (real), total %g s\n\n', ...
           tSEFour);
+end
+%%
+% for Gaussian shaper parameter, m
+
+opt.m = m(i);
+leg{i} = sprintf('m = %.1f',opt.m) % plot legend string (below)
+for j = 1:length(P)
+    % for Gaussian support, P
+
+    opt.P = P(j);
+    u = SE3P_Stokes(1:N,x,f,opt);
+
+    % compute RMS error (first vector component)
+    e = (u - ref).^2; 
+    err(i,j) = sqrt( sum(e(:,1))/N );
+
+end
+sty = {'.-','*-','+-','r'};
+hold on
+for i = 1:size(err,1)
+    plot(P,err(i,:),sty{i})
 end

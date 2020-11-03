@@ -18,8 +18,11 @@ function [G1,G2,G3] = SE3P_Stokes_scaling(H1,H2,H3,opt)
 KK = K1.^2 + K2.^2 + K3.^2;
 
 % Scale
+Q = (KK / (4 * opt.xi^2));
 if strcmp(opt.window, 'gaussian')
-  Z = 8*pi .* (1 + KK / (4*opt.xi^2)) .* exp(-(1-opt.eta) .* KK/4*opt.xi^2)./ KK.^2;
+  %Z = 8*pi .* (1 + Q) .* exp(-(1-opt.eta) .* Q) ./ (KK.*KK);
+  [G1 G2 G3] = se3p_fast_k_scaling(H1,H2,H3,opt.xi,opt.box,opt.eta);
+  return;
 % else
 %   if ~isempty(pre)
 %     F = pre.F;
@@ -31,11 +34,12 @@ if strcmp(opt.window, 'gaussian')
     [F1, F2, F3] = ndgrid(f1.^2, f2.^2, f3.^2);
     F = F1.*F2.*F3; % tensor product of spatial directions
     F = 1./F;
-%     pre.F = F;
-    Q = (KK / 4 * opt.xi^2);
+     pre.F = F;
+    
     Z = F .* 8*pi.*(1 + Q) .* exp(-Q) ./ (KK .* KK); 
-%     G = se3p_k_scaling_kaiser({H1,H2,H3},opt,pre);
-%     G1 = G{1}; G2 = G{2}; G3 = G{3};
+     G = se3p_k_scaling_kaiser({H1,H2,H3},opt,pre);
+     G1 = G{1}; G2 = G{2}; G3 = G{3};
+     return;
   else
     error('Precomputed Fourier transform necessary for the %s window', opt.window);
 %   end
