@@ -23,11 +23,13 @@ function [pot, force, walltime] = SE3P_Laplace_fourier_space(eval_idx, x, f, opt
 % :param opt.force:         Compute force (default: false)
 % :param opt.box:           Size of periodic cell [L1,L2,L3] (required)
 % :param opt.M:             Grid size [M1,M2,M3] (required)
+% :param opt.base_factor:   Integer that the final grid size should be divisible by
+%                           (default: 4); the grid size will be rounded up
 % :param opt.xi:            Ewald parameter (required)
 % :param opt.P:             Support of window, in number of grid points (required)
 % :param opt.window:        Window function (default: 'gaussian')
 % :param opt.w:             Width of window (default: w=h*P/2)
-% :param opt.m:             Gaussian shape function (default: m=1.71*sqrt(P))
+% :param opt.m:             Gaussian shape parameter (default: m=0.95*sqrt(pi*P))
 % :param opt.eval_x:        External points to evaluate potential in (Nex×3)
 % :param opt.fast_gridding: Use fast gridding and spreading (default: true)
 % :param opt.fourier_differentiation: Compute forces using differentiation in
@@ -112,7 +114,7 @@ if opt.fast_gridding
   int_fcn_pot = @(F) iperm(W_fast_int_pot(F, opt, S));
   int_fcn_force = @(F) iperm(W_fast_int_force(F, opt, S));
 else
-  %error('Fast gridding should be used!'); % TODO FIXME
+  warning('SE3P:SlowGridding', 'Using slow gridding routines');
   grid_fcn = @(F) W_plain_grid(x, F, opt);
   int_fcn_pot = @(F) W_plain_int_pot(x(eval_idx,:), F, opt);
   int_fcn_force = @(F) W_plain_int_force(x(eval_idx,:), F, opt);
@@ -200,7 +202,7 @@ if ~opt.fourier_differentiation && ~isempty(force)
 end
 
 
-if nargout == 2
+if nargout >= 3
   walltime.total = sum(struct2array(walltime));
 end
 
@@ -215,20 +217,25 @@ assert(isfield(opt, 'P'), 'window support P must be given in opt struct');
 if ~isfield(opt,'potential'), opt.potential = true; end
 if ~isfield(opt,'force'), opt.force = false; end
 if ~isfield(opt,'fourier_differentiation'), opt.fourier_differentiation = false; end
+if ~isfield(opt,'fast_gridding'), opt.fast_gridding = true; end
+if ~isfield(opt,'base_factor'), opt.base_factor = 4; end
 
-% Verify assumptions on parameters
+% Basic grid
+opt.M(1) = opt.base_factor * ceil(opt.M(1) / opt.base_factor); % round up
+opt.M(2) = opt.base_factor * ceil(opt.M(2) / opt.base_factor); % round up
+opt.M(3) = opt.base_factor * ceil(opt.M(3) / opt.base_factor); % round up
 opt.L = opt.box(1);
 opt.h = opt.L/opt.M(1); % step size (M contains number of subintervals)
 % Check that h is the same in all directions
 assert(abs(opt.h - opt.box(2)/opt.M(2)) < eps);
 assert(abs(opt.h - opt.box(3)/opt.M(3)) < eps);
 
+% Window options
 if ~isfield(opt,'window'), opt.window = 'gaussian'; end
 if ~isfield(opt,'w'), opt.w = opt.h*opt.P/2; end
-if ~isfield(opt,'m'), opt.m = 1.71*sqrt(opt.P); end
+if ~isfield(opt,'m'), opt.m = 0.95*sqrt(pi*opt.P); end
 opt.eta = (2*opt.w*opt.xi/opt.m)^2;
 opt.c = 2*opt.xi^2/opt.eta;
-if ~isfield(opt,'fast_gridding'), opt.fast_gridding = true; end
 
 % Options for ExpSemiCirc and Kaiser-Bessel windows
 if strcmp(opt.window,'expsemicirc') || strcmp(opt.window,'kaiser_exact') ...

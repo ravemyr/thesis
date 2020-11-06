@@ -10,19 +10,18 @@ else
   error('Unsupported window function');
 end
 
-L = opt.L;
 h = opt.h;
-x = 0:h:(L-h);
-f = h*window(x-L/2);
+F = cell(1,3);
+for d=1:3
+  L = opt.box(d);
+  x = 0:h:(L-h);
+  f = h*window(x-L/2);
+  F{d} = fft(f).^2;
+end
 
-F = fft(f);
-[F1,F2,F3] = ndgrid(F.^2);
+[F1, F2, F3] = ndgrid(F{1}, F{2}, F{3});
 F = F1.*F2.*F3; % tensor product of spatial directions
 pre.F = 1./F;
-
-% TODO: In old se3p_window_precomp.m, pre.F(:,:,M/2)=0. Why?
-% In old precomp.m pre.F(isnan(F))=0 instead, which doesn't happen.
-% It seems to be fine to use what we get here directly.
 
 % ------------------------------------------------------------------------------
 function z = expsemicirc(x, beta, w)

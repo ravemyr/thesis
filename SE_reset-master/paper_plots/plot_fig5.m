@@ -24,6 +24,7 @@ function plot_fig5
   legend('show', 'Location', 'NorthEast')
   grid on
   title('Error vs P')
+  ylim([1e-15 1e0])
 end
 
 % tim = time.total - exclude_pre*(time.pre + time.prefft);

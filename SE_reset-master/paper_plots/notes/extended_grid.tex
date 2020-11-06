@@ -1,0 +1,703 @@
+% LaTeX
+\documentclass[a4paper,10pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage[left=1.5cm,right=1.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{siunitx}
+
+
+\title{Notes on the extended grid}
+\author{Joar Bagge}
+\date{2020-10-13}
+
+
+\begin{document}
+
+\maketitle
+
+\section{Baseline case}
+
+Plots produced by \verb|../comp_fig5.m| and \verb|../comp_figT1.m|,
+using 100 source particles in a cube of side length $L=1$. For
+other parameters, see the scripts. In this baseline case, the
+grid size $M$ is increased by $P$ (the number of points in the
+window function's support) in the nonperiodic directions (this is
+needed to fit the window function without clipping or wrapping),
+and the side length is also increased to keep $h=L/M$ constant
+across all three directions.
+
+{\noindent\centering
+\includegraphics[width=0.5\textwidth]{fig/x-f1-baseline}\\%
+\includegraphics[width=0.5\textwidth]{fig/x-f2-baseline}%
+\includegraphics[width=0.5\textwidth]{fig/x-f3-baseline}\\%
+\includegraphics[width=0.5\textwidth]{fig/x-f4-baseline}%
+\includegraphics[width=0.5\textwidth]{fig/x-f5-baseline}}
+
+Following Lindbo \& Tornberg (2011),%
+\footnote{However, here $M$ is the number of subintervals and is
+therefore even. (In the Lindbo \& Tornberg paper, the same letter
+was used to denote number of grid points, which is odd.)}
+we introduce the integer wavenumber $\kappa \in \{ -M/2, \ldots,
+0, \ldots, M/2\}$ and the scaled wavenumber $k = 2\pi \kappa /
+L$. The largest integer wavenumber is denoted by
+$\kappa_\infty = M/2$, and the corresponding $k$ is $k_\infty =
+2\pi (M/2)/L = \pi M / L$. In the first plot (Error vs $P$),
+$\xi$ is selected as $\xi = \pi (M/L) / 12$, which means that
+$k_\infty / \xi = 12$ in that plot. For smaller values of $P$,
+this is to the right of the ``sweet spot'' in 2P (third plot) and
+0P (fifth plot). For some reason the error increase with
+$k_\infty/\xi$ is slower in 1P (fourth plot) than in 2P and 0P.
+
+The reason that the error increases with $k_\infty/\xi$ when
+nonperiodic directions are present is explained in af Klinteberg,
+Saffar Shamshirgar, Tornberg (2017), section~5.3. For the
+Gaussian window function, this can be understood as the Gaussian
+$e^{-\xi^2r^2/(1-\eta)}$ needing to be properly truncated when
+$\eta < 1$ (which is always the case in the first plot).%
+\footnote{The reason the error grows with $k_\infty/\xi$ is
+probably that the extension that we do, i.e.\ adding $hP$ to the
+side length and $P$ to the grid size, becomes more and more
+insufficient as $h$ decreases.}
+
+\section{The 0P fix}
+
+In af Klinteberg, Saffar Shamshirgar, Tornberg (2017), the
+suggested fix is to extend the box by
+\[
+  \delta_L = \begin{cases}
+    hP & \text{if $\eta \geq 1$}, \\
+    \max(hP, \sqrt{2(1-\eta)m^2/\xi^2}) & \text{if $\eta < 1$},
+  \end{cases}
+\]
+where $m = C \sqrt{\pi P}$ (where $C=0.976$ in the 0P Stokes
+paper), i.e.\ $\tilde{L} = L + \delta_L$ is the side length of
+the extended box. This strategy is used for the Gaussian window
+in 0P electrostatics in the current code. For the Kaiser windows,
+we instead use
+\[
+  \delta_L = \max(hP, \sqrt{8 (\beta/P) /\xi^2}),
+\]
+and since $\beta/P = 2.5$, this is actually $\delta_L = \max(hP,
+\sqrt{20}/\xi)$.
+
+As can be seen in the plots below, these selections completely
+flatten the error curves (in plots 2--5) so that the error no
+longer grows with $k_\infty/\xi$. Of course, $\delta_L$ is
+rounded up so that $\delta_M = \delta_L/h$ becomes an (even)
+integer, where $\tilde{M} = M + \delta_M$. We introduce
+\begin{align*}
+  \delta_{M,\text{rem,Gauss}} &= 2 \times
+  \text{ceil}(\sqrt{2(1-\eta)m^2/\xi^2}/(2h)), \\
+  \delta_{M,\text{rem,Kaiser}} &= 2 \times
+  \text{ceil}(\sqrt{8 (\beta/P) /\xi^2}/(2h)).
+\end{align*}
+
+{\noindent\centering
+\includegraphics[width=0.5\textwidth]{fig/x-f1-0Psol}\\%
+\includegraphics[width=0.5\textwidth]{fig/x-f2-0Psol}%
+\includegraphics[width=0.5\textwidth]{fig/x-f3-0Psol}\\%
+\includegraphics[width=0.5\textwidth]{fig/x-f4-0Psol}%
+\includegraphics[width=0.5\textwidth]{fig/x-f5-0Psol}}
+
+The following table shows $\delta_{M,\text{rem,Gauss}}$ and
+$\delta_{M,\text{rem,Kaiser}}$ as functions of $P$, for the
+setting in the first plot (Error vs $P$), where $M=28$. This data is
+the same for all periodicities (but not applicable to 3P of
+course).
+\begin{center}
+  \begin{tabular}{ccc}
+    \toprule
+    $P$ & $\delta_{M,\text{rem,Gauss}}$ & $\delta_{M,\text{rem,Kaiser}}$ \\
+    \midrule
+     2 & 14 & 18 \\
+     4 & 18 & 18 \\
+     6 & 22 & 18 \\
+     8 & 24 & 18 \\
+    10 & 26 & 18 \\
+    12 & 28 & 18 \\
+    14 & 28 & 18 \\
+    16 & 30 & 18 \\
+    18 & 30 & 18 \\
+    20 & 30 & 18 \\
+    22 & 30 & 18 \\
+    24 & 30 & 18 \\
+    26 & 28 & 18 \\
+    28 & 28 & 18 \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+Note that $\delta_M = \max(P, \delta_{M,\text{rem}})$ for each
+window function. This means that the actual choices are as
+follows.
+\begin{center}
+  \begin{tabular}{ccccccc}
+    \toprule
+    $P$ & $\delta_M$ (Gauss) & $\delta_M$ (Kaiser) & $\tilde{M}$
+    (Gauss) & $\tilde{M}$ (Kaiser) & $\tilde{M}/M$ (Gauss) &
+    $\tilde{M}/M$ (Kaiser) \\
+    \midrule
+     2 & 14 & 18 & 42 & 46 & 1.5000 & 1.6429 \\
+     4 & 18 & 18 & 46 & 46 & 1.6429 & 1.6429 \\
+     6 & 22 & 18 & 50 & 46 & 1.7857 & 1.6429 \\
+     8 & 24 & 18 & 52 & 46 & 1.8571 & 1.6429 \\
+    10 & 26 & 18 & 54 & 46 & 1.9286 & 1.6429 \\
+    12 & 28 & 18 & 56 & 46 & 2.0000 & 1.6429 \\
+    14 & 28 & 18 & 56 & 46 & 2.0000 & 1.6429 \\
+    16 & 30 & 18 & 58 & 46 & 2.0714 & 1.6429 \\
+    18 & 30 & 18 & 58 & 46 & 2.0714 & 1.6429 \\
+    20 & 30 & 20 & 58 & 48 & 2.0714 & 1.7143 \\
+    22 & 30 & 22 & 58 & 50 & 2.0714 & 1.7857 \\
+    24 & 30 & 24 & 58 & 52 & 2.0714 & 1.8571 \\
+    26 & 28 & 26 & 56 & 54 & 2.0000 & 1.9286 \\
+    28 & 28 & 28 & 56 & 56 & 2.0000 & 2.0000 \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+Note that neither $\delta_{M,\text{rem,Gauss}}$ nor
+$\delta_{M,\text{rem,Kaiser}}$ changes when $M/L$ changes
+(assuming $\xi \sim M/L$); they are functions only of $P$
+($\delta_{M,\text{rem,Kaiser}}$ is even constant). This means
+that $\delta_M$ itself is a function only of $P$, not of $M$ or
+anything else.
+
+\section{The 2P fix}
+
+The 2P fix is to always increase $M$ by $P+6$ in the nonperiodic
+directions, which corresponds to $\delta_M = P+6$. This does not
+seem completely unreasonable in principle given that we observed
+above that $\delta_M$ is a function only of $P$ in the 0P fix.
+The result is shown in the plots below. In the 1P case, this
+seems to be enough to completely flatten the curves, while in 2P
+and 0P it flattens the curves somewhat -- enough to make the
+first plot look good (at $k_\infty/\xi=12$).
+
+{\noindent\centering
+\includegraphics[width=0.5\textwidth]{fig/x-f1-2Psol}\\%
+\includegraphics[width=0.5\textwidth]{fig/x-f2-2Psol}%
+\includegraphics[width=0.5\textwidth]{fig/x-f3-2Psol}\\%
+\includegraphics[width=0.5\textwidth]{fig/x-f4-2Psol}%
+\includegraphics[width=0.5\textwidth]{fig/x-f5-2Psol}}
+
+With $\delta_M=P+6$, the choices look like this, independent of
+window function.
+\begin{center}
+  \begin{tabular}{cccc}
+    \toprule
+    $P$ & $\delta_M$ & $\tilde{M}$ & $\tilde{M}/M$ \\
+    \midrule
+     2 &  8 & 36 & 1.2857 \\
+     4 & 10 & 38 & 1.3571 \\
+     6 & 12 & 40 & 1.4286 \\
+     8 & 14 & 42 & 1.5000 \\
+    10 & 16 & 44 & 1.5714 \\
+    12 & 18 & 46 & 1.6429 \\
+    14 & 20 & 48 & 1.7143 \\
+    16 & 22 & 50 & 1.7857 \\
+    18 & 24 & 52 & 1.8571 \\
+    20 & 26 & 54 & 1.9286 \\
+    22 & 28 & 56 & 2.0000 \\
+    24 & 30 & 58 & 2.0714 \\
+    26 & 32 & 60 & 2.1429 \\
+    28 & 34 & 62 & 2.2143 \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+In this situation, the 2P fix results in a smaller $\delta_M$
+than the 0P fix for $P < 24$ for the Gaussian window, and for $P
+< 12$ for the Kaiser window. Since both fixes seem to be working,
+one could simply pick the one with the smallest $\delta_M$ for a
+given $P$.
+
+\section{Variations}
+
+As the plots below show, the 2P fix ($\delta_M = P+6$) seems to
+work for different original grid sizes (here tested with $M = 20,
+24, 28, 32$), i.e.\ there is no strong dependence on $M$.
+
+{\noindent\centering
+\includegraphics[width=0.5\textwidth]{fig/x-f1-var1-M20}%
+\includegraphics[width=0.5\textwidth]{fig/x-f1-var1-M24}\\%
+\includegraphics[width=0.5\textwidth]{fig/x-f1-var1-M28}%
+\includegraphics[width=0.5\textwidth]{fig/x-f1-var1-M32}}
+
+Next, we try different variants on the 2P fix, namely $\delta_M =
+P+2, P+4, P+6$ and $P+8$. It seems one could get away with $P+4$,
+but $P+6$ takes down the Kaiser 2P curve a bit more (compare for
+example at $P=10$).
+
+{\noindent\centering
+\includegraphics[width=0.5\textwidth]{fig/x-f1-var2-plus2}%
+\includegraphics[width=0.5\textwidth]{fig/x-f1-var2-plus4}\\%
+\includegraphics[width=0.5\textwidth]{fig/x-f1-var2-plus6}%
+\includegraphics[width=0.5\textwidth]{fig/x-f1-var2-plus8}}
+
+While $P+6$ seems optimal for the 2P case, it seems $P+4$ is
+enough for the 0P case, and in the 1P case it is sufficient to
+add only $P$.
+
+\section{The more complicated relation}
+
+Above, we used the simple relation
+\begin{equation}
+  \label{eq:simple-xi}
+  \xi = \frac{\pi}{12}\frac{M}{L},
+\end{equation}
+which is probably what we want to use when producing the
+Error-vs-$P$ plots. However, in other circumstances, we like to
+use the more complicated relation
+\begin{equation}
+  \label{eq:complicated-M}
+  \frac{M}{L} = \frac{\sqrt{3}\xi}{\pi} \sqrt{W \left(
+  \frac{4Q^{2/3}}{3L^2(\pi\xi\varepsilon_*^2)^{2/3}}
+  \right)},
+\end{equation}
+where $W$ is the Lambert $W$ function and $\varepsilon_*$ is an
+error tolerance (and $Q = \sum_{n=1}^N q_n^2$). This relation
+can also be inverted (i.e.\ solved for $\xi$), which yields
+\begin{equation}
+  \label{eq:complicated-xi}
+  \xi = \frac{\pi}{\sqrt{2}} \frac{M}{L}
+  \frac{1}{\sqrt{W\left(\dfrac{4Q}{\pi^2 L^2 \varepsilon_*^2 M}\right)}}.
+\end{equation}
+We have established a relation between $P$ and the error
+tolerance, which is given by the table below.
+\begin{center}
+  \begin{tabular}{ccc}
+    \toprule
+    $\varepsilon \geq \num{5e-4}$ &:& $P=4$ \\
+    $\varepsilon \geq \num{5e-6}$ &:& $P=6$ \\
+    $\varepsilon \geq \num{5e-8}$ &:& $P=8$ \\
+    $\varepsilon \geq \num{1e-10}$ &:& $P=10$ \\
+    $\varepsilon \geq \num{1e-12}$ &:& $P=12$ \\
+    $\varepsilon \geq \num{1e-13}$ &:& $P=14$ \\
+    $\varepsilon \geq \num{2e-14}$ &:& $P=16$ \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+Here, $\varepsilon = 10 \varepsilon_*$. This relation was based
+precisely on the Error-vs-$P$ plots above. (This holds for the
+Kaiser windows, but we will use the same values for all windows.)
+
+Below we present Error-vs-$P$ plots where we use
+\eqref{eq:complicated-xi} rather than \eqref{eq:simple-xi}.
+
+\begin{center}
+  \textbf{Baseline case}\\
+  \includegraphics[width=0.5\textwidth]{fig/x-f1-baseline-adv}
+\end{center}
+Comparing with the first plot on page~1, we see that the Kaiser
+error curves are a bit less steep (i.e.\ the error does not decay
+quite as fast), but the additional error coming from the free
+directions also seems to be quite a lot smaller. The reason for
+this latter phenomenon must be that we have changed
+$k_\infty/\xi$, probably decreased it. Therefore we are less
+likely to end up in the bad part of the error curves. Recall
+that before, $k_\infty/\xi=12$ always. Now the value depends on $M$ as
+well as other parameters such as $P$ (which sets
+$\varepsilon_*$), according to \eqref{eq:complicated-xi}.
+For $P=4$, we have $k_\infty/\xi=5.6979$; for $P=8$, we have
+$k_\infty/\xi=8.2361$; for $P=12$ we have $k_\infty/\xi=10.4949$;
+and for $P=16$ we have $k_\infty/\xi=11.2040$. These values seem
+to be closer to the ``sweet spot''.
+
+\begin{center}
+  \textbf{The 0P fix}\\
+  \includegraphics[width=0.5\textwidth]{fig/x-f1-0Psol-adv}
+\end{center}
+As expected, the 0P fix solves the small remaining problem (only
+really visible for 2P). The table of $\delta_M$ for this case
+($M=28$) is found below.
+\begin{center}
+  \begin{tabular}{ccccc}
+    \toprule
+    $P$ & $\delta_M$ (Gauss) & $\delta_M$ (Kaiser) & $\tilde{M}$
+    (Gauss) & $\tilde{M}$ (Kaiser) \\
+    \midrule
+     2 &  6 & 10 & 34 & 38 \\
+     4 &  8 & 10 & 36 & 38 \\
+     6 & 10 & 12 & 38 & 40 \\
+     8 & 14 & 12 & 42 & 40 \\
+    10 & 18 & 14 & 46 & 42 \\
+    12 & 22 & 16 & 50 & 44 \\
+    14 & 24 & 16 & 52 & 44 \\
+    16 & 26 & 16 & 54 & 44 \\
+    18 & 28 & 18 & 56 & 46 \\
+    20 & 28 & 20 & 56 & 48 \\
+    22 & 28 & 22 & 56 & 50 \\
+    24 & 28 & 24 & 56 & 52 \\
+    26 & 28 & 26 & 56 & 54 \\
+    28 & 26 & 28 & 54 & 56 \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+This can be compared with the table on page~4; unsurprisingly,
+$\delta_M$ is smaller here than on page~4 (or at least never
+larger). Note that since $\xi$ is determined by
+\eqref{eq:complicated-xi}, it is no longer the case that $\xi$ is
+directly proportional to $M/L$; rather, $\xi = C(M) \times M/L$,
+where the prefactor $C(M)$ is given by
+\[
+  C(M) = \frac{\pi}{\sqrt{2}}
+  \frac{1}{\sqrt{W\left(\dfrac{4Q}{\pi^2 L^2 \varepsilon_*^2 M}\right)}}.
+\]
+Here, $Q$ depends on the particle system, and $L$ on the box, so
+the prefactor depends on the problem. Furthermore,
+$\varepsilon_*^2$ is connected to $P$, so the prefactor depends
+on $P$. Lastly, the prefactor contains $M$, so even for the same
+problem and tolerance, the prefactor and thus $\delta_M$ may
+change when varying $M$. This seems to be very far from a simple
+rule such as $P+6$. Note in particular that as $M \to \infty$,
+the value of the $W$ function approaches zero (since $W(0)=0$),
+and thus $C(M) \to \infty$. This in turn means that $\xi \to
+\infty$, and this is true even if $M/L$ is fixed. As $\xi \to
+\infty$, we will have $\delta_{M,\text{rem}} \to 0$. This is in
+fact good news, since it means that $\delta_M$ will simply be
+equal to $P$ in this situation. It would be far worse if
+$\delta_{M,\text{rem}}$ started to grow, but that can only happen
+if $\xi L/M \to 0$, which is equivalent to $C(M) \to 0$, which is
+in turn equivalent to
+\[
+  W\left(\frac{4Q}{\pi^2 L^2 \varepsilon_*^2 M}\right) \to \infty.
+\]
+The $W$ function is strictly increasing for nonnegative
+arguments, so the way to make this happen is if
+\[
+  \frac{4Q}{\pi^2 L^2 \varepsilon_*^2 M} \to \infty.
+\]
+But this cannot happen for a fixed particle system and tolerance,
+since $M$ cannot be selected arbitrarily small (it cannot be
+smaller than 2, and even that would be silly). Thus, $\delta_M$
+cannot be larger than the value it takes for the smallest $M$ one
+considers (for fixed $Q$, $L$, $P$ and $\varepsilon_*$).
+
+This leads us to the question: what \emph{is} the smallest $M$
+that we can consider? Our main restriction is that $r_c \leq 1$,
+and the relation between $r_c$ and $\xi$ is
+\[
+  \xi = \frac{1}{r_c} \sqrt{W \left( \frac{1}{\varepsilon_*}
+  \sqrt{\frac{Q}{2L^3}} \right)},
+\]
+which means that the restriction is simply
+\[
+  \xi \geq \sqrt{W \left( \frac{1}{\varepsilon_*}
+  \sqrt{\frac{Q}{2L^3}} \right)}.
+\]
+The number in the right-hand side depends on the particle system
+(through $Q$ and $L$) and the selected tolerance (through
+$\varepsilon_*$). For the test system that we use to compute the
+plots in this document, we have $Q=31.4433$ and $L=1$. The
+tolerance is related to $P$ through the table on page~8. The
+lower bound for $\xi$ in this case is shown below.
+\begin{center}
+  \begin{tabular}{cc}
+    \toprule
+    $P$ & Lower bound for $\xi$ \\
+    \midrule
+    2 & 3.01255 \\
+    4 & 3.01255 \\
+    6 & 3.64671 \\
+    8 & 4.19788 \\
+    10 & 4.85252 \\
+    12 & 5.28958 \\
+    14 & 5.49597 \\
+    16 & 5.63603 \\
+    18 & 5.94532 \\
+    20 & 5.94532 \\
+    22 & 5.94532 \\
+    24 & 5.94532 \\
+    26 & 5.94532 \\
+    28 & 5.94532 \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+Plugging this into \eqref{eq:complicated-M}, we get $M$ at the
+bounding value (first unrounded, then rounded):
+\begin{center}
+  \begin{tabular}{ccc}
+    \toprule
+    $P$ & $M$ for $\xi$ as in the table above & Rounded up to even number \\
+    \midrule
+    2 & 5.71089 & 6 \\
+    4 & 5.71089 & 6 \\
+    6 & 8.39782 & 10 \\
+    8 & 11.1495 & 12 \\
+    10 & 14.9207 & 16 \\
+    12 & 17.7423 & 18 \\
+    14 & 19.1593 & 20 \\
+    16 & 20.1518 & 22 \\
+    18 & 22.432 & 24 \\
+    20 & 22.432 & 24 \\
+    22 & 22.432 & 24 \\
+    24 & 22.432 & 24 \\
+    26 & 22.432 & 24 \\
+    28 & 22.432 & 24 \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+I don't know if this is the smallest $M$ (if $\xi$ increases in
+\eqref{eq:complicated-M}, are we sure that $M$ also increases?),
+but I would guess this is pretty much the smallest. The
+corresponding values for $\delta_M$ are shown in the table below.
+\begin{center}
+  \begin{tabular}{cccccc}
+    \toprule
+    $P$ & $M$ & $\delta_M$ (Gauss) & $\delta_M$ (Kaiser) & $\tilde{M}$
+    (Gauss) & $\tilde{M}$ (Kaiser) \\
+    \midrule
+     2 &  6 &  6 & 10 & 12 & 16 \\
+     4 &  6 &  8 & 10 & 14 & 16 \\
+     6 & 10 & 12 & 12 & 22 & 22 \\
+     8 & 12 & 14 & 12 & 26 & 24 \\
+    10 & 16 & 20 & 14 & 36 & 30 \\
+    12 & 18 & 22 & 16 & 40 & 34 \\
+    14 & 20 & 24 & 16 & 44 & 36 \\
+    16 & 22 & 26 & 16 & 48 & 38 \\
+    18 & 24 & 28 & 18 & 52 & 42 \\
+    20 & 24 & 28 & 20 & 52 & 44 \\
+    22 & 24 & 28 & 22 & 52 & 46 \\
+    24 & 24 & 28 & 24 & 52 & 48 \\
+    26 & 24 & 28 & 26 & 52 & 50 \\
+    28 & 24 & 28 & 28 & 52 & 52 \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+These should be the largest values of $\delta_M$, and therefore
+also the largest ratios $\tilde{M}/M$. It seems the Error-vs-$P$
+plot still looks okay with these choices (although $M=6$ is a
+silly choice of course). Finally, I check the Error-vs-$P$ plot
+for $M=32$, and it looks like this:\\[\baselineskip]
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{The 0P fix, M=32}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-0Psol-adv-M32}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{The 0P fix, M=36}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-0Psol-adv-M36}
+\end{minipage}
+Not sure why the 2P Kaiser curve behaves strange for $P$ between
+16 and 22. Whatever happens seems to become even worse for
+$M=36$. Maybe $\delta_M$ becomes too small somehow? I notice that
+for $M=40$, a bug prevents the 1P code from running (this could
+be in the direct summation though). The other codes can run, and
+the result is shown below:
+\begin{center}
+  \textbf{The 0P fix, M=40}\\
+  \includegraphics[width=0.5\textwidth]{fig/x-f1-0Psol-adv-M40}
+\end{center}
+Strange, the Kaiser 2P curve flattens out completely and then
+joins the Gaussian curves. And $\delta_M$ is more or less the
+same as its maximum value (table on page~12), just the maximum
+minus 2 in some cases. I don't really see how this would explain
+the problem, but it is still possible that $\delta_M$ is too
+small.
+
+Anyway, time to move on to the 2P fix, i.e.\ $\delta_M = P + k$
+for some constant $k$ (we try $k=2, 4, 6, 8$). We will try this
+fix for $M=16$, $M=28$, $M=32$ and possibly some larger values of
+$M$ as well. First of all, we note that the baseline case itself
+becomes worse for $M=16$ than for $M=28$:\\[\baselineskip]
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{Baseline case, M=16}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-plus0-M16}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{Baseline case, M=28}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-baseline-adv}
+\end{minipage}
+One can't help but wonder what happens to the baseline case for
+$M=36$ and $M=40$:\\[\baselineskip]
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{Baseline case, M=36}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-plus0-M36}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{Baseline case, M=40}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-plus0-M40}
+\end{minipage}
+Something strange clearly happens to the 2P case. It could be
+that some other unrelated error also appears, which cannot be
+decreased by increasing $\delta_M$?
+
+Moving on, it's time to check $\delta_M = P+k$ for $M=16$.\\[\baselineskip]
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{P+2, M=16}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-plus2-M16}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{P+4, M=16}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-plus4-M16}
+\end{minipage}\\
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{P+6, M=16}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-plus6-M16}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{P+8, M=16}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-plus8-M16}
+\end{minipage}
+We see that for $M=16$, it is enough to choose $\delta_M=P+2$.
+
+Now for $M=28$:\\[\baselineskip]
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{P+2, M=28}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-plus2-M28}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{P+4, M=28}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-plus4-M28}
+\end{minipage}\\
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{P+6, M=28}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-plus6-M28}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{P+8, M=28}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-plus8-M28}
+\end{minipage}
+It seems $P+2$ is enough here as well.
+
+Next is $M=32$:\\[\baselineskip]
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{P+2, M=32}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-plus2-M32}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{P+4, M=32}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-plus4-M32}
+\end{minipage}\\
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{P+6, M=32}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-plus6-M32}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{P+8, M=32}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-plus8-M32}
+\end{minipage}
+For $M=32$ it seems $P+4$ is the best choice; $P+2$ isn't quite
+enough.
+
+Finally we try $M=40$:\\[\baselineskip]
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{P+2, M=40}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-plus2-M40}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{P+4, M=40}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-plus4-M40}
+\end{minipage}\\
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{P+6, M=40}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-plus6-M40}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{P+8, M=40}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-plus8-M40}
+\end{minipage}
+Here it seems one has to go up to $P+8$. On the other hand, this
+fixes the problem better than the 0P fix.
+
+I will try to run with $M=64$ as well, since it seems a bit like
+the problem becomes worse and worse as $M$ grows. If that's the
+case, one might be worried that not even $P+8$ would be enough
+for large enough $M$. Results (1P cannot be ran for $M=64$
+either due to the bug):
+\begin{center}
+  \textbf{Baseline case, M=64}\\
+  \includegraphics[width=0.5\textwidth]{fig/x-f1-var3-plus0-M64}
+\end{center}
+Note that both window functions are affected by the bad
+behaviour. However, it only happens in the 2P case (but of
+course, we cannot see the 1P case here).\\[\baselineskip]
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{P+2, M=64}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-plus2-M64}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{P+4, M=64}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-plus4-M64}
+\end{minipage}\\
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{P+6, M=64}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-plus6-M64}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{P+8, M=64}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-plus8-M64}
+\end{minipage}
+This seems to confirm the worries. We probably need to either
+understand why this happens only for 2P and fix it, or adapt the
+rule $P+k$ so that $k$ depends on $M$.
+
+This section was about the more complicated relation between
+$\xi$ and $M$, but the last results begs the question if $M=64$
+looks bad also using the simpler relation \eqref{eq:simple-xi}.
+Therefore we finish with a battery of such tests.
+\begin{center}
+  \textbf{Baseline case ($\xi=\pi(M/L)/12$), M=64}\\
+  \includegraphics[width=0.5\textwidth]{fig/x-f1-var4-plus0-M64}
+\end{center}
+Interestingly, the 1P code worked in this case. So the error must
+be related to the relation between $M$ and $\xi$. It seems the 2P
+error was not very affected by changing relation, but for the 0P
+code, the error went up. Now we can also see that the 1P code has
+an error between the 2P and 0P codes.\\[\baselineskip]
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{($\xi=\pi(M/L)/12$) P+2, M=64}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var4-plus2-M64}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{($\xi=\pi(M/L)/12$) P+4, M=64}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var4-plus4-M64}
+\end{minipage}\\
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{($\xi=\pi(M/L)/12$) P+6, M=64}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var4-plus6-M64}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{($\xi=\pi(M/L)/12$) P+8, M=64}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var4-plus8-M64}
+\end{minipage}
+Here the results seem rather similar to those shown on page~19.
+So the problems with $M=64$ seems to hold for both
+$M$-$\xi$-relations. Then it might be enough to do tests with the
+simple relation; it seems this captures all problems already (we
+just didn't try large enough $M$ before).
+
+We will also try the 0P fix for $M=64$, both using the simple and
+complicated relations between $M$ and $\xi$.\\[\baselineskip]
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{($\xi=\pi(M/L)/12$) 0P fix, M=64}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var4-0Pfix-M64}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}\centering
+  \textbf{(Complicated $M$-$\xi$-relation) 0P fix, M=64}\\
+  \includegraphics[width=\textwidth]{fig/x-f1-var3-0Pfix-M64}
+\end{minipage}
+We see that the 0P fix is also not enough for $M=64$. This is
+expected. It seems that $\delta_M$ really should depend on $M$
+somehow, but it doesn't in the 0P fix (not in the right way at
+least).
+
+\section{Finding out how much is needed}
+
+We return to the simple relation between $M$ and $\xi$, i.e.\
+\eqref{eq:simple-xi}, and investigate how large $k$ in $\delta_M
+= P+k$ needs to be to remove the bulge in the error curve, as a
+function of $M$ and the periodicity.
+
+\section{Timing tests}
+
+TODO: These are done, and I will do no more timing. But write
+down the conclusion here (which I think was to use $P+4$ or $P+6$
+and then round up $M$ to the nearest multiple of 4).
+
+([The only reason to complicate the simplest rule (which is to use
+$\delta_M = P+6$ in all cases) would be if it makes a difference
+to the runtime.])
+
+\end{document}

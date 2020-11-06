@@ -1,4 +1,4 @@
-function comp_fig5
+function varargout = comp_fig5(ref)
 % Computations for Figure 5
 % Show relative RMS error and runtime as a function of P
 
@@ -12,7 +12,7 @@ function comp_fig5
   xi = pi*M/12; % Ewald split parameter
 
   n_rep = 1; % number of repetitions (for timing)
-  USE_KAISER_REF = false;
+  USE_SE_REF = false;
 
   % Set up option struct
   per = [3 2 1 0];
@@ -27,10 +27,12 @@ function comp_fig5
   A = sqrt(Q*xi*L)/L;
 
   % Compute reference solutions
-  ref = cell(size(per));
-  for i=1:numel(per)
-    fprintf('Computing reference solution for %dP ...\n', per(i));
-    ref{i} = compute_reference(per(i), x, f, opt{i}, USE_KAISER_REF);
+  if ~exist('ref', 'var') || isempty(ref)
+    ref = cell(1,4);
+    for i=1:numel(per)
+      fprintf('Computing reference solution for %dP ...\n', per(i));
+      ref{per(i)+1} = compute_reference(per(i), x, f, opt{i}, USE_SE_REF);
+    end
   end
 
   % Compute Spectral Ewald solutions, different window functions
@@ -48,7 +50,6 @@ function comp_fig5
         opti.window = windows{w};
         opti.P = Pvec(k);
         opti.polynomial_degree = max(min(opti.P+1, 9), 4);
-        opti = modify_M(per(i), opti);
         %if opti.P > 16 && ~strcmp(opti.window, 'gaussian')
         if opti.P > 16 && strcmp(opti.window, 'kaiser_poly')
           continue;
@@ -58,7 +59,7 @@ function comp_fig5
         u_se{i,w,k} = u;
         time{i,w,k} = t;
         % Compute error
-        err(i,w,k) = rms(u - ref{i}) / rms(ref{i});
+        err(i,w,k) = rms(u - ref{per(i)+1}) / rms(ref{per(i)+1});
       end
       fprintf('\n');
     end
@@ -67,6 +68,10 @@ function comp_fig5
   save('data/fig5.mat', 'N', 'L', 'bP', 'xi', 'M', 'per', 'opt', ...
        'x', 'f', 'ref', 'windows', 'Pvec', 'u_se', 'err', 'time');
   plot_fig5;
+
+  if nargout > 0
+    varargout{1} = ref;
+  end
 end
 
 function opt = set_params(periodicity, L, M, xi, bP)
@@ -75,42 +80,25 @@ function opt = set_params(periodicity, L, M, xi, bP)
   opt.xi = xi;
   opt.rc = 6/opt.xi;
   opt.betaP = bP;
-  if periodicity == 2
-    opt.s0 = 2;
-    opt.s = 3.5;
-    opt.n = 6;
-  elseif periodicity == 1
-    opt.s0 = 2.6;
-    opt.s = 4;
-    opt.n = 8;
-  elseif periodicity == 0
-    opt.s = 2.8;
-  end
 end
 
-function opt = modify_M(periodicity, opt)
-  if periodicity == 2
-    opt.add_M3 = 6; % FIXME: why is this needed?
-  end
-end
-
-function u = compute_reference(periodicity, x, f, opt, USE_KAISER)
+function u = compute_reference(periodicity, x, f, opt, USE_SE)
   N = size(x,1);
-  if USE_KAISER
-    opt.window = 'expsemicirc';
-    opt.P = 20;
+  if USE_SE
+    opt.window = 'gaussian';
+    opt.P = 32;
   else
-    ref_opt.xi = opt.xi; ref_opt.box = opt.box;
+    ref_opt.box = opt.box; ref_opt.xi = opt.xi;
     ref_opt.layers = ceil((max(opt.M)-1)/2);
   end
   if periodicity == 3
-    if USE_KAISER
+    if USE_SE
       u = SE3P_Laplace_fourier_space(1:N, x, f, opt);
     else
       u = SE3P_Laplace_direct_fd_mex(1:N, x, f, ref_opt);
     end
   elseif periodicity == 2
-    if USE_KAISER
+    if USE_SE
       u = SE2P_Laplace_fourier_space(1:N, x, f, opt);
     else
       uf = SE2P_Laplace_direct_fd_mex(1:N, x, f, ref_opt);
@@ -118,7 +106,7 @@ function u = compute_reference(periodicity, x, f, opt, USE_KAISER)
       u = uf+u0;
     end
   elseif periodicity == 1
-    if USE_KAISER
+    if USE_SE
       u = SE1P_Laplace_fourier_space(1:N, x, f, opt);
     else
       uf = SE1P_Laplace_direct_fd_mex(1:N, x, f, ref_opt);
@@ -126,7 +114,7 @@ function u = compute_reference(periodicity, x, f, opt, USE_KAISER)
       u = uf+u0;
     end
   elseif periodicity == 0
-    if USE_KAISER
+    if USE_SE
       SE0P_warnings('off');
       u = SE0P_Laplace_fourier_space(1:N, x, f, opt);
     else
@@ -146,7 +134,7 @@ function [u, time] = compute_spectral_ewald(periodicity, x, f, opt, n_rep)
     end
   elseif periodicity == 2
     for n=1:n_rep
-      [u, time] = SE2P_Laplace_fourier_space(1:N, x, f, opt);
+      [u, ~, time] = SE2P_Laplace_fourier_space(1:N, x, f, opt);
     end
   elseif periodicity == 1
     for n=1:n_rep

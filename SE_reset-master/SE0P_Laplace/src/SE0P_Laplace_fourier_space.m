@@ -26,16 +26,22 @@ function [pot, force, walltime] = SE0P_Laplace_fourier_space(eval_idx, x, f, opt
 % :param opt.force:             Compute force (default: false)
 % :param opt.box:               Size of periodic cell [L1,L2,L3] (required)
 % :param opt.M:                 Grid size [M1,M2,M3] (required)
+% :param opt.add_M:             Extra number to add to M (default: [6,6,6]),
+%                               see below. If set to the special value
+%                               'cover_remainder', the grid is extended to
+%                               cover the "remainder Gaussian".
+% :param opt.base_factor:       Integer that the final grid sizes should be divisible by
+%                               (default: 4); the grid sizes will be rounded up
 % :param opt.xi:                Ewald parameter (required)
 % :param opt.P:                 Support of window, in number of grid points (required)
-% :param opt.s:                 Oversampling factor (required)
+% :param opt.s:                 Oversampling factor (default: 2.8)
 % :param opt.oversample_all:    Use the oversampled grid for the padded grid as well
 %                               (default: false)
 % :param opt.no_extra_support:  Don't take the "remainder window" into account when
 %                               computing the extended grid (default: false)
 % :param opt.window:            Window function (default: 'gaussian')
 % :param opt.w:                 Width of window (default: w=h*P/2)
-% :param opt.m:                 Gaussian shape function (default: m=0.94*sqrt(pi*P))
+% :param opt.m:                 Gaussian shape function (default: m=0.95*sqrt(pi*P))
 % :param opt.eval_x:            External points to evaluate potential in (Nex×3)
 % :param opt.fast_gridding:     Use fast gridding and spreading (default: true)
 %
@@ -47,6 +53,10 @@ function [pot, force, walltime] = SE0P_Laplace_fourier_space(eval_idx, x, f, opt
 %   oversampling factor s
 % If opt.oversample_all is true, the oversampled grid is used
 % also for the aperiodic convolution.
+%
+% The grid size of the extended grid, Mext, is set to
+%   Mext = opt.M + opt.P + opt.add_M,
+% i.e. both opt.P and opt.add_M are added to the values provided in the opt struct.
 %
 % Valid window functions are 'gaussian', 'expsemicirc', 'kaiser_exact'
 % and 'kaiser_poly'.
@@ -147,7 +157,7 @@ if isfield(opt, 'polynomial_degree')
   mod_opt.polynomial_degree = opt.polynomial_degree;
 end
 % Shift x for the extended box
-x = bsxfun(@plus, x, opt.deltaB);
+x = bsxfun(@plus, x, opt.deltaLhalf);
 if opt.fast_gridding
   % Gridder
   pre_t = tic;
@@ -159,7 +169,7 @@ if opt.fast_gridding
   int_fcn_pot = @(F) iperm(W_fast_int_pot(F, mod_opt, S));
   int_fcn_force = @(F) iperm(W_fast_int_force(F, mod_opt, S));
 else
-  error('Fast gridding should be used!');
+  warning('SE0P:SlowGridding', 'Using slow gridding routines');
   grid_fcn = @(F) W_plain_grid(x, F, mod_opt);
   int_fcn_pot = @(F) W_plain_int_pot(x(eval_idx,:), F, mod_opt);
   int_fcn_force = @(F) W_plain_int_force(x(eval_idx,:), F, mod_opt);
@@ -210,6 +220,6 @@ if opt.fast_gridding
   end
 end
 
-if nargout == 2
+if nargout >= 3
   walltime.total = sum(struct2array(walltime));
 end

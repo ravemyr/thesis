@@ -10,7 +10,7 @@ box = [L L L]; % periodic box
 Neval = N; % number of evaluation points
 
 % Ewald parameters
-M0 = 24; % Set M0 to an even number, the rest is automatic
+M0 = 28; % Set M0=M/L, the rest is automatic
 
 opt.box = box;
 opt.M = M0*opt.box;
@@ -48,7 +48,7 @@ for w=1:numel(windows)
   opt.window = windows{w};
   if strcmp(windows{w}, 'gaussian')
     opt.P = 32;
-    if isfield(opt, 'betaP'), rmfield(opt, 'betaP'), end
+    if isfield(opt, 'betaP'), rmfield(opt, 'betaP'); end
   else
     opt.P = 16;
     opt.betaP = 2.5;
@@ -60,8 +60,9 @@ for w=1:numel(windows)
   [uf, ~, walltime] = SE3P_Laplace_fourier_space(1:Neval, x, f, opt);
   tSEFour = toc(t);
   u = uf + ur + us;
+  tSE = tSEReal + tSEFour;
   rms_error = rms(u-ref) / rms(ref);
   fprintf('  RMS error: %.16g\n', rms_error);
   fprintf('  Time: %g s (Fourier), %g s (real), total %g s\n\n', ...
-          tSEFour, tSEReal, tSEFour+tSEReal);
+          tSEFour, tSEReal, tSE);
 end

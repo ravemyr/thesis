@@ -26,18 +26,23 @@ function [pot, force, walltime] = SE1P_Laplace_fourier_space(eval_idx, x, f, opt
 % :param opt.force:         Compute force (default: false)
 % :param opt.box:           Size of periodic cell [L1,L2,L3] (required)
 % :param opt.M:             Grid size [M1,M2,M3] (required)
-% :param opt.add_M2:        Extra number to add to M2 (default: 0), see below
-% :param opt.add_M3:        Extra number to add to M3 (default: 0), see below
+% :param opt.add_M2:        Extra number to add to M2 (default: 6), see below
+% :param opt.add_M3:        Extra number to add to M3 (default: 6), see below.
+%                           If either add_M2 or add_M3 is set to the special
+%                           value 'cover_remainder', the grid in that direction is
+%                           extended to cover the "remainder Gaussian".
+% :param opt.base_factor:   Integer that the final grid size should be divisible by
+%                           (default: 4); the grid size will be rounded up
 % :param opt.xi:            Ewald parameter (required)
 % :param opt.P:             Support of window, in number of grid points (required)
-% :param opt.s0:            Oversampling factor for zero mode (required)
-% :param opt.s:             Oversampling factor for local pad (required)
+% :param opt.s0:            Oversampling factor for zero mode (default: 2.5)
+% :param opt.s:             Oversampling factor for local pad (default: 4)
 % :param opt.sg:            Oversampling factor for the rest of the domain (default: 1)
 % :param opt.n:             Used to define which modes to include in the local pad
-%                           (default: n=max(ceil(opt.M(1)/2),1))
+%                           (default: ceil(M1/5))
 % :param opt.window:        Window function (default: 'gaussian')
 % :param opt.w:             Width of window (default: w=h*P/2)
-% :param opt.m:             Gaussian shape function (default: m=0.94*sqrt(pi*P))
+% :param opt.m:             Gaussian shape function (default: m=0.95*sqrt(pi*P))
 % :param opt.eval_x:        External points to evaluate potential in (Nex×3)
 % :param opt.fast_gridding: Use fast gridding and spreading (default: true)
 %
@@ -128,7 +133,7 @@ if opt.fast_gridding
   int_fcn_pot = @(F) iperm(W_fast_int_pot(F, opt, S));
   int_fcn_force = @(F) iperm(W_fast_int_force(F, opt, S));
 else
-  error('Fast gridding should be used!');
+  warning('SE1P:SlowGridding', 'Using slow gridding routines');
   grid_fcn = @(F) W_plain_grid(x, F, opt);
   int_fcn_pot = @(F) W_plain_int_pot(x(eval_idx,:), F, opt);
   int_fcn_force = @(F) W_plain_int_force(x(eval_idx,:), F, opt);
@@ -177,7 +182,7 @@ if opt.fast_gridding
   end
 end
 
-if nargout == 2
+if nargout >= 3
   walltime.total = sum(struct2array(walltime));
 end
 
@@ -188,22 +193,25 @@ assert(isfield(opt, 'box'), 'cell size box must be given in opt struct');
 assert(isfield(opt, 'M'), 'grid size M must be given in opt struct');
 assert(isfield(opt, 'xi'), 'Ewald parameter xi must be given in opt struct');
 assert(isfield(opt, 'P'), 'window support P must be given in opt struct');
-assert(isfield(opt, 's'), 'oversampling factor s must be given in opt struct');
-assert(isfield(opt, 's0'), 'zero-mode oversampling factor s0 must be given in opt struct');
 
 if ~isfield(opt,'potential'), opt.potential = true; end
 if ~isfield(opt,'force'), opt.force = false; end
+if ~isfield(opt,'fast_gridding'), opt.fast_gridding = true; end
+if ~isfield(opt,'base_factor'), opt.base_factor = 4; end
+% The following estimate for add_M2 and add_M3 works well when
+% the periodic cell is a cube. Otherwise is might be completely off.
+if ~isfield(opt,'add_M2'), opt.add_M2 = 6; end
+if ~isfield(opt,'add_M3'), opt.add_M3 = 6; end
 
 % Basic grid
+opt.M(1) = opt.base_factor * ceil(opt.M(1) / opt.base_factor); % round up
 opt.L = opt.box(1);
-opt.h = opt.L/opt.M(1); % step size (M contains number of subintervals)
-if ~isfield(opt,'add_M2'), opt.add_M2 = 0; end
-if ~isfield(opt,'add_M3'), opt.add_M3 = 0; end
+opt.h = opt.L / opt.M(1); % step size (M contains number of subintervals)
 
 % Window options
 if ~isfield(opt,'window'), opt.window = 'gaussian'; end
 if ~isfield(opt,'w'), opt.w = opt.h*opt.P/2; end
-if ~isfield(opt,'m'), opt.m = 0.94*sqrt(pi*opt.P); end
+if ~isfield(opt,'m'), opt.m = 0.95*sqrt(pi*opt.P); end
 opt.eta = (2*opt.w*opt.xi/opt.m)^2;
 opt.c = 2*opt.xi^2/opt.eta;
 
@@ -220,34 +228,46 @@ if strcmp(opt.window,'kaiser_poly')
   if ~isfield(opt,'polynomial_degree'), opt.polynomial_degree = 1; end
 end
 
-% Verify assumptions on parameters
-opt.My = opt.M(2) + opt.P + opt.add_M2; % increase grid size in y direction
-opt.Mz = opt.M(3) + opt.P + opt.add_M3; % increase grid size in z direction
-% If Mx is even, make My and Mz even too
-if mod(opt.M(1), 2) == 0
-  opt.My = 2*ceil(opt.My/2);
-  opt.Mz = 2*ceil(opt.Mz/2);
+% Extend grid in free directions (y and z directions)
+if (ischar(opt.add_M2) && strcmp(opt.add_M2, 'cover_remainder')) || ...
+   (ischar(opt.add_M3) && strcmp(opt.add_M3, 'cover_remainder'))
+  % Method used in legacy 0P code
+  deltaM_grid = opt.P; % to cover the gridding window
+  deltaM_rem = deltaM_grid; % to cover the "remainder Gaussian"
+  if strcmp(opt.window,'expsemicirc') || strcmp(opt.window,'kaiser_exact') ...
+      || strcmp(opt.window,'kaiser_poly')
+    deltaM_rem = sqrt(8*opt.betaP)/opt.xi / opt.h;
+  elseif opt.eta < 1
+    deltaM_rem = sqrt(2*(1-opt.eta))*opt.m/opt.xi / opt.h;
+  end
+  deltaM = max(deltaM_grid, deltaM_rem);
+  if isfield(opt, 'no_extra_support') && opt.no_extra_support == true
+    deltaM = deltaM_grid;
+  end
 end
-opt.M(2) = opt.My; % for good measure
-opt.M(3) = opt.Mz; % for good measure
-opt.Ly = opt.h*opt.My;
-opt.Lz = opt.h*opt.Mz;
-% Compute extended grid in the 0P way
-deltaB_grid = opt.h * opt.P / 2;
-deltaB_rem = deltaB_grid;
-if strcmp(opt.window,'expsemicirc') || strcmp(opt.window,'kaiser_exact') ...
-    || strcmp(opt.window,'kaiser_poly')
-  deltaB_rem = sqrt(2*opt.betaP)/opt.xi;
-elseif opt.eta < 1
-  deltaB_rem = sqrt((1-opt.eta)/2)*opt.m/opt.xi;
+% y direction
+if ischar(opt.add_M2) && strcmp(opt.add_M2, 'cover_remainder')
+  opt.My = opt.M(2) + deltaM;
+else
+  % Default method
+  opt.My = opt.M(2) + opt.P + opt.add_M2;
 end
-deltaM_grid = 2*ceil(deltaB_grid / opt.h);
-deltaM_rem = 2*ceil(deltaB_rem / opt.h);
-deltaB_grid = opt.h * deltaM_grid / 2;
-deltaB_rem = opt.h * deltaM_rem / 2;
-fprintf('P=%d; deltaM_grid=%d; deltaM_rem=%d\n', opt.P, deltaM_grid, deltaM_rem);
-opt.box(2) = opt.Ly; % for good measure
-opt.box(3) = opt.Lz; % for good measure
+% z direction
+if ischar(opt.add_M3) && strcmp(opt.add_M3, 'cover_remainder')
+  opt.Mz = opt.M(3) + deltaM;
+else
+  % Default method
+  opt.Mz = opt.M(3) + opt.P + opt.add_M3;
+end
+opt.My = opt.base_factor * ceil(opt.My / opt.base_factor); % round up
+opt.Mz = opt.base_factor * ceil(opt.Mz / opt.base_factor); % round up
+opt.Ly = opt.h * opt.My; % adjust box side length
+opt.Lz = opt.h * opt.Mz; % adjust box side length
+% Store values in given vectors as well
+opt.M(2) = opt.My;
+opt.M(3) = opt.Mz;
+opt.box(2) = opt.Ly;
+opt.box(3) = opt.Lz;
 % Check that h is the same in all directions
 assert(abs(opt.h - opt.Ly/opt.My) < eps);
 assert(abs(opt.h - opt.Lz/opt.Mz) < eps);
@@ -256,29 +276,29 @@ wbox = [0 opt.L; -opt.w -opt.w+opt.Ly; -opt.w -opt.w+opt.Lz];
 opt.free_offset = wbox(2:3,1);
 
 % Sampling factor (oversampling)
-if ~isfield(opt,'sg'), opt.sg = 1; end
-if ~isfield(opt,'s'), opt.s = 4; end % Are these mandatory or not?
-if ~isfield(opt,'s0'), opt.s0 = 2.5; end % -"-
-if ~isfield(opt,'n'), opt.n = max(ceil(opt.M(1)/2),1); end
+if ~isfield(opt,'sg'), opt.sg = 1; end % global oversampling
+if ~isfield(opt,'s'), opt.s = 4; end % oversampling for local pad
+if ~isfield(opt,'s0'), opt.s0 = 2.5; end % oversampling for zero-mode
+if ~isfield(opt,'n'), opt.n = ceil(opt.M(1)/5); end % size of local pad
 % Increase s and s0 such that FFTN has integer size vectors.
 opt.s = max(ceil(opt.s*opt.My)/opt.My, ceil(opt.s*opt.Mz)/opt.Mz);
 opt.s0 = max(ceil(opt.s0*opt.My)/opt.My, ceil(opt.s0*opt.Mz)/opt.Mz);
 opt.sl = opt.s; % FIXME: in GAUSSIAN code s is called sl (which
-                % actually seems like a better name)
+                % actually seems like a better name), and n is called nl
 
 % Local pads, only if local oversampling is different from global oversampling
 if opt.sg ~= opt.sl
   n = opt.n;
-  if n > 1
-      n = min(floor((opt.M(1)-1)/2), n); % half-modes should be at most half of M
-  end
+  % The local pad consists of k = -n:n, and the grid is -M/2:(M/2-1)
+  % [if M is even] or -(M-1)/2:(M-1)/2 [if M is odd]. Thus, n can
+  % at most be M/2-1 [if M is even] or (M-1)/2 [if M is odd].
+  % These are both captured by floor((M-1)/2).
+  n = min(floor((opt.M(1)-1)/2), n);
   % Zero mode is the first element, excluded here
   opt.local_pad = [2:n+1 opt.M(1)-n+1:opt.M(1)];
 else
   opt.local_pad = 1;
 end
-
-if ~isfield(opt,'fast_gridding'), opt.fast_gridding = true; end
 
 % Half-support of window
 if mod(opt.P,2)==0

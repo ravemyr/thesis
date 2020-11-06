@@ -23,9 +23,10 @@ function plot_figT1
     end
     xlabel('kinf/xi')
     ylabel('RMS error (rel.)')
-    legend('show', 'Location', 'NorthEast')
+    legend('show', 'Location', 'best')
     grid on
-    title('Error vs M')
+    title(sprintf('Error vs M (%dP)', per(i)))
+    ylim([1e-15 1e0])
   end
 end
 

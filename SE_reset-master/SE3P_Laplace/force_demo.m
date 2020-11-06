@@ -3,14 +3,14 @@
 clear
 rng(1);
 
-N = 50; % number of source particles
+N = 100; % number of source particles
 L = 1; % box side length
 box = [L L L]; % periodic box
 [x, f] = NEW_vector_system(N, box); % random sources
 Neval = N; % number of evaluation points
 
 % Ewald parameters
-M0 = 28; % Set M0 to an even number, the rest is automatic
+M0 = 28; % Set M0=M/L, the rest is automatic
 
 opt.box = box;
 opt.M = M0*opt.box;
@@ -37,7 +37,6 @@ ref = ref_fd + ref_real;
 
 %% Spectral Ewald, real space
 opt.potential = false; opt.force = true;
-%opt.fast_gridding = false;
 %opt.fourier_differentiation = true;
 t = tic();
 [~, ur] = SE3P_Laplace_real_space(1:Neval, x, f, opt);
@@ -50,7 +49,7 @@ for w=1:numel(windows)
   opt.window = windows{w};
   if strcmp(windows{w}, 'gaussian')
     opt.P = 32;
-    if isfield(opt, 'betaP'), rmfield(opt, 'betaP'), end
+    if isfield(opt, 'betaP'), rmfield(opt, 'betaP'); end
   else
     opt.P = 16;
     opt.betaP = 2.5;
@@ -68,24 +67,3 @@ for w=1:numel(windows)
   fprintf('  Time: %g s (Fourier), %g s (real), total %g s\n\n', ...
           tSEFour, tSEReal, tSE);
 end
-
-%pid = 5;
-%h = 1e-7;
-%xh = x;
-%xh(pid,1) = xh(pid,1) + h;
-
-%prfd0 = SE3P_Laplace_direct_fd_mex(1:Neval, x, f, Dopt);
-%prfdh = SE3P_Laplace_direct_fd_mex(1:Neval, xh, f, Dopt);
-%Frfdh = (prfdh(1) - prfd0(1))/h;
-
-%Dopt.layers = 1;
-%prrs0 = SE3P_Laplace_direct_real_rc_mex(1:Neval, x, f, Dopt);
-%prrsh = SE3P_Laplace_direct_real_rc_mex(1:Neval, xh, f, Dopt);
-%Frrsh = (prrsh(pid) - prrs0(pid))/h
-
-%Frh = Frrsh + Frfdh
-
-%opt.potential = true; opt.force = false;
-%psfd0 = SE3P_Laplace_fourier_space(1:Neval, x, f, opt);
-%psfdh = SE3P_Laplace_fourier_space(1:Neval, xh, f, opt);
-%Fsfdh = (psfdh(1) - psfd0(1))/h

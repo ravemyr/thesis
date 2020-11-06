@@ -17,7 +17,7 @@ close all
 opt.box = box;
 
 %Ewald params
-M0 = 28; % Set M0=M/L, the restu * 1+ is automatic
+M0 = 32; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*opt.box;
 opt.xi = M0*pi/12;
 
@@ -29,7 +29,7 @@ ED_opt.layers = (opt.M(1)-1)/2;
 ED_opt.xi = opt.xi;
 ED_opt.box = box;
 %%
-
+% Direct computation for reference
 t = tic();
 ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
 tDirReal = toc(t);
@@ -43,7 +43,7 @@ for w=1:numel(windows)
     opt.P = 32;
     if isfield(opt, 'betaP'), rmfield(opt, 'betaP'); end
   else
-    opt.P = 32;
+    opt.P = 16;
     opt.betaP = 2.5;
   end
   if strcmp(windows{w}, 'kaiser_poly')

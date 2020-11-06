@@ -1,0 +1,7 @@
+.dropbox.attr
+*~
+*.log
+a.out
+bin/*
+build/*
+*.swp

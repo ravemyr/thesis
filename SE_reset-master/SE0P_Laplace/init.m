@@ -11,7 +11,3 @@ addpath([root, '/SE0P_Laplace/src']);
 addpath([root, '/util']);
 addpath([root, '/bin']);
 addpath([root, '/SE_Laplace_direct']);
-
-% TEMPORARY PATHS (TODO FIXME)
-%addpath([root, '/../SE_unified.git/SE_kaiser/src']);
-%addpath([root, '/../SE_unified.git/util']);
