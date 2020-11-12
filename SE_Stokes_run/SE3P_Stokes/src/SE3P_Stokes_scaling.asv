@@ -35,7 +35,7 @@ if strcmp(opt.window, 'gaussian')
     error('Precomputed Fourier transform necessary for the %s window', opt.window);
 %   end
 end
-Z(k1 ==0,k2==0,k3==0) = 0;
+Z(1,1,1) = 0;
 KH = K1 .* H1 + K2 .* H2 + K3 .* H3;
 G1 = Z .* (KK .* H1 - KH .* K1);
 G2 = Z .* (KK .* H2 - KH .* K2);
