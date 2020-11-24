@@ -35,7 +35,7 @@ ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
 tDirReal = toc(t);
 
 %%
-windows = {'gaussian', 'kaiser_exact'};%, 'kaiser_poly'};
+windows = {'gaussian', 'kaiser_exact', 'kaiser_poly'};
 for w=1:numel(windows)
   fprintf('3P Stokes Spectral Ewald, window: %s\n', windows{w});
   opt.window = windows{w};
