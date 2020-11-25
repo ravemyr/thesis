@@ -56,7 +56,7 @@ exportgraphics(gcf,'error_est.png')
 
 A = @(F,xi,L) (F*xi/L)^(1/2); %Hypothesis
 
-opt.M = 64; 
+M0 = 64; 
 opt.P =32;
 opt.window = 'kaiser_exact';
 NN = [10,50,100,200,400];
@@ -65,6 +65,7 @@ xx = [2,4,6,8,10,12];
 MA = [];
 for L = LL
     opt.box = [L,L,L];
+    opt.M = M0*opt.box;
     for N = NN
         [x,f] = SE_charged_system(N,box,'vector');
         F = sqrt(sum(abs(f).^2));
