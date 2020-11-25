@@ -33,8 +33,7 @@ ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
 %% Estimate
 
 F = sum(abs(f).^2);
-est = @(M,xi) 2.*L^2.*sqrt(F).*(2*sqrt(pi)*M/2 + 3*xi*L).*exp(-*M/2(pi/(xi*L)).^2)/sqrt(pi);
-A = @(F,xi,L) (F*xi/L)^(1/2);
+est = @(M,xi) 2.*L^2.*sqrt(F).*(2*sqrt(pi)*M/2 + 3*xi*L).*exp(-((M/2)*pi/(xi*L)).^2)/sqrt(pi);
 MM = [16,24,32,40,48,56,64];
 err = [];
 ee = [];
@@ -43,7 +42,7 @@ for i = MM
     opt.M = M0*opt.box;
     u = SE3P_Stokes(1:N, x, f, opt);
     err = [err rms(u-ref) / rms(ref)];
-    ee = [ee, rms(est(opt.M, opt.xi))];
+    ee = [ee, est(opt.M, opt.xi)];
 end
 disp('error rate as M increases')
 disp(err)
@@ -53,4 +52,27 @@ semilogy(MM./2,err)
 exportgraphics(gcf,'error_kplot.png')
 semilogy(MM./2,ee)
 exportgraphics(gcf,'error_est.png')
+%% Amplitute
+
+A = @(F,xi,L) (F*xi/L)^(1/2); %Hypothesis
+
+opt.M = 64; 
+opt.P =32;
+opt.window = 'kaiser';
+NN = [10,50,100,200,400];
+LL = [0.5, 1, 2, 5, 10];
+xx = [2,4,6,8,10,12];
+
+for L = LL
+    opt.box = [L,L,L];
+    for N = NN
+        [x,f] = SE_charged_system(N,box,'vector');
+        F = sqrt(sum(abs(f).^2));
+        for xi = xx
+            opt.xi = xi;
+            u = SE3P_Stokes()
+        end
+    end
+end
+
 
