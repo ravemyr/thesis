@@ -33,7 +33,7 @@ ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
 %% Estimate
 
 F = sum(abs(f).^2);
-est = @(M,xi) 2.*L^2.*sqrt(F).*(2*sqrt(pi)*M/2 + 3*xi*L).*exp(-((M/2)*pi/(xi*L)).^2)/sqrt(pi);
+est = @(M,xi,L,F) 2.*L^2.*sqrt(F).*(2*sqrt(pi)*M/2 + 3*xi*L).*exp(-((M/2)*pi/(xi*L)).^2)/sqrt(pi);
 MM = [16,24,32,40,48,56,64];
 err = [];
 ee = [];
@@ -42,7 +42,7 @@ for i = MM
     opt.M = M0*opt.box;
     u = SE3P_Stokes(1:N, x, f, opt);
     err = [err rms(u-ref) / rms(ref)];
-    ee = [ee, est(opt.M, opt.xi)];
+    ee = [ee, est(opt.M, opt.xi,L,F)];
 end
 disp('error rate as M increases')
 disp(err)
