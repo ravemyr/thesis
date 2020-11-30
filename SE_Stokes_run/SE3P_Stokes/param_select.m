@@ -48,7 +48,7 @@ for i = MM
     ED_opt.layers = (opt.M(1)-1)/2;
     %u = SE3P_Stokes(1:N, x, f, opt);
     u = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
-    err = [err rms(u-ref) / rms(ref)];
+    err = [err rms(u-ref)];
     ee = [ee, est(opt.M, opt.xi,L,F)];
 end
 disp('error rate as M increases')
