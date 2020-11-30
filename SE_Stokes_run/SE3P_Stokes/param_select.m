@@ -87,7 +87,7 @@ for L = LL
         end
     end
 end
-plot(1:length(eu(1,:)),eu(1)/norm(a),'*')
+plot(1:length(MA),MA,'*')
 exportgraphics(gcf,'error_amp.png');
 fclose(fileid);
 disp(MA)
