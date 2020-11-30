@@ -71,9 +71,10 @@ NN = [25,50,100];
 LL = [0.5, 1, 2];
 xx = [4,6,8];
 MA = [];
+fileid = fopen('outdata.txt','w');
+fprintf(fileid,'%2s %3s %4s %9s %11s \n','N','L','xi', 'rms','A');
 for L = LL
     opt.box = [L,L,L];
-    
     for N = NN
         [x,f] = SE_charged_system(N,opt.box,'vector');
         F = sqrt(sum(abs(f).^2));
@@ -81,10 +82,12 @@ for L = LL
             opt.xi = xi;
             eu = rms(SE3P_Stokes(1:N, x, f, opt));
             a = norm(A(F,xi,L));
+            fprintf(fileid,'%3i %2.2f %1i %6.4f %6.4f %6.4f %6.4f \n',N,L,xi,eu,a);
             MA = [MA eu/a];
         end
     end
 end
+fclose(fileid);
 disp(MA)
 
 
