@@ -15,7 +15,7 @@ opt.box = box;
 %Ewald params
 
 
-M0 = 64; % Set M0=M/L, the restu * 1+ is automatic
+M0 = 128; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*opt.box;
 opt.xi = M0*pi/12;
 opt.P = opt.M/2;
@@ -79,9 +79,9 @@ for L = LL
         F = sqrt(sum(abs(f).^2));
         for xi = xx
             opt.xi = xi;
-            u = norm(SE3P_Stokes(1:N, x, f, opt));
+            eu = rms(SE3P_Stokes(1:N, x, f, opt));
             a = norm(A(F,xi,L));
-            MA = [MA u/a];
+            MA = [MA eu/a];
         end
     end
 end
