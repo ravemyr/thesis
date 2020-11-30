@@ -61,7 +61,7 @@ exportgraphics(gcf,'error_kplot.png')
 %exportgraphics(gcf,'error_est.png')
 %% Amplitute
 
-A = @(F,xi,L) (F*xi/L).^(1/2); %Hypothesis
+A = @(F,xi,L) (F*xi^2/L); %Hypothesis
 
 M0 = 128;
 opt.M = [M0,M0,M0];
@@ -82,11 +82,13 @@ for L = LL
             opt.xi = xi;
             eu = rms(SE3P_Stokes(1:N, x, f, opt));
             a = A(F,xi,L);
-            fprintf(fileid,'%3i %2.2f %1i %6.4f %6.4f %6.4f %6.4f %6.4f \n',N,L,xi,eu,a,eu(1)/a);
+            fprintf(fileid,'%3i %2.2f %1i %6.4f %6.4f %6.4f %6.4f %6.4f \n',N,L,xi,eu,norm(a),eu(2)/norm(a));
             MA = [MA eu/norm(a)];
         end
     end
 end
+plot(1:length(eu(1,:)),eu(1)/norm(a),'*')
+exportgraphics(gcf,'error_amp.png');
 fclose(fileid);
 disp(MA)
 
