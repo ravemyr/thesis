@@ -84,12 +84,11 @@ for L = LL
             a = A(F,xi,L);
             fprintf(fileid,'%3i %2.2f %1i %6.4f %6.4f %6.4f %6.4f %6.4f \n',N,L,xi,eu,a,eu(1)/a);
             MA = [MA eu/norm(a)];
-            t = [t eu/a];
         end
     end
 end
 fclose(fileid);
 disp(MA)
-t
+
 
 
