@@ -72,7 +72,7 @@ LL = [0.5, 1, 2];
 xx = [4,6,8];
 MA = [];
 fileid = fopen('outdata.txt','w');
-fprintf(fileid,'%2s %3s %4s %9s %11s %5 \n','N','L','xi', 'rms','A','rms/a');
+fprintf(fileid,'%2s %3s %4s %9s %11s %5s \n','N','L','xi', 'rms','A','rms/a');
 for L = LL
     opt.box = [L,L,L];
     for N = NN
