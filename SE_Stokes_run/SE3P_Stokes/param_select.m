@@ -55,7 +55,7 @@ disp('error rate as M increases')
 disp(err)
 disp('error estimate')
 disp(ee)
-semilogy(MM./2,err([1,4,9]))
+semilogy(MM./2,err([1,4,7]))
 exportgraphics(gcf,'error_kplot.png')
 %semilogy(MM./2,ee)
 %exportgraphics(gcf,'error_est.png')
@@ -72,7 +72,7 @@ LL = [0.5, 1, 2];
 xx = [4,6,8];
 MA = [];
 fileid = fopen('outdata.txt','w');
-fprintf(fileid,'%2s %3s %4s %9s %11s \n','N','L','xi', 'rms','A');
+fprintf(fileid,'%2s %3s %4s %9s %11s %5 \n','N','L','xi', 'rms','A','rms/a');
 for L = LL
     opt.box = [L,L,L];
     for N = NN
@@ -82,7 +82,7 @@ for L = LL
             opt.xi = xi;
             eu = rms(SE3P_Stokes(1:N, x, f, opt));
             a = norm(A(F,xi,L));
-            fprintf(fileid,'%3i %2.2f %1i %6.4f %6.4f %6.4f %6.4f \n',N,L,xi,eu,a);
+            fprintf(fileid,'%3i %2.2f %1i %6.4f %6.4f %6.4f %6.4f %6.4f \n',N,L,xi,eu,a,eu(1)/a);
             MA = [MA eu/a];
         end
     end
