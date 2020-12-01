@@ -36,7 +36,7 @@ ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
 %ref = SE3P_Stokes(1:N,x,f,opt);
 %% Estimate
 
-F = sum(abs(f).^2);
+F = sum(norm(f).^2);
 est = @(M,xi,L,F) 2.*L^2.*sqrt(F).*(2*sqrt(pi)*M/2 + 3*xi*L).*exp(-((M/2)*pi/(xi*L)).^2)/sqrt(pi);
 MM = [8,16,32];
 err = [];
