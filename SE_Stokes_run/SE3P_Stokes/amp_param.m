@@ -22,7 +22,7 @@ for L = LL
             eu = rmse(SE3P_Stokes(1:N, x, f, opt));
             a = A(F,xi,L);
             fprintf(fileid,'%3i %2.2f %1i %6.4f %6.4f %6.4f \n',N,L,xi,eu,norm(a),eu/a);
-            MA = [MA eu/a];
+            MA = [MA eu];
         end
     end
 end

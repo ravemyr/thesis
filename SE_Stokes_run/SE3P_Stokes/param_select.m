@@ -15,7 +15,7 @@ opt.box = box;
 %Ewald params
 
 
-M0 = 128; % Set M0=M/L, the restu * 1+ is automatic
+M0=128; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*opt.box;
 opt.xi = M0*pi/12;
 opt.P = opt.M/2;
@@ -37,10 +37,11 @@ ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
 %% Estimate
 
 F = sum(norm(f).^2);
-est = @(M,xi,L,F) 2.*L^2.*sqrt(F).*(2*sqrt(pi)*M/2 + 3*xi*L).*exp(-((M/2)*pi/(xi*L)).^2)/sqrt(pi);
+est = @(M,xi,L,f) 2*L^2*sqrt(f)*(2*sqrt(pi)*M/2 + 3*xi*L)*exp(-((M/2)*pi/(xi*L))^2)/sqrt(pi);
 MM = [8,16,32];
 err = [];
 ee = [];
+
 for i = MM
     M0 = i;
     opt.M = M0*opt.box;
@@ -48,15 +49,18 @@ for i = MM
     ED_opt.layers = (opt.M(1)-1)/2;
     %u = SE3P_Stokes(1:N, x, f, opt);
     u = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
-    err = [err rmse(u-ref)/rmse(ref)];
-    esti = est(opt.M,opt.xi,L,F);
-    ee = [ee, esti/rmse(ref)];
+    err = [err rmse(u-ref)];
+    esti = est(opt.M(1),opt.xi,L,F);
+    ee = [ee, esti];
 end
+disp(rmse(ref))
 disp('error rate as M increases')
 disp(err)
 disp('estimate error comparison')
 disp(ee)
-semilogy(MM./2,err)
+semilogy(MM./2,err,'-')
+hold on
+semilogy(MM./2,ee,'--')
 exportgraphics(gcf,'error_kplot.png')
 %semilogy(MM./2,ee)
 %exportgraphics(gcf,'error_est.png')
