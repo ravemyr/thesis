@@ -45,7 +45,7 @@ for P = PP
     u = SE3P_Stokes(1:N, x, f, opt);
     rms_err = [rms_err rms(u-ref)/rms(ref)];
 end
-
+disp(rms_err)
 semilogy(PP,rms_err)
 exportgraphics(gcf,'error_P.png')
 
