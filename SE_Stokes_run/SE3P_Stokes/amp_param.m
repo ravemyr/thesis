@@ -1,13 +1,13 @@
 %% Amplitute
 
-A = @(F,xi,L) (F.^(1/2)*xi^2/(L^(1/2))); %Hypothesis
+A = @(F,xi,L) (F*xi^2/L).^(1/2); %Hypothesis
 
 M0 = 128;
 opt.M = [M0,M0,M0];
-opt.P =48;
-opt.window = 'kaiser_exact';
+opt.P = 96;
+opt.window = 'gaussian';
 NN = [25,50,100];
-LL = [0.5, 1, 2];
+LL = [1,2,3];
 xx = [4,6,8];
 MA = [];
 fileid = fopen('outdata.txt','w');
