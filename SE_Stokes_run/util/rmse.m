@@ -1,5 +1,5 @@
 function Q = rmse(x)
-    N = max(dim(x));
+    N = max(size(x));
     for i=1:N
        QQ = QQ + norm(x(i,:))^2; 
     end
