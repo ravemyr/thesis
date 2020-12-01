@@ -53,7 +53,7 @@ for w=1:numel(windows)
   u = SE3P_Stokes(1:N, x, f, opt);
   tSEFour = toc(t);
   
-  rms_error = rms(u-ref) / rms(ref);
+  rms_error = rmse(u-ref) / rmse(ref);
   fprintf('  RMS error: %.16g\n', rms_error);
   fprintf('  Time: %g s (Fourier), %g s (real), total %g s\n\n', ...
           tSEFour);
