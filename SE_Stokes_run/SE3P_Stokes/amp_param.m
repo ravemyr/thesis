@@ -11,7 +11,7 @@ LL = [0.5,1,1.5,2];
 xx = [2,4,6,8,10,12];
 MA = [];
 fileid = fopen('outdata.txt','w');
-fprintf(fileid,'%2s %3s %4s %9s %11s %5s \n','N','L','xi', 'rms','A','rms/a');
+fprintf(fileid,'%2s %3s %4s %9s %6s %5s \n','N','L','xi', 'rms','A','rms/a');
 for L = LL
     opt.box = [L,L,L];
     for N = NN
@@ -19,9 +19,9 @@ for L = LL
         F = sqrt(sum(norm(f).^2));
         for xi = xx
             opt.xi = xi;
-            eu = rms(SE3P_Stokes(1:N, x, f, opt));
+            eu = rmse(SE3P_Stokes(1:N, x, f, opt));
             a = A(F,xi,L);
-            fprintf(fileid,'%3i %2.2f %1i %6.4f %6.4f %6.4f %6.4f %6.4f \n',N,L,xi,eu,norm(a),eu/a);
+            fprintf(fileid,'%3i %2.2f %1i %6.4f %6.4f %6.4f \n',N,L,xi,eu,norm(a),eu/a);
             MA = [MA eu/a];
         end
     end
