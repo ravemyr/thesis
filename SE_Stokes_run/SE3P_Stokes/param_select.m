@@ -61,7 +61,7 @@ exportgraphics(gcf,'error_kplot.png')
 %exportgraphics(gcf,'error_est.png')
 %% Amplitute
 
-A = @(F,xi,L) (F*xi^2/L); %Hypothesis
+A = @(F,xi,L) (F.^(1/2)*xi^2/(L^(1/2))); %Hypothesis
 
 M0 = 128;
 opt.M = [M0,M0,M0];
