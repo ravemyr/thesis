@@ -27,6 +27,6 @@ for L = LL
     end
 end
 plot(1:length(MA),MA,'*')
-exportgraphics(gcf,'error_amp.png');
+exportgraphics(gcf,'error_amp.png','Resolution',300);
 fclose(fileid);
 %disp(MA)

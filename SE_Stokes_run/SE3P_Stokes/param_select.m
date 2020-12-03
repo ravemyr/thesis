@@ -61,9 +61,9 @@ disp(ee)
 semilogy(MM./2,err,'-')
 hold on
 semilogy(MM./2,ee,'--')
-exportgraphics(gcf,'error_kplot.png')
+exportgraphics(gcf,'error_kplot.png','Resolution',300)
 %semilogy(MM./2,ee)
-%exportgraphics(gcf,'error_est.png')
+%exportgraphics(gcf,'error_est.png','Resolution',300)
 
 
 
