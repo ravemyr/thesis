@@ -44,7 +44,7 @@ for P = PP
 end
 disp(rms_err)
 semilogy(PP,rms_err)
-exportgraphics(gcf,'error_P.png')
+exportgraphics(gcf,'error_P.png','Resolution',1500)
 
 
 
