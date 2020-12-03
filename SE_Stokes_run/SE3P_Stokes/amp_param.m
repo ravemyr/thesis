@@ -15,10 +15,10 @@ fprintf(fileid,'%2s %3s %4s %9s %6s %5s \n','N','L','xi', 'rms','A','rms/a');
 for L = LL
     opt.box = [L,L,L];
     [x,f] = SE_charged_system(N,opt.box,'vector');
-    FF = [f, 2*f, 4*f, 8*f];
     for xi = xx
         opt.xi = xi;
-        for f = FF
+        for j = 0:3
+	    f = f*2^j;
             eu = rmse(SE3P_Stokes(1:N, x, f, opt));
             F = sqrt(sum(norm(f).^2));
             a = A(F,xi,L);
