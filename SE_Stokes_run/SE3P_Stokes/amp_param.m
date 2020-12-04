@@ -1,6 +1,6 @@
 %% Amplitute
 rng(1);
-A = @(F,xi,L) (F*xi/(L)).^(1/2); %Hypothesis
+A = @(F,xi,L) (F^2*xi^2/(L)).^(1/2); %Hypothesis
 
 M0 = 128;
 opt.M = [M0,M0,M0];
@@ -18,9 +18,9 @@ for L = LL
     for xi = xx
         opt.xi = xi;
         for j = 0:3
-	    f = f*2^j;
-            eu = rmse(SE3P_Stokes(1:N, x, f, opt));
-            F = sqrt(sum(norm(f).^2));
+	    ff = f*2^j;
+            eu = rmse(SE3P_Stokes(1:N, x, ff, opt));
+            F = sqrt(sum(norm(ff).^2));
             a = A(F,xi,L);
             fprintf(fileid,'%3i %2.2f %1i %6.4f %6.4f %6.4f \n',N,L,xi,eu,norm(a),eu/a);
             MA = [MA eu];
@@ -28,6 +28,6 @@ for L = LL
     end
 end
 plot(1:length(MA),MA,'*')
-exportgraphics(gcf,'error_amp.png','Resolution',1500);
+exportgraphics(gcf,'error_amp.png','Resolution',10);
 fclose(fileid);
 %disp(MA)
