@@ -23,7 +23,7 @@ for L = LL
             F = sqrt(sum(norm(ff).^2));
             a = A(F,xi,L);
             fprintf(fileid,'%3i %2.2f %1i %6.4f %6.4f %6.4f \n',N,L,xi,eu,norm(a),eu/a);
-            MA = [MA eu];
+            MA = [MA eu/a];
         end
     end
 end
