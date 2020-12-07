@@ -39,7 +39,7 @@ end
 %ref = SE3P_Stokes(1:N,x,f,opt);
 %% Compare solutions with changing P
 
-PP = 48:16:80;
+PP = 16:16:80;
 rms_err = [];
 for P = PP
     opt.P = P;

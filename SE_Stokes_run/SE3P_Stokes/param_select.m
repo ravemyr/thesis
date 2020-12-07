@@ -68,6 +68,7 @@ disp(ee)
 semilogy(MM./2,err,'.-')
 hold on
 semilogy(MM./2,ee,'.--')
+legend('relative error','error estimate','Location','North East')
 exportgraphics(gcf,'error_kplot.png')
 %semilogy(MM./2,ee)
 %exportgraphics(gcf,'error_est.png','Resolution',1500)
