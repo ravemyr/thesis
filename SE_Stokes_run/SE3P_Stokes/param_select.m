@@ -30,15 +30,22 @@ ED_opt.xi = opt.xi;
 ED_opt.box = box;
 
 %% Direct solution
-
-ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
+if(~exist('refval.mat'))
+	disp('Generating reference solution')
+	ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
+	save('refval.mat','ref');
+else
+	disp('Using existing reference solution')
+        reffile = load('refval.mat');
+	ref = reffile.ref;
+end
 %opt.window = 'gaussian';
 %ref = SE3P_Stokes(1:N,x,f,opt);
 %% Estimate
 
 F = sum(norm(f).^2);
 est = @(M,xi,L,f) 2*L^2*sqrt(f)*(2*sqrt(pi)*M/2 + 3*xi*L)*exp(-((M/2)*pi/(xi*L))^2)/sqrt(pi);
-MM = [8,16,32];
+MM = [50,64,80,96];
 err = [];
 ee = [];
 
@@ -49,8 +56,8 @@ for i = MM
     ED_opt.layers = (opt.M(1)-1)/2;
     %u = SE3P_Stokes(1:N, x, f, opt);
     u = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
-    err = [err rmse(u-ref)];
-    esti = est(opt.M(1),opt.xi,L,F);
+    err = [err rmse(u-ref)/rmse(ref)];
+    esti = est(opt.M(1),opt.xi,L,F)/rmse(ref);
     ee = [ee, esti];
 end
 disp(rmse(ref))
@@ -58,10 +65,10 @@ disp('error rate as M increases')
 disp(err)
 disp('estimate error comparison')
 disp(ee)
-semilogy(MM./2,err,'-')
+semilogy(MM./2,err,'.-')
 hold on
-semilogy(MM./2,ee,'--')
-exportgraphics(gcf,'error_kplot.png','Resolution',1500)
+semilogy(MM./2,ee,'.--')
+exportgraphics(gcf,'error_kplot.png')
 %semilogy(MM./2,ee)
 %exportgraphics(gcf,'error_est.png','Resolution',1500)
 
