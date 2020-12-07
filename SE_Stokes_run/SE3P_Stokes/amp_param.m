@@ -8,7 +8,7 @@ opt.P = 96;
 opt.window = 'gaussian';
 N = 100;
 LL = [0.5,1,1.5,2];
-xx = [2,4,6,8,10,12,14,16];
+xx = [2,4,6,8,10,12];
 MA = [];
 fileid = fopen('outdata.txt','w');
 fprintf(fileid,'%2s %3s %4s %9s %6s %5s \n','N','L','xi', 'rms','A','rms/a');

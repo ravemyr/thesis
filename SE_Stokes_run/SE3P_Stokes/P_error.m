@@ -29,13 +29,17 @@ ED_opt.xi = opt.xi;
 ED_opt.box = box;
 
 %% Direct solution
-
-ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
-%opt.window = 'gaussian';
+if(exist('refval.mat'))
+	refval = load('refval.mat');
+	ref = refval.ref;
+else
+	ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
+end
+	%opt.window = 'gaussian';
 %ref = SE3P_Stokes(1:N,x,f,opt);
 %% Compare solutions with changing P
 
-PP = 16:16:(M0-16);
+PP = 48:16:80;
 rms_err = [];
 for P = PP
     opt.P = P;
@@ -44,7 +48,7 @@ for P = PP
 end
 disp(rms_err)
 semilogy(PP,rms_err)
-exportgraphics(gcf,'error_P.png','Resolution',1500)
+exportgraphics(gcf,'error_P.png')
 
 
 
