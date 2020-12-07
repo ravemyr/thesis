@@ -4,7 +4,7 @@
 %%setup
 clear
 rng(1);
-N = 100; % number of source particles
+N = 10; % number of source particles
 
 
 %% Parameter selection
@@ -45,7 +45,7 @@ end
 
 F = sum(norm(f).^2);
 est = @(M,xi,L,f) 2*L^2*sqrt(f)*(2*sqrt(pi)*M/2 + 3*xi*L)*exp(-((M/2)*pi/(xi*L))^2)/sqrt(pi);
-MM = [50,64,80,96];
+MM = [50,64,80,96,112];
 err = [];
 ee = [];
 
