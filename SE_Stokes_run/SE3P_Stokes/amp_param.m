@@ -1,6 +1,6 @@
 %% Amplitute
 rng(1);
-A = @(F,xi,L) F*(xi^(3/4)/(L^(15/16))); %Hypothesis
+A = @(F,xi,L) F*(xi^(3/4)/(L^(13/15))); %Hypothesis
 
 M0 = 128;
 opt.M = [M0,M0,M0];
