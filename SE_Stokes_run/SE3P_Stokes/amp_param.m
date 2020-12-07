@@ -1,6 +1,6 @@
 %% Amplitute
 rng(1);
-A = @(F,xi,L) (F^2*xi^3/(L)).^(1/2); %Hypothesis
+A = @(F,xi,L) F*(xi^(3/4)/(L^(3/4))); %Hypothesis
 
 M0 = 128;
 opt.M = [M0,M0,M0];
@@ -17,7 +17,7 @@ for L = LL
     [x,f] = SE_charged_system(N,opt.box,'vector');
     for xi = xx
         opt.xi = xi;
-        for j = 0:4
+        for j = 1:1
 	    ff = f*2^j;
             eu = rmse(SE3P_Stokes(1:N, x, ff, opt));
             F = sqrt(sum(norm(ff).^2));
