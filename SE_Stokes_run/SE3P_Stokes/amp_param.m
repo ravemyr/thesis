@@ -31,6 +31,7 @@ for L = LL
     end
 end
 plot(1:length(MA),MA,'*')
+gca.YLim = [0,1];
 exportgraphics(gcf,'error_amp.png');
 fclose(fileid);
 %disp(MA)
