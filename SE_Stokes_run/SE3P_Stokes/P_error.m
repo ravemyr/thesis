@@ -4,7 +4,7 @@
 %%setup
 clear
 rng(1);
-N = 100; % number of source particles
+N = 10; % number of source particles
 
 
 %% Parameter selection
@@ -39,7 +39,7 @@ end
 %ref = SE3P_Stokes(1:N,x,f,opt);
 %% Compare solutions with changing P
 
-PP = 16:16:80;
+PP = 8:4:64;
 rms_err = [];
 for P = PP
     opt.P = P;
