@@ -45,7 +45,7 @@ end
 
 F = sum(norm(f).^2);
 est = @(M,xi,L,f) 2*L^2*sqrt(f)*(2*sqrt(pi)*M/2 + 3*xi*L)*exp(-((M/2)*pi/(xi*L))^2)/sqrt(pi);
-MM = [50,64,80,96,112];
+MM = [50,64,80,96,112,128,146];
 err = [];
 ee = [];
 
