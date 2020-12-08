@@ -15,10 +15,10 @@ opt.box = box;
 %Ewald params
 
 
-M0=160; % Set M0=M/L, the restu * 1+ is automatic
+M0=192; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*opt.box;
-opt.xi = 2;
-opt.P = M0 ;
+opt.xi = M0*pi/12;
+opt.P = M0;
 opt.betaP = 2.5;
 
 % charge-neutral system
@@ -54,8 +54,8 @@ for i = MM
     opt.M = M0*opt.box;
     opt.P = 32;
     ED_opt.layers = (opt.M(1)-1)/2;
-    u = SE3P_Stokes(1:N, x, f, opt);
-    %u = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
+    %u = SE3P_Stokes(1:N, x, f, opt);
+    u = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
     err = [err rmse(u-ref)/rmse(ref)];
     esti = est(opt.M(1),opt.xi,L,F)/rmse(ref);
     ee = [ee, esti];
