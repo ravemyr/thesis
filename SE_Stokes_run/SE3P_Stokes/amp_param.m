@@ -1,23 +1,26 @@
 %% Amplitute
 rng(1);
-A = @(F,xi,L) F*(xi^(3/4)/(L^(9/16))); %Hypothesis
+A = @(F,xi,L) F*(xi^(3/4)/(L^(9/16))); %Hypothesis for new generated f
+A = @(F,xi,L) F*(xi)^(13/16)/(L^(1/32));
 
 M0 = 128;
 opt.M = [M0,M0,M0];
 opt.P = 96;
 opt.window = 'gaussian';
 N = 100;
-LL = [0.5,1,1.5,2];
-xx = [2,4,6,8,10,12];
+LL = [1,1.5,2,2.5,3];
+xx = [8,10,12,14,16];
 MA = [];
+opt.box = [1,1,1];
+[x,f] =SE_charged_system(N,opt.box,'vector');
 fileid = fopen('outdata.txt','w');
 fprintf(fileid,'%2s %3s %4s %9s %6s %5s \n','N','L','xi', 'rms','A','rms/a');
 for L = LL
-    opt.box = [L,L,L];
-    [x,f] = SE_charged_system(N,opt.box,'vector');
+   % opt.box = [L,L,L];
+   % [x,f] = SE_charged_system(N,opt.box,'vector');
     for xi = xx
         opt.xi = xi;
-        for j = 1:1
+        for j = 0:0
 	    ff = f*2^j;
             eu = rmse(SE3P_Stokes(1:N, x, ff, opt));
             F = sqrt(sum(norm(ff).^2));
