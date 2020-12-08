@@ -20,7 +20,7 @@ for L = LL
    % [x,f] = SE_charged_system(N,opt.box,'vector');
     for xi = xx
         opt.xi = xi;
-        for j = 0:0
+        for j = 0:2
 	    ff = f*2^j;
             eu = rmse(SE3P_Stokes(1:N, x, ff, opt));
             F = sqrt(sum(norm(ff).^2));
@@ -31,7 +31,7 @@ for L = LL
     end
 end
 plot(1:length(MA),MA,'*')
-axis([0,25,0,1])
+axis([0,75,0,1])
 exportgraphics(gcf,'error_amp.png');
 fclose(fileid);
 %disp(MA)
