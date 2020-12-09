@@ -27,21 +27,24 @@ opt.betaP = 2.5;
 ED_opt.layers = (opt.M(1)-1)/2;
 ED_opt.box = box;
 refv = [];
-xx = (4:8:20)*pi;
+xx = (4:8:28)*pi;
 
     %% Direct solution
     if(exist('refval.mat'))
-            disp('Using existing reference solution')
             reffile = load('refval.mat');
             refv = reffile.refv;  
-            if(~size(refv)== [N,length(xx)])
+            s = size(refv);
+	    if(~(s(1)==N)||~(s(2)==length(xx)))
                 disp('Generating reference solution')
                 for xi = xx
                     ED_opt.xi = xi;
                     refv = [refv,SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt)];
                     save('refval.mat','refv');
                 end
-            end
+            else
+		    disp('Using existing reference solution')
+	    end
+	    
     else
         disp('Generating reference solution')
         for xi = xx
