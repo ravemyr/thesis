@@ -27,7 +27,7 @@ opt.betaP = 2.5;
 ED_opt.layers = (opt.M(1)-1)/2;
 ED_opt.box = box;
 refv = [];
-xx = (20:4:24)*pi;
+xx = (4:8:20)*pi;
 
     %% Direct solution
     if(~exist('refval.mat'))
@@ -69,7 +69,6 @@ for xi = xx
         ee = [ee, esti];
     end
 semilogy(MM./2,err,'.-')
-disp(err)
 hold on
 semilogy(MM./2,ee,'.--')
 str = [str,strcat('computed error, \xi =', num2str(xi))];
