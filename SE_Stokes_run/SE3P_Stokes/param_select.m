@@ -54,7 +54,8 @@ str = {};
 for xi = xx
     err = [];
     ee = [];
-    ref = refv(:,xx==xi);
+    idx = 3*(find(xx==xi));
+    ref = refv(:,idx-2:idx);
     for i = MM
         M0 = i;
         opt.M = M0*opt.box;
