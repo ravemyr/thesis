@@ -27,7 +27,6 @@ opt.betaP = 2.5;
 ED_opt.layers = (opt.M(1)-1)/2;
 ED_opt.xi = opt.xi;
 ED_opt.box = box;
-refv = [];
 xx = (4:4:24)*pi;
 
     %% Direct solution
@@ -35,13 +34,13 @@ xx = (4:4:24)*pi;
         disp('Generating reference solution')
         for xi = xx
             opt.xi = xi;
-            refv = [refv,SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt)];
+            refv(find(xi==xx) = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
             save('refval.mat','ref');
         end
     else
         disp('Using existing reference solution')
             reffile = load('refval.mat');
-            refv = reffile.ref;
+        refv = reffile.ref;
     end
     %opt.window = 'gaussian';
     %ref = SE3P_Stokes(1:N,x,f,opt);
@@ -53,7 +52,7 @@ xx = (4:4:24)*pi;
     err = [];
     ee = [];
 for xi = xx
-    ref = refv(xx==opt.xi);
+    ref = refv(find(xx==opt.xi));
     for i = MM
         M0 = i;
         opt.M = M0*opt.box;
