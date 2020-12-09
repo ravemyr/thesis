@@ -25,7 +25,6 @@ opt.betaP = 2.5;
 
 % parameters for (reference) direct Ewald sum
 ED_opt.layers = (opt.M(1)-1)/2;
-ED_opt.xi = opt.xi;
 ED_opt.box = box;
 refv = [];
 xx = (4:4:24)*pi;
@@ -34,14 +33,14 @@ xx = (4:4:24)*pi;
     if(~exist('refval.mat'))
         disp('Generating reference solution')
         for xi = xx
-            opt.xi = xi;
+            ED_opt.xi = xi;
             refv = [refv,SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt)];
-            save('refval.mat','ref');
+            save('refval.mat','refv');
         end
     else
         disp('Using existing reference solution')
             reffile = load('refval.mat');
-            refv = reffile.ref;
+            refv = reffile.refv;
     end
     %opt.window = 'gaussian';
     %ref = SE3P_Stokes(1:N,x,f,opt);
@@ -50,19 +49,20 @@ xx = (4:4:24)*pi;
     F = sum(norm(f).^2);
     est = @(M,xi,L,f) 2*L^2*sqrt(f)*(2*sqrt(pi)*M/2 + 3*xi*L)*exp(-((M/2)*pi/(xi*L))^2)/sqrt(pi);
     MM = [50,64,80,96,112,128,146];
+for xi = xx
     err = [];
     ee = [];
-for xi = xx
-    ref = refv(xx==opt.xi);
+    ref = refv(xx==xi);
     for i = MM
         M0 = i;
         opt.M = M0*opt.box;
         opt.P = M0/2;
         ED_opt.layers = (opt.M(1)-1)/2;
-        %u = SE3P_Stokes(1:N, x, f, opt);
+        ED_opt.xi = xi;
+	%u = SE3P_Stokes(1:N, x, f, opt);
         u = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
         err = [err rmse(u-ref)/rmse(ref)];
-        esti = est(opt.M(1),opt.xi,L,F)/rmse(ref);
+        esti = est(opt.M(1),xi,L,F)/rmse(ref);
         ee = [ee, esti];
     end
 semilogy(MM./2,err,'.-')
@@ -72,7 +72,7 @@ str = [];
 str = {strcat('computed error, \xi =', num2str(xi))};
 str = [str, strcat('error estimate, \xi =', num2str(xi))];
 legend(str{:},'Location','North East')
-legend('comp error %3.2f',)
+
 end
 % disp('error rate as M increases')
 % disp(err)
