@@ -30,17 +30,25 @@ refv = [];
 xx = (4:8:20)*pi;
 
     %% Direct solution
-    if(~exist('refval.mat'))
+    if(exist('refval.mat'))
+            disp('Using existing reference solution')
+            reffile = load('refval.mat');
+            refv = reffile.refv;  
+            if(~size(refv)== [N,length(xx)])
+                disp('Generating reference solution')
+                for xi = xx
+                    ED_opt.xi = xi;
+                    refv = [refv,SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt)];
+                    save('refval.mat','refv');
+                end
+            end
+    else
         disp('Generating reference solution')
         for xi = xx
             ED_opt.xi = xi;
             refv = [refv,SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt)];
             save('refval.mat','refv');
         end
-    else
-        disp('Using existing reference solution')
-            reffile = load('refval.mat');
-            refv = reffile.refv;
     end
     %opt.window = 'gaussian';
     %ref = SE3P_Stokes(1:N,x,f,opt);
