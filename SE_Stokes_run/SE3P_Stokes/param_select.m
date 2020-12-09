@@ -27,7 +27,7 @@ opt.betaP = 2.5;
 ED_opt.layers = (opt.M(1)-1)/2;
 ED_opt.box = box;
 refv = [];
-xx = (4:4:24)*pi;
+xx = (4:4:8)*pi;
 
     %% Direct solution
     if(~exist('refval.mat'))
@@ -71,9 +71,10 @@ semilogy(MM./2,ee,'.--')
 str = [];
 str = {strcat('computed error, \xi =', num2str(xi))};
 str = [str, strcat('error estimate, \xi =', num2str(xi))];
+end
 legend(str{:},'Location','North East')
 
-end
+
 % disp('error rate as M increases')
 % disp(err)
 % disp('estimate error comparison')
