@@ -27,21 +27,25 @@ opt.betaP = 2.5;
 ED_opt.layers = (opt.M(1)-1)/2;
 ED_opt.box = box;
 refv = [];
+rms_ev = [];
 xx = (8:4:12)*pi;
 
     %% Direct solution
     if(exist('refval.mat'))
             reffile = load('refval.mat');
-            refv = reffile.refv;  
-            s = size(refv);
-	    if((s(1)==N)&&(s(2)==(3*length(xx))))
+	    if(xx==reffile.xx)
 		disp('Using existing reference solution')
+		refv = reffile.refv
+		rms_ev = reffile.rms_ev
 	    else
                 disp('Generating reference solution')
                 for xi = xx
                     ED_opt.xi = xi;
-                    refv = [refv,SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt)];
-                    save('refval.mat','refv');
+		    u = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
+		    rms_e = rmse(u);
+		    rms_ev =[rms_ev, rms_e];
+                    refv = [refv,u];
+                    save('refval.mat','refv','xx','rms_ev');
                 end
 	    end
 	    
@@ -49,8 +53,11 @@ xx = (8:4:12)*pi;
         disp('Generating reference solution')
         for xi = xx
             ED_opt.xi = xi;
-            refv = [refv,SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt)];
-            save('refval.mat','refv');
+	    u = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
+	    rms_e = rmse(u);
+	    rms_ev = [rms_ev,rms_e];
+            refv = [refv,u];
+            save('refval.mat','refv','xx','rms_ev');
         end
     end
     %opt.window = 'gaussian';
@@ -67,8 +74,9 @@ for xi = xx
     err = [];
     ee = [];
     eee = [];
-    idx = 3*(find(xx==xi));
-    ref = refv(:,idx-2:idx);
+    idx = (find(xx==xi));
+    ref = refv(:,3*idx-2:3*idx);
+    rms_e = rms_ev(idx);
     for i = MM
         M0 = i;
         opt.M = M0*opt.box;
@@ -78,9 +86,9 @@ for xi = xx
 	%u = SE3P_Stokes(1:N, x, f, opt);
         u = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
         err = [err rmse(u-ref)/rmse(ref)];
-        esti = est(opt.M(1),xi,L,F)/rmse(ref);
+        esti = est(opt.M(1),xi,L,F)/rms_e;
         ee = [ee, esti];
-	esti2 = est2(opt.M(1),xi,L,F)/rmse(ref);
+	esti2 = est2(opt.M(1),xi,L,F)/rms_e;
 	eee = [eee esti2];
     end
 semilogy(MM./2,err,'.-')
