@@ -38,19 +38,18 @@ end
 	%opt.window = 'gaussian';
 %ref = SE3P_Stokes(1:N,x,f,opt);
 %% Compare solutions with changing P
-MM = 48:15:128;
+MM = 48:16:128;
 for M = MM
 	opt.M = opt.box*M;
-PP = 8:4:48;
-rms_err = [];
-for P = PP
-    opt.P = P;
-    u = SE3P_Stokes(1:N, x, f, opt);
-    rms_err = [rms_err rmse(u-ref)/rmse(ref)];
-end
-
-semilogy(PP,rms_err)
-hold on
+	PP = 4:2:36;
+	rms_err = [];
+	for P = PP
+    		opt.P = P;
+    		u = SE3P_Stokes(1:N, x, f, opt);
+    		rms_err = [rms_err rmse(u-ref)/rmse(ref)];
+	end
+	semilogy(PP,rms_err)
+	hold on
 end
 exportgraphics(gcf,'error_P.png')
 
