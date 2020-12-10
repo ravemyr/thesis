@@ -16,7 +16,7 @@ opt.box = box;
 
 
 M0 = 192; % Set M0=M/L, the restu * 1+ is automatic
-opt.M = M0*opt.box;
+opt.M = 30;
 opt.xi = M0*pi/12;
 opt.betaP = 2.5;
 
