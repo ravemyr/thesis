@@ -99,7 +99,7 @@ str = [str,strcat('computed error, \xi =', num2str(xi))];
 str = [str, strcat('error estimate, \xi =', num2str(xi))];
 str = [str, strcat('second estimate, \xi =', num2str(xi))];
 end
-axis([1,MM(end)/2,10^-15,100])
+axis([0,MM(end)/2,10^-15,1])
 legend(str{:},'Location','North East')
 
 
