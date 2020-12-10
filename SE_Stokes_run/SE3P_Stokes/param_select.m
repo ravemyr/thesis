@@ -28,36 +28,42 @@ ED_opt.layers = (opt.M(1)-1)/2;
 ED_opt.box = box;
 refv = [];
 rms_ev = [];
-xx = (8:4:12)*pi;
+xx = (8:4:16)*pi;
 
     %% Direct solution
     if(exist('refval.mat'))
             reffile = load('refval.mat');
-	    if(xx==reffile.xx)
-		disp('Using existing reference solution')
-		refv = reffile.refv;
-		rms_ev = reffile.rms_ev;
-	    else
+	    if(size(xx)==size(reffile.xx))
+	    	if(xx==reffile.xx)
+			disp('Using existing reference solution')
+			refv = reffile.refv;
+			rms_ev = reffile.rms_ev;
+	    	else
+                	disp('Generating reference solution')
+                	for xi = xx
+                    	ED_opt.xi = xi;
+		    	u = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
+		    	rms_e = rmse(u);
+		    	rms_ev =[rms_ev, rms_e];
+                    	refv = [refv,u];
+                    	save('refval.mat','refv','xx','rms_ev');
+                	end
+	    	end
+	     else
+		disp('Generating reference solution')
+		for xi = xx
+			ed_opt.xi = xi;
+			u =
+	    
+             else
                 disp('Generating reference solution')
                 for xi = xx
-                    ED_opt.xi = xi;
-		    u = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
-		    rms_e = rmse(u);
-		    rms_ev =[rms_ev, rms_e];
-                    refv = [refv,u];
-                    save('refval.mat','refv','xx','rms_ev');
-                end
-	    end
-	    
-    else
-        disp('Generating reference solution')
-        for xi = xx
-            ED_opt.xi = xi;
-	    u = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
-	    rms_e = rmse(u);
-	    rms_ev = [rms_ev,rms_e];
-            refv = [refv,u];
-            save('refval.mat','refv','xx','rms_ev');
+       	        ED_opt.xi = xi;
+		u = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
+		rms_e = rmse(u);
+	    	rms_ev = [rms_ev,rms_e];
+		refv = [refv,u];
+		save('refval.mat','refv','xx','rms_ev');
         end
     end
     %opt.window = 'gaussian';
@@ -100,7 +106,7 @@ str = [str, strcat('error estimate, \xi =', num2str(xi))];
 str = [str, strcat('second estimate, \xi =', num2str(xi))];
 end
 %axis([0,MM(end)/2,10^-15,1])
-ylim([10^-15,1])
+ylim([10^-14,1])
 legend(str{:},'Location','North East')
 
 
