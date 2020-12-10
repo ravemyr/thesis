@@ -31,25 +31,28 @@ ED_opt.box = box;
 %% Direct solution
 if(exist('refval.mat'))
 	refval = load('refval.mat');
-	ref = refval.ref;
+	ref = refval.refv(:,1:3);
 else
 	ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
 end
 	%opt.window = 'gaussian';
 %ref = SE3P_Stokes(1:N,x,f,opt);
 %% Compare solutions with changing P
-
-PP = 8:4:64;
+MM = 60:16:176;
+for M = MM
+	opt.M = opt.box*M
+PP = 8:4:32;
 rms_err = [];
 for P = PP
     opt.P = P;
     u = SE3P_Stokes(1:N, x, f, opt);
     rms_err = [rms_err rmse(u-ref)/rmse(ref)];
 end
-disp(rms_err)
-semilogy(PP,rms_err)
-exportgraphics(gcf,'error_P.png')
 
+semilogy(PP,rms_err)
+hold on
+end
+exportgraphics(gcf,'error_P.png')
 
 
 
