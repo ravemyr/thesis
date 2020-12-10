@@ -59,13 +59,14 @@ xx = (4:8:12)*pi;
 
     F = sum(norm(f).^2);
     est = @(M,xi,L,f) 2*L^2*sqrt(f)*(2*sqrt(pi)*M/2 + 3*xi*L)*exp(-((M/2)*pi/(xi*L))^2)/sqrt(pi);
-    est = @(M,xi,L,f) sqrt(f)*(xi^3*L^2/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L)^2));
+    est2 = @(M,xi,L,f) sqrt(f)*(xi^3*L^2/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L)^2));
     MM = [50,64,80,96,112,128,146];
 str = {};
 
 for xi = xx
     err = [];
     ee = [];
+    eee = [];
     idx = 3*(find(xx==xi));
     ref = refv(:,idx-2:idx);
     for i = MM
@@ -79,12 +80,16 @@ for xi = xx
         err = [err rmse(u-ref)/rmse(ref)];
         esti = est(opt.M(1),xi,L,F)/rmse(ref);
         ee = [ee, esti];
+	esti2 = est2(opt.M(1),xi,L,F)/rmse(ref);
+	eee = [eee esti2];
     end
 semilogy(MM./2,err,'.-')
 hold on
 semilogy(MM./2,ee,'.--')
+semilogy(MM./2,eee,':*')
 str = [str,strcat('computed error, \xi =', num2str(xi))];
 str = [str, strcat('error estimate, \xi =', num2str(xi))];
+str = [str, strcat('second estimate, \xi =', num2str(xi))];
 end
 legend(str{:},'Location','North East')
 
