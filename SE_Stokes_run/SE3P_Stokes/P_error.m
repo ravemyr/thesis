@@ -38,9 +38,9 @@ end
 	%opt.window = 'gaussian';
 %ref = SE3P_Stokes(1:N,x,f,opt);
 %% Compare solutions with changing P
-MM = 60:16:176;
+MM = 60:4:176;
 for M = MM
-	opt.M = opt.box*M
+	opt.M = opt.box*M;
 PP = 8:4:32;
 rms_err = [];
 for P = PP
