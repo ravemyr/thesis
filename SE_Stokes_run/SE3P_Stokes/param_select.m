@@ -34,15 +34,15 @@ xx = (4:8:12)*pi;
             reffile = load('refval.mat');
             refv = reffile.refv;  
             s = size(refv);
-	    if(~(s(1)==N)||~(s(2)==(3*length(xx))))
+	    if((s(1)==N)&&(s(2)==(3*length(xx))))
+		disp('Using existing reference solution')
+	    else
                 disp('Generating reference solution')
                 for xi = xx
                     ED_opt.xi = xi;
                     refv = [refv,SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt)];
                     save('refval.mat','refv');
                 end
-            else
-		    disp('Using existing reference solution')
 	    end
 	    
     else
