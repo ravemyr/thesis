@@ -38,7 +38,7 @@ end
 	%opt.window = 'gaussian';
 %ref = SE3P_Stokes(1:N,x,f,opt);
 %% Compare solutions with changing P
-MM = 5:8;
+MM = 6:9;
 str = {};
 for m = MM
 	PP = 4:2:36;
@@ -51,7 +51,7 @@ for m = MM
 	end
 	semilogy(PP,rms_err)
 	hold on
-	str = [str strcat('m = ',m)];
+	str = [str strcat('m = ',num2str(m))];
 end
 legend(str)
 exportgraphics(gcf,'error_P.png')
