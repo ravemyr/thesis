@@ -39,6 +39,7 @@ end
 %ref = SE3P_Stokes(1:N,x,f,opt);
 %% Compare solutions with changing P
 MM = 5:8;
+str = {};
 for m = MM
 	PP = 4:2:36;
 	rms_err = [];
@@ -50,7 +51,9 @@ for m = MM
 	end
 	semilogy(PP,rms_err)
 	hold on
+	str = [str strcat('m = ',m)];
 end
+legend(str)
 exportgraphics(gcf,'error_P.png')
 
 
