@@ -28,7 +28,7 @@ ED_opt.layers = (opt.M(1)-1)/2;
 ED_opt.box = box;
 refv = [];
 rms_ev = [];
-xx = (12:4:16)*pi;
+xx = (12:4:24)*pi;
 
     %% Direct solution
 if(exist('refval.mat'))
@@ -81,7 +81,7 @@ str = {};
 
 for xi = xx
     err = [];
-    ee = [];
+    %ee = [];
     eee = [];
     idx = (find(xx==xi));
     ref = refv(:,3*idx-2:3*idx);
@@ -95,18 +95,18 @@ for xi = xx
         %u = SE3P_Stokes(1:N, x, f, opt);
         u = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
         err = [err rmse(u-ref)/rmse(ref)];
-        esti = est(opt.M(1),xi,L,F)/rms_e;
-        ee = [ee, esti];
+        %esti = est(opt.M(1),xi,L,F)/rms_e;
+        %ee = [ee, esti];
         esti2 = est2(opt.M(1),xi,L,F)/rms_e;
         eee = [eee esti2];
     end
     semilogy(MM./2,err,'.-')
     hold on
-    semilogy(MM./2,ee,'.--')
+    %semilogy(MM./2,ee,'.--')
     semilogy(MM./2,eee,':*')
     str = [str,strcat('computed error, \xi =', num2str(xi))];
     str = [str, strcat('error estimate, \xi =', num2str(xi))];
-    str = [str, strcat('second estimate, \xi =', num2str(xi))];
+    %str = [str, strcat('second estimate, \xi =', num2str(xi))];
 end
 ylim([10^-14,1])
 legend(str{:},'Location','North East')
