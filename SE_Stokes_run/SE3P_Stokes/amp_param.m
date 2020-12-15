@@ -1,14 +1,14 @@
 %% Amplitute
 rng(1);
 %A = @(F,xi,L) F*(xi^(3/4)/(L^(9/16))); %Hypothesis for new generated f
-A = @(F,xi,L) F*(xi)^(14/16)*(L^(1/32));
+A = @(F,xi,L) F^(1/2)*(xi)^(14/16)*(L^(1/32));
 
 M0 = 128;
 opt.M = [M0,M0,M0];
 opt.P = 32;
 opt.window = 'gaussian';
 N = 100;
-LL = [1,1.5,2,2.5,3,4,5];
+LL = [1,2,2.5,3,4,5];
 xx = [8,10,12,14,16,18];
 MA = [];
 %opt.box = [1,1,1];
@@ -23,7 +23,7 @@ for L = LL
         for j = 0:2
 	    ff = f*2^j;
             eu = rmse(SE3P_Stokes(1:N, x, ff, opt));
-            F = sqrt(sum(norm(ff).^2));
+            F = sum(norm(ff).^2);
             a = A(F,xi,L);
             fprintf(fileid,'%3i %2.2f %1i %6.4f %6.4f %6.4f \n',N,L,xi,eu,norm(a),eu/a);
             MA = [MA eu/a];
