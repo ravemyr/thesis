@@ -17,7 +17,7 @@ opt.box = box;
 
 M0 = 192; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*[1,1,1];
-opt.xi = 20;
+opt.xi = 40;
 opt.betaP = 2.5;
 opt.window = 'kaiser_exact';
 % charge-neutral system
@@ -46,6 +46,7 @@ for M = [128 MM]
 	rms_err = [];
 	for P = PP
     		opt.P = P;
+		opt.betaP = 2.5;
     		u = SE3P_Stokes(1:N, x, f, opt);
     		rms_err = [rms_err rmse(u-ref)/rmse(ref)];
 	end
