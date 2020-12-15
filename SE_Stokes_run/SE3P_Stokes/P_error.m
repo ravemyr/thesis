@@ -46,7 +46,6 @@ for M = [128 MM]
 	rms_err = [];
 	for P = PP
     		opt.P = P;
-		opt.betaP = 2.5;
     		u = SE3P_Stokes(1:N, x, f, opt);
     		rms_err = [rms_err rmse(u-ref)/rmse(ref)];
 	end
