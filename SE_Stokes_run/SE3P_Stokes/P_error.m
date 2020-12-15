@@ -40,7 +40,7 @@ end
 %% Compare solutions with changing P
 MM = 48:16:96;
 str = {};
-for M = MM
+for M = [128 MM]
 	opt.M = M*[L,L,L];
 	PP = 4:2:36;
 	rms_err = [];
