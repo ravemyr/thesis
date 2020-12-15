@@ -15,7 +15,7 @@ opt.box = box;
 %Ewald params
 
 
-M0 = 128; % Set M0=M/L, the restu * 1+ is automatic
+M0 = 192; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*[1,1,1];
 opt.xi = 20;
 opt.betaP = 2.5;
