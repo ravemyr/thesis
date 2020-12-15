@@ -19,7 +19,7 @@ M0 = 128; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*[1,1,1];
 opt.xi = 20;
 opt.betaP = 2.5;
-
+opt.window = 'kaiser_exact';
 % charge-neutral system
 [x, f] = SE_charged_system(N,box,'vector');
 
@@ -38,20 +38,20 @@ end
 	%opt.window = 'gaussian';
 %ref = SE3P_Stokes(1:N,x,f,opt);
 %% Compare solutions with changing P
-MM = 6:9;
+MM = 32:16:96;
 str = {};
-for m = MM
+for M = MM
+	opt.M = M*[L,L,L];
 	PP = 4:2:36;
 	rms_err = [];
 	for P = PP
     		opt.P = P;
-		opt.m = m;
     		u = SE3P_Stokes(1:N, x, f, opt);
     		rms_err = [rms_err rmse(u-ref)/rmse(ref)];
 	end
 	semilogy(PP,rms_err)
 	hold on
-	str = [str strcat('m = ',num2str(m))];
+	str = [str strcat('M = ',num2str(M))];
 end
 legend(str)
 exportgraphics(gcf,'error_P.png')
