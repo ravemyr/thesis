@@ -109,6 +109,7 @@ for xi = xx
     %str = [str, strcat('second estimate, \xi =', num2str(xi))];
 end
 ylim([10^-14,1])
+xlim([0,73])
 legend(str{:},'Location','North East')
 
 
