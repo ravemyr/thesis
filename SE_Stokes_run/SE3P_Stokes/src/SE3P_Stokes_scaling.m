@@ -46,6 +46,4 @@ function F = kaiser_exact_ft(k2, b2, w, scaling)
 
 t = sqrt(b2 - k2*w^2);
 F = 2*w*sinh(t)./t * scaling;
-
-
 end
