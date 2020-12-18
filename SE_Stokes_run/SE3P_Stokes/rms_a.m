@@ -42,7 +42,7 @@ for M = [128 MM]
 	PP = 4:2:32;
 	rms_err = [];
     A = @(F,xi,L) F^(1/2)*(xi)^(1)*(L^(0));
-    F = sum(norm(ff).^2);
+    F = sum(norm(f).^2);
     a = A(F,opt.xi,L);
 	for P = PP
     		opt.P = P;
@@ -54,4 +54,4 @@ for M = [128 MM]
 	str = [str strcat('M = ',num2str(M))];
 end
 legend(str)
-exportgraphics(gcf,'error_P.png')
+exportgraphics(gcf,'rms_a.png')
