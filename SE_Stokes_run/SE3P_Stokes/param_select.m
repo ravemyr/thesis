@@ -8,14 +8,14 @@ N = 10; % number of source particles
 
 
 %% Parameter selection
-L = 1; % box side length
+L = 2; % box side length
 box = [L L L]; % periodic box
 opt.box = box;
 
 %Ewald params
 
 
-M0=192; % Set M0=M/L, the restu * 1+ is automatic
+M0=144; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*opt.box;
 opt.P = M0;
 opt.betaP = 2.5;
@@ -28,7 +28,7 @@ ED_opt.layers = (opt.M(1)-1)/2;
 ED_opt.box = box;
 refv = [];
 rms_ev = [];
-xx = (4:4:16)*pi;
+xx = (4:4:8)*pi;
 
     %% Direct solution
 if(exist('refval.mat'))
