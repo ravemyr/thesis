@@ -12,7 +12,7 @@ opt.box = box;
 %Ewald params
 
 
-M0 = 144; % Set M0=M/L, the restu * 1+ is automatic
+M0 = 128; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*[1,1,1];
 opt.xi = 25;
 opt.betaP = 2.5;
@@ -35,23 +35,29 @@ end
 	%opt.window = 'gaussian';
 %ref = SE3P_Stokes(1:N,x,f,opt);
 %% Compare solutions with changing P
-MM = 48:8:56;
 str = {};
-for M = [128 MM]
-	opt.M = M*[L,L,L];
-	PP = 4:2:32;
-	rms_err = [];
-    A = @(F,xi,L) F^(1/2)*(xi)^(1)*(L^(0));
-    F = sum(norm(f).^2);
-    a = A(F,opt.xi,L);
+M = 96; 
+opt.M = M*[L,L,L];
+PP = 4:2:32;
+rms_err = [];
+A = @(F,xi,L) F^(1/2)*(xi)^(1)*(L^(0));
+F = sum(norm(f).^2);
+a = A(F,opt.xi,L);
+for N = [10,50,100,200]
+for L = [1,2,3]
+	opt.box = [L,L,L];
+	opt.M = M*opt.box;
+	[x,f] = SE_charged_system(N,box,'vector')
+	F = sum(norm(f).^2);
+	for xi = 4:2:16
 	for P = PP
     		opt.P = P;
     		u = SE3P_Stokes(1:N, x, f, opt);
     		rms_err = [rms_err rmse(u-ref)/a];
 	end
-	semilogy(PP,rms_err)
+	semilogy(PP,rms_err,'.b')
 	hold on
-	str = [str strcat('M = ',num2str(M))];
 end
-legend(str)
+end
+end
 exportgraphics(gcf,'rms_a.png')
