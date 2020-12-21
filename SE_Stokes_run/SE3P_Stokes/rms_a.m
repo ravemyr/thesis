@@ -22,7 +22,8 @@ A = @(F,xi,L) F^(1/2)*(xi)^(1)*(L^(0));
 
 for N = [10,50,100]
     for L = [1,2,3]
-        opt.box = [L,L,L];
+        disp(L)
+	    opt.box = [L,L,L];
         opt.M = M*opt.box;
         [x,f] = SE_charged_system(N,opt.box,'vector');
         F = sum(norm(f).^2);
