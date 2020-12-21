@@ -20,7 +20,7 @@ PP = 4:2:32;
 A = @(F,xi,L) F^(1/2)*(xi)^(1)*(L^(0));
 
 
-for N = [10,50,100,200]
+for N = [10,50,100]
     for L = [1,2,3]
         opt.box = [L,L,L];
         opt.M = M*opt.box;
