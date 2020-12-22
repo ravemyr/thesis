@@ -8,14 +8,14 @@ N = 10; % number of source particles
 
 
 %% Parameter selection
-L = 4; % box side length
+L = 3; % box side length
 box = [L L L]; % periodic box
 opt.box = box;
 
 %Ewald params
 
 
-M0=144; % Set M0=M/L, the restu * 1+ is automatic
+M0=128; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*opt.box;
 opt.P = M0;
 opt.betaP = 2.5;
@@ -76,7 +76,7 @@ end
 F = sum(norm(f).^2);
 est = @(M,xi,L,f) 2*L^2*sqrt(f)*(2*sqrt(pi)*M/2 + 3*xi*L)*exp(-((M/2)*pi/(xi*L))^2)/sqrt(pi);
 est2 = @(M,xi,L,f) sqrt(f)*(xi^3*L^3/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
-MM = [8,16,32,48,64,80,96,112,128,146];
+MM = [8,16,32,48,64,80,112];
 str = {};
 
 for xi = xx
@@ -84,6 +84,7 @@ for xi = xx
     %ee = [];
     eee = [];
     idx = (find(xx==xi));
+    disp(idx)
     ref = refv(:,3*idx-2:3*idx);
     rms_e = rms_ev(idx);
     for i = MM
