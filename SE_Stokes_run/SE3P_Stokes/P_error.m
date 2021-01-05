@@ -42,6 +42,7 @@ MM = 48:8:56;
 str = {};
 est = @(M,xi,L,f) sqrt(f)*(xi^3*L^3/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
 e_vec = [];
+F = sum(norm(f.^2));
 for M = [128 MM]
 	opt.M = M*[L,L,L];
 	PP = 4:2:32;
@@ -52,7 +53,7 @@ for M = [128 MM]
     		u = SE3P_Stokes(1:N, x, f, opt);
     		rms_err = [rms_err rmse(u-ref)/rmse(ref)];
     end
-    e = est(M,opt.xi,L,f);
+    e = est(M,opt.xi,L,F);
     e_vec = [e_vec, e];
 	semilogy(PP,rms_err)
     semilogy(PP, e*ones(1,length(PP)))
