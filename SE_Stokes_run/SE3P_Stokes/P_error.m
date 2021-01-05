@@ -56,12 +56,13 @@ for M = [128 MM]
     e = est(M,opt.xi,L,F);
     e_vec = [e_vec, e];
 	semilogy(PP,rms_err)
-    semilogy(PP, e*ones(1,length(PP)))
+   
 	hold on
 	str = [str strcat('M = ',num2str(M))];
 end
 legend(str)
-
+e = est(48,opt.xi,L,F);
+semilogy(PP,e*ones(1,length(PP)))
 exportgraphics(gcf,'error_P.png')
 
 
