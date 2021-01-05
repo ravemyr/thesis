@@ -40,20 +40,27 @@ end
 %% Compare solutions with changing P
 MM = 48:8:56;
 str = {};
+est = @(M,xi,L,f) sqrt(f)*(xi^3*L^3/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
+e_vec = [];
 for M = [128 MM]
 	opt.M = M*[L,L,L];
 	PP = 4:2:32;
 	rms_err = [];
+    
 	for P = PP
     		opt.P = P;
     		u = SE3P_Stokes(1:N, x, f, opt);
     		rms_err = [rms_err rmse(u-ref)/rmse(ref)];
-	end
+    end
+    e = est(M,opt.xi,L,f);
+    e_vec = [e_vec, e];
 	semilogy(PP,rms_err)
+    semilogy(PP, e*ones(1,length(PP)))
 	hold on
 	str = [str strcat('M = ',num2str(M))];
 end
 legend(str)
+
 exportgraphics(gcf,'error_P.png')
 
 
