@@ -17,7 +17,7 @@ opt.box = box;
 
 M0 = 192; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*[1,1,1];
-opt.xi = 7.5;
+opt.xi = 15;
 opt.betaP = 2.5;
 opt.window = 'kaiser_exact';
 % charge-neutral system
