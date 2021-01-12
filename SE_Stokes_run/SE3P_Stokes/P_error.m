@@ -40,7 +40,7 @@ end
 %% Compare solutions with changing P
 MM = 48:8:56;
 str = {};
-est = @(M,xi,L,f) sqrt(f)*(xi^3*L^3/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
+est = @(M,xi,L,f) sqrt(f)*(xi^3*L^2/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
 e_vec = [];
 F = sum(norm(f.^2));
 for M = [128 MM]
