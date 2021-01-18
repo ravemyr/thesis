@@ -41,7 +41,7 @@ MM = 48:8:56;
 str = {};
 est = @(M,xi,L,f) sqrt(f)*(xi^3*L^2/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
 e_vec = [];
-F = sum(norm(f.^2));
+
 xx = [5,10];
 LL = [2,1];
 for xi = xx
@@ -52,7 +52,7 @@ ED_opt.xi = xi;
 ED_opt.box = [L,L,L];
 	[x,f] = SE_charged_system(N,opt.box,'vector');
         ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
-	opt.L = L;
+        F = sum(norm(f.^2));	
         for M = [96 MM]
             opt.M = M*[L,L,L];
             PP = 4:2:32;
@@ -62,7 +62,7 @@ ED_opt.box = [L,L,L];
                 u = SE3P_Stokes(1:N, x, f, opt);
                 rms_err = [rms_err rmse(u-ref)/rmse(ref)];
             end 
-            semilogy(PP,rms_err,'.')
+            semilogy(PP,rms_err)
             hold on
             str = [str strcat('M = ',num2str(M))];
         end
