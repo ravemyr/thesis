@@ -66,6 +66,6 @@ legend(str)
 e = est(48,opt.xi,L,F);
 xlabel('P')
 exportgraphics(gcf,'error_P.png')
-
+ylim([10^-14,1])
 
 
