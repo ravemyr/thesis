@@ -42,7 +42,7 @@ str = {};
 est = @(M,xi,L,f) sqrt(f)*(xi^3*L^2/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
 e_vec = [];
 F = sum(norm(f.^2));
-xx = [10,20];
+xx = [5,10];
 LL = [2,1];
 for xi = xx
     opt.xi = xi;
@@ -59,7 +59,7 @@ for xi = xx
                 u = SE3P_Stokes(1:N, x, f, opt);
                 rms_err = [rms_err rmse(u-ref)/rmse(ref)];
             end 
-            semilogy(PP,rms_err)
+            semilogy(PP,rms_err,'.')
             hold on
             str = [str strcat('M = ',num2str(M))];
         end
