@@ -69,7 +69,7 @@ ED_opt.box = [L,L,L];
     end
 end
 str = [str, 'estimate'];
-legend(str)
+%legend(str)
 xlabel('P')
 exportgraphics(gcf,'xiLM.png')
 
