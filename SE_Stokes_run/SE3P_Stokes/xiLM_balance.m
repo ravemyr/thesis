@@ -42,14 +42,15 @@ str = {};
 est = @(M,xi,L,f) sqrt(f)*(xi^3*L^2/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
 e_vec = [];
 F = sum(norm(f.^2));
-xx = [10,20,40];
-LL = [4,2,1];
+xx = [20,40];
+LL = [2,1];
 for xi = xx
     opt.xi = xi;
     for L = LL
-        opt.L = L;
+        ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
+	opt.L = L;
         opt.box = [L,L,L];
-        for M = [128 MM]
+        for M = [96 MM]
             opt.M = M*[L,L,L];
             PP = 4:2:32;
             rms_err = [];
@@ -69,7 +70,7 @@ end
 str = [str, 'estimate'];
 legend(str)
 xlabel('P')
-exportgraphics(gcf,'error_P.png')
+exportgraphics(gcf,'xiLM.png')
 
 
 
