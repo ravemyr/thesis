@@ -58,12 +58,12 @@ for M = [128 MM]
 	semilogy(PP,rms_err)
    
 	hold on
+	semilogy(PP,ones(1,length(PP))*e)
 	str = [str strcat('M = ',num2str(M))];
 end
 str = [str, 'estimate'];
 legend(str)
 e = est(48,opt.xi,L,F);
-semilogy(PP,e*ones(1,length(PP)))
 xlabel('P')
 exportgraphics(gcf,'error_P.png')
 
