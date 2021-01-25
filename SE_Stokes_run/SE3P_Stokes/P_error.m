@@ -19,7 +19,8 @@ M0 = 144; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*opt.box;
 opt.xi = 15;
 opt.betaP = 2.5;
-opt.window = 'kaiser_exact';
+%opt.window = 'kaiser_exact';
+opt.window = 'gaussian'
 % charge-neutral system
 [x, f] = SE_charged_system(N,box,'vector');
 
@@ -61,7 +62,11 @@ for M = [128 MM]
 	semilogy(PP,ones(1,length(PP))*e)
 	str = [str strcat('M = ',num2str(M))];
 end
-semilogy(PP,exp(-2.5.*PP),'--')
+if(opt.window=='kaiser_exact')
+    semilogy(PP,exp(-2.5.*PP),'--')
+elseif(opt.window=='gaussian')
+     semilogy(PP,exp(-2.5.*PP),'--')
+end
 str = [str, 'estimate'];
 legend(str)
 e = est(48,opt.xi,L,F);
