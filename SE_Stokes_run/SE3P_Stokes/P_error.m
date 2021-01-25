@@ -61,6 +61,7 @@ for M = [128 MM]
 	semilogy(PP,ones(1,length(PP))*e)
 	str = [str strcat('M = ',num2str(M))];
 end
+semilogy(PP,exp.^(-2.5*PP))
 str = [str, 'estimate'];
 legend(str)
 e = est(48,opt.xi,L,F);
