@@ -43,7 +43,7 @@ est = @(M,xi,L,f) sqrt(f)*(xi^3*L^2/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2
 e_vec = [];
 
 xx = [5,8,10,20];
-LL = [1,0.5];
+LL = [2,1];
 for xi = xx
     opt.xi = xi;
     for L = LL
