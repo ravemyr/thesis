@@ -62,13 +62,8 @@ ED_opt.box = [L,L,L];
                 u = SE3P_Stokes(1:N, x, f, opt);
                 rms_err = [rms_err rmse(u-ref)/rmse(ref)];
             end 
-            if(L==LL(1)
-                semilogy(PP,rms_err,'-*r')
-            elseif(L==LL(2))
-                semilogy(PP,rms_err,'--b')
-            elseif(L==LL(3)
-                semilogy(PP,rms_err,'-.g')
-            end
+            if(L
+            semilogy(PP,rms_err)
             hold on
             str = [str strcat('M = ',num2str(M))];
         end
