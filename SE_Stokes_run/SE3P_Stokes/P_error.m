@@ -62,11 +62,8 @@ for M = [128 MM]
 	semilogy(PP,ones(1,length(PP))*e)
 	str = [str strcat('M = ',num2str(M))];
 end
-if(opt.window=='kaiser_exact')
-    semilogy(PP,exp(-2.5.*PP),'--')
-elseif(opt.window=='gaussian')
-     semilogy(PP,exp(-2.5.*PP),'--')
-end
+
+semilogy(PP,exp(-2.5.*PP),'--')
 str = [str, 'estimate'];
 legend(str)
 e = est(48,opt.xi,L,F);
