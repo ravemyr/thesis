@@ -43,7 +43,7 @@ est = @(M,xi,L,f) sqrt(f)*(xi^3*L^2/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2
 e_vec = [];
 
 xx = [5,8,10,20];
-LL = [2,1,0.5];
+LL = [1,0.5];
 for xi = xx
     opt.xi = xi;
     for L = LL
@@ -53,7 +53,7 @@ ED_opt.box = [L,L,L];
 	[x,f] = SE_charged_system(N,opt.box,'vector');
         ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
         F = sum(norm(f.^2));	
-        for M = [MM]
+        for M = [96 MM]
             opt.M = M*[L,L,L];
             PP = 4:2:32;
             rms_err = [];
