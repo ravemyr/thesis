@@ -15,7 +15,7 @@ opt.box = box;
 %Ewald params
 
 
-M0 = 144; % Set M0=M/L, the restu * 1+ is automatic
+M0 = 128; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*opt.box;
 opt.xi = 20;
 opt.betaP = 2.5;
@@ -62,11 +62,11 @@ ED_opt.box = [L,L,L];
                 u = SE3P_Stokes(1:N, x, f, opt);
                 rms_err = [rms_err rmse(u-ref)/rmse(ref)];
             end 
-            if(L==LL(1)
+            if(L==LL(1))
                 semilogy(PP,rms_err,'-*r')
             elseif(L==LL(2))
                 semilogy(PP,rms_err,'--b')
-            elseif(L==LL(3)
+            elseif(L==LL(3))
                 semilogy(PP,rms_err,'-.g')
             end
             hold on

@@ -78,6 +78,7 @@ est = @(M,xi,L,f) 2*L^2*sqrt(f)*(2*sqrt(pi)*M/2 + 3*xi*L)*exp(-((M/2)*pi/(xi*L))
 est2 = @(M,xi,L,f) sqrt(f)*(xi^3*L^3/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
 MM = [8,16,32,48,64,80,112];
 str = {};
+opt.window = 'kaiser_exact';
 
 for xi = xx
     err = [];

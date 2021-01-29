@@ -15,12 +15,13 @@ opt.box = box;
 %Ewald params
 
 
-M0 = 144; % Set M0=M/L, the restu * 1+ is automatic
+M0 = 128; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*opt.box;
 opt.xi = 15;
 opt.betaP = 2.5;
 %opt.window = 'kaiser_exact';
-opt.window = 'gaussian'
+opt.window = 'kaiser_poly';
+opt.polynomial_degree = 9;
 % charge-neutral system
 [x, f] = SE_charged_system(N,box,'vector');
 
