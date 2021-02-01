@@ -31,7 +31,7 @@ for L = LL
     end
 end
 plot(1:length(MA),MA,'*')
-axis([0,200,0.2,0.5]);
+ylim([0.2,0.5]);
 exportgraphics(gcf,'error_amp.png');
 fclose(fileid);
 %disp(MA)
