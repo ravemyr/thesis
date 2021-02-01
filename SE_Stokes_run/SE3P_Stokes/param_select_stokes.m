@@ -11,7 +11,7 @@ function outopt =  param_select_stokes(tol,inopt)
 %     if(lim(xi*L/M)>val)
 %        %TODO Modify selection of parameters if threshold not met 
 %     end
-    if ~isfield(inopt,'window'), inopt.window = 'gaussian'; outopt.window=inopt.window end
+    if ~isfield(inopt,'window'), inopt.window = 'gaussian'; outopt.window=inopt.window; end
     if(strcmp(inopt.window,'gaussian'))
         %Compute P from error estimate here
         c = sqrt(0.91);
