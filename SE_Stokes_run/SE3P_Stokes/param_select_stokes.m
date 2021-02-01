@@ -3,7 +3,7 @@ function outopt =  param_select_stokes(tol,inopt)
     %given, select N =10 if not given
     checkInopt(inopt);
     outopt.xi = inopt.xi;
-    F = sqrt(sum(norm((opt.f).^2)));
+    F = sqrt(sum(norm((outopt.f).^2)));
     B = F*inopt.xi^(1/2);
     kf_inside = lambertw(4*(inopt.box(1)*F)^(2/3)*inopt.xi^2/(3*pi^(10/3)*tol^(4/3)));
     M = sqrt(3)*inopt.box(1)*inopt.xi*sqrt(kf_inside)/pi;
@@ -14,7 +14,7 @@ function outopt =  param_select_stokes(tol,inopt)
     if(strcmp(inopt.window,'gaussian'))
         %Compute P from error estimate here
         c = sqrt(0.91);
-        P = -log(tol/(2*B))/(2*pi*c);
+        outopt.P = -log(tol/(2*B))/(2*pi*c);
         outopt.eta = (2*outopt.w*outopt.xi/outopt.m)^2;
         outopt.c = 2*outopt.xi^2/outopt.eta;
         outopt.w = outopt.h*outopt.P/2;
@@ -23,8 +23,8 @@ function outopt =  param_select_stokes(tol,inopt)
     if strcmp(inopt.window,'kaiser_exact') || strcmp(inopt.window,'kaiser_poly')
       %compute P here
       
-      P = -log(tol/(10*B))/2.5;
-        outopt.kaiser_scaling = 1/besseli(0,outopt.beta);
+      outopt.P = -log(tol/(10*B))/2.5;
+      outopt.kaiser_scaling = 1/besseli(0,outopt.beta);
     end
     if strcmp(inopt.window,'expsemicirc') || strcmp(inopt.window,'kaiser_exact') ...
         || strcmp(inopt.window,'kaiser_poly')
@@ -33,12 +33,12 @@ function outopt =  param_select_stokes(tol,inopt)
     end
 
     if strcmp(inopt.window,'kaiser_poly')
-      outopt.polynomial_degree = min(P/2 +2,9); end
+      outopt.polynomial_degree = min(P/2 +2,9);
     end
-    if mod(opt.P,2)==0
-      opt.p_half = opt.P/2;
+    if mod(outopt.P,2)==0
+      outopt.p_half = outopt.P/2;
     else
-      opt.p_half = (opt.P-1)/2;
+      outopt.p_half = (outopt.P-1)/2;
     end
 
 
