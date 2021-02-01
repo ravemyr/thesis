@@ -58,3 +58,4 @@ for w=1:numel(windows)
   fprintf('  Time: %g s (Fourier), %g s (real), total %g s\n\n', ...
           tSEFour);
 end
+opt

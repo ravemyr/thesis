@@ -1,7 +1,8 @@
 %demo final
 
-N = 10;
+N = 100;
 L = 1;
+opt.window = 'kaiser_poly'
 opt.box = [L,L,L];
 [x, f] = SE_charged_system(N,opt.box,'vector');
 
