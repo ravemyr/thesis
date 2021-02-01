@@ -1,7 +1,7 @@
 %% Amplitute
 rng(1);
 %A = @(F,xi,L) F*(xi^(3/4)/(L^(9/16))); %Hypothesis for new generated f
-A = @(F,xi,L) F^(1/2)*(xi)^(1)*(L^(-1/2));
+A = @(F,xi,L) F^(1/2)*(xi)^(1)*(L^(0));
 
 M0 = 128;
 opt.M = [M0,M0,M0];
