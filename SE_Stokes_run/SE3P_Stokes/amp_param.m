@@ -1,7 +1,7 @@
 %% Amplitute
 rng(1);
 %A = @(F,xi,L) F*(xi^(3/4)/(L^(9/16))); %Hypothesis for new generated f
-A = @(F,xi,L) F^(1/2)*(xi)^(1)*(L^(-1));
+A = @(F,xi,L) F^(1/2)*(xi)^(1)*(L^(-1/2));
 
 M0 = 128;
 opt.M = [M0,M0,M0];
@@ -34,5 +34,4 @@ plot(1:length(MA),MA,'*')
 ylim([0.2,0.5]);
 exportgraphics(gcf,'error_amp.png');
 fclose(fileid);
-disp(size(MA))
 %disp(MA)
