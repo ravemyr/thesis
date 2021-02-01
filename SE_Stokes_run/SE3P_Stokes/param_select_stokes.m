@@ -7,7 +7,7 @@ function outopt =  param_select_stokes(tol,inopt)
     B = F*inopt.xi^(1/2);
     kf_inside = lambertw(4*(inopt.box(1)*F)^(2/3)*inopt.xi^2/(3*pi^(10/3)*tol^(4/3)));
     M = sqrt(3)*inopt.box(1)*inopt.xi*sqrt(kf_inside)/pi;
-    
+   outopt.h = M./inopt.box(1); 
 %     if(lim(xi*L/M)>val)
 %        %TODO Modify selection of parameters if threshold not met 
 %     end
@@ -15,7 +15,7 @@ function outopt =  param_select_stokes(tol,inopt)
     if(strcmp(inopt.window,'gaussian'))
         %Compute P from error estimate here
         c = sqrt(0.91);
-        outopt.P = -log(tol/(2*B))/(2*pi*c);
+        outopt.P = ceil(-log(tol/(2*B))/(2*pi*c));
         outopt.w = outopt.h*outopt.P/2;
         outopt.m = 0.95*sqrt(pi*outopt.P);  
         outopt.eta = (2*outopt.w*outopt.xi/outopt.m)^2;
@@ -25,7 +25,7 @@ function outopt =  param_select_stokes(tol,inopt)
     if strcmp(inopt.window,'kaiser_exact') || strcmp(inopt.window,'kaiser_poly')
       %compute P here
       
-      outopt.P = -log(tol/(10*B))/2.5;
+      outopt.P = ceil(-log(tol/(10*B))/2.5);
       outopt.kaiser_scaling = 1/besseli(0,outopt.beta);
     end
     if strcmp(inopt.window,'expsemicirc') || strcmp(inopt.window,'kaiser_exact') ...
@@ -43,7 +43,7 @@ function outopt =  param_select_stokes(tol,inopt)
       outopt.p_half = (outopt.P-1)/2;
     end
     outopt.M = [M,M,M];
-
+    outopt.box = inopt.box;
 end
 
 
