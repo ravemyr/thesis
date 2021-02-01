@@ -34,4 +34,5 @@ plot(1:length(MA),MA,'*')
 ylim([0.2,0.5]);
 exportgraphics(gcf,'error_amp.png');
 fclose(fileid);
+disp(size(MA))
 %disp(MA)
