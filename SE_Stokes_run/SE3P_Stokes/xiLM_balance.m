@@ -42,7 +42,7 @@ str = {};
 est = @(M,xi,L,f) sqrt(f)*(xi^3*L^2/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
 e_vec = [];
 
-xx = [5,8,10,20];
+xx = [10,20,30,40];
 LL = [2,1,0.5];
 for xi = xx
     opt.xi = xi;
@@ -67,7 +67,7 @@ ED_opt.box = [L,L,L];
             elseif(L==LL(2))
                 semilogy(PP,rms_err,'--b')
             elseif(L==LL(3))
-                semilogy(PP,rms_err,'-.g')
+                semilogy(PP,rms_err,'-og')
             end
             hold on
             str = [str strcat('M = ',num2str(M))];
