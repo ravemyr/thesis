@@ -20,3 +20,6 @@ u = SE3P_Stokes(1:N, x, f, opt);
 tSE = toc(t);
 fprintf('parameter selection time: %f \n',t_par)
 fprintf('computation time: ', tSE)
+ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
+opt
+fprintf(tolerance>rmse(u-ref)/rmse(ref))
