@@ -3,7 +3,7 @@
 N = 10;
 L = 1;
 opt.box = [L,L,L];
-[x, f] = SE_charged_system(N,box,'vector');
+[x, f] = SE_charged_system(N,opt.box,'vector');
 
 opt.xi = 20;
 tolerance = 10^(-10);

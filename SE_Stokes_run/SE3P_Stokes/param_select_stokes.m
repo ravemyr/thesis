@@ -3,7 +3,7 @@ function outopt =  param_select_stokes(tol,inopt)
     %given, select N =10 if not given
     checkInopt(inopt);
     outopt.xi = inopt.xi;
-    F = sqrt(sum(norm((outopt.f).^2)));
+    F = sqrt(sum(norm((inopt.f).^2)));
     B = F*inopt.xi^(1/2);
     kf_inside = lambertw(4*(inopt.box(1)*F)^(2/3)*inopt.xi^2/(3*pi^(10/3)*tol^(4/3)));
     M = sqrt(3)*inopt.box(1)*inopt.xi*sqrt(kf_inside)/pi;
