@@ -11,7 +11,7 @@ function outopt =  param_select_stokes(tol,inopt)
 %     if(lim(xi*L/M)>val)
 %        %TODO Modify selection of parameters if threshold not met 
 %     end
-    if ~isfield(inopt,'window'), outopt.window = 'gaussian'; end
+    if ~isfield(inopt,'window'), inopt.window = 'gaussian'; outopt.window=inopt.window end
     if(strcmp(inopt.window,'gaussian'))
         %Compute P from error estimate here
         c = sqrt(0.91);
@@ -56,7 +56,7 @@ function checkInopt(opt)
         if(~isfield(opt,'N')) opt.N = 10; end
         [opt.x, opt.f] = SE_charged_system(opt.N,opt.box,'vector'); 
     end
-
+    
 
     % Half-support of window
 end
