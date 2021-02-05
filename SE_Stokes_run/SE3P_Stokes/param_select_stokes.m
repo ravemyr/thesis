@@ -22,18 +22,13 @@ function outopt =  param_select_stokes(tol,inopt)
         outopt.c = 2*outopt.xi^2/outopt.eta;
         
     end
-    if strcmp(inopt.window,'kaiser_exact') || strcmp(inopt.window,'kaiser_poly')
-      %compute P here
-      
+    if strcmp(inopt.window,'kaiser_exact') ...
+        || strcmp(inopt.window,'kaiser_poly')
+      outopt.betaP = 2.5;      
       outopt.P = ceil(-log(tol/(10*B))/2.5);
+      outopt.beta = outopt.betaP*outopt.P;
       outopt.kaiser_scaling = 1/besseli(0,outopt.beta);
     end
-    if strcmp(inopt.window,'expsemicirc') || strcmp(inopt.window,'kaiser_exact') ...
-        || strcmp(inopt.window,'kaiser_poly')
-      outopt.betaP = 2.5;
-      outopt.beta = outopt.betaP*outopt.P;
-    end
-
     if strcmp(inopt.window,'kaiser_poly')
       outopt.polynomial_degree = min(P/2 +2,9);
     end
