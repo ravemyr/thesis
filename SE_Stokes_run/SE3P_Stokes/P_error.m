@@ -20,7 +20,7 @@ opt.M = M0*opt.box;
 opt.xi = 15;
 opt.betaP = 2.5;
 %opt.window = 'kaiser_exact';
-opt.window = 'kaiser_poly';
+opt.window = 'kaiser_exact';
 opt.polynomial_degree = 9;
 % charge-neutral system
 [x, f] = SE_charged_system(N,box,'vector');

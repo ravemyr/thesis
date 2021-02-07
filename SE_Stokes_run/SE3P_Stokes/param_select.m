@@ -8,7 +8,7 @@ N = 10; % number of source particles
 
 
 %% Parameter selection
-L = 3; % box side length
+L = 4; % box side length
 box = [L L L]; % periodic box
 opt.box = box;
 
@@ -76,7 +76,7 @@ end
 F = sum(norm(f).^2);
 est = @(M,xi,L,f) 2*L^2*sqrt(f)*(2*sqrt(pi)*M/2 + 3*xi*L)*exp(-((M/2)*pi/(xi*L))^2)/sqrt(pi);
 est2 = @(M,xi,L,f) sqrt(f)*(xi^3*L^3/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
-MM = [8,32,64,112];
+MM = [8,32,64];
 str = {};
 opt.window = 'kaiser_exact';
 
