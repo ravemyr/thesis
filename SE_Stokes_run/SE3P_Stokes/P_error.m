@@ -47,7 +47,7 @@ e_vec = [];
 F = sum(norm(f.^2));
 for M = [112 MM]
 	opt.M = M*[L,L,L];
-	PP = [4:1:10,10:2:32];
+	PP = [2:1:10,10:2:32];
 	rms_err = [];
     
 	for P = PP
