@@ -30,7 +30,7 @@ function outopt =  param_select_stokes(tol,inopt)
       outopt.kaiser_scaling = 1/besseli(0,outopt.beta);
     end
     if strcmp(inopt.window,'kaiser_poly')
-      outopt.polynomial_degree = min(P/2 +2,9);
+      outopt.polynomial_degree = min(outopt.P/2 +2,9);
     end
     if mod(outopt.P,2)==0
       outopt.p_half = outopt.P/2;

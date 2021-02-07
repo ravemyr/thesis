@@ -28,7 +28,7 @@ ED_opt.layers = (opt.M(1)-1)/2;
 ED_opt.box = box;
 refv = [];
 rms_ev = [];
-xx = (4:4:8)*pi;
+xx = (8:4:12)*pi;
 
     %% Direct solution
 if(exist('refval.mat'))
@@ -76,7 +76,7 @@ end
 F = sum(norm(f).^2);
 est = @(M,xi,L,f) 2*L^2*sqrt(f)*(2*sqrt(pi)*M/2 + 3*xi*L)*exp(-((M/2)*pi/(xi*L))^2)/sqrt(pi);
 est2 = @(M,xi,L,f) sqrt(f)*(xi^3*L^3/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
-MM = [8,16,32,48,64,80,112];
+MM = [8,32,64,112];
 str = {};
 opt.window = 'kaiser_exact';
 
