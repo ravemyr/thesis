@@ -8,7 +8,7 @@ N = 10; % number of source particles
 
 
 %% Parameter selection
-L = 1; % box side length
+L = 2; % box side length
 box = [L L L]; % periodic box
 opt.box = box;
 
@@ -47,7 +47,7 @@ e_vec = [];
 F = sum(norm(f.^2));
 for M = [128 MM]
 	opt.M = M*[L,L,L];
-	PP = 4:2:32;
+	PP = [4:1:10,10:2:32];
 	rms_err = [];
     
 	for P = PP
