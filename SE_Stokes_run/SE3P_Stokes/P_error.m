@@ -8,7 +8,7 @@ N = 10; % number of source particles
 
 
 %% Parameter selection
-L = 2; % box side length
+L = 1; % box side length
 box = [L L L]; % periodic box
 opt.box = box;
 
@@ -17,7 +17,7 @@ opt.box = box;
 
 M0 = 128; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*opt.box;
-opt.xi = 15;
+opt.xi = 30;
 opt.betaP = 2.5;
 %opt.window = 'kaiser_exact';
 opt.window = 'kaiser_exact';
@@ -40,12 +40,12 @@ end
 	%opt.window = 'gaussian';
 %ref = SE3P_Stokes(1:N,x,f,opt);
 %% Compare solutions with changing P
-MM = 32:4:56;
+MM = 32:4:64;
 str = {};
 est = @(M,xi,L,f) sqrt(f)*(xi^3*L^2/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
 e_vec = [];
 F = sum(norm(f.^2));
-for M = [128 MM]
+for M = [112 MM]
 	opt.M = M*[L,L,L];
 	PP = [4:1:10,10:2:32];
 	rms_err = [];
