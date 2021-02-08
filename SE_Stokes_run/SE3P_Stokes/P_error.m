@@ -19,8 +19,9 @@ M0 = 128; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*opt.box;
 opt.xi = 15;
 opt.betaP = 2.5;
+opt.c = sqrt(0.91);
 %opt.window = 'kaiser_exact';
-opt.window = 'kaiser_exact';
+opt.window = 'gaussian';
 opt.polynomial_degree = 9;
 % charge-neutral system
 [x, f] = SE_charged_system(N,box,'vector');
@@ -62,8 +63,13 @@ for M = [112 MM]
 	hold on
 	str = [str strcat('M = ',num2str(M))];
 end
+if(strcmp(opt.window,'kaiser_exact'))
 semilogy(PP,10*exp(-2.5.*PP),'--')
 str = [str ,'10exp(-2.5\beta)'];
+else
+semilogy(PP,exp(-(pi/2)*PP*opt.c),'--')
+str = [str,'exp(-(\pi/2)Pc)'];
+end
 for i = 1:length(e_vec)
     semilogy(PP,ones(1,length(PP))*e_vec(i),('bl-'))
 end
