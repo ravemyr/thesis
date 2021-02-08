@@ -60,14 +60,16 @@ for M = [112 MM]
 	semilogy(PP,rms_err)
    
 	hold on
+	
 	str = [str strcat('M = ',num2str(M))];
 end
+semilogy(PP,ones(1,length(PP))*e,'bl-')
 semilogy(PP,10*exp(-2.5.*PP),'--')
-str = [str ,'10exp(-2.5\beta'];
 for i = 1:length(e_vec)
     semilogy(PP,ones(1,length(PP))*e_vec(i),('bl-'))
 end
-str = [str,'estimate'];
+
+str = [str ,'10exp(-2.5\beta'];
 legend(str)
 e = est(48,opt.xi,L,F);
 xlabel('P')
