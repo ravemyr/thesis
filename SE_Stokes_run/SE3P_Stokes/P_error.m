@@ -40,7 +40,7 @@ end
 	%opt.window = 'gaussian';
 %ref = SE3P_Stokes(1:N,x,f,opt);
 %% Compare solutions with changing P
-MM = 32:4:48;
+MM = 40:4:56;
 str = {};
 est = @(M,xi,L,f) sqrt(f)*(xi^3*L^2/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
 e_vec = [];
@@ -65,7 +65,7 @@ for M = [112 MM]
 end
 
 semilogy(PP,10*exp(-2.5.*PP),'--')
-str = [str, 'estimate'];
+str = [str, 'estimate','10exp(-2.5\beta'];
 legend(str)
 e = est(48,opt.xi,L,F);
 xlabel('P')
