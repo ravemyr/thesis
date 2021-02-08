@@ -63,7 +63,7 @@ for M = [112 MM]
 	str = [str strcat('M = ',num2str(M))];
 end
 semilogy(PP,10*exp(-2.5.*PP),'--')
-str = [str ,'10exp(-2.5\beta'];
+str = [str ,'10exp(-2.5\beta)'];
 for i = 1:length(e_vec)
     semilogy(PP,ones(1,length(PP))*e_vec(i),('bl-'))
 end
