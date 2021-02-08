@@ -62,10 +62,11 @@ for M = [112 MM]
 	hold on
 	semilogy(PP,ones(1,length(PP))*e,'bl-')
 	str = [str strcat('M = ',num2str(M))];
+    str = [str, 'estimate'];
 end
 
 semilogy(PP,10*exp(-2.5.*PP),'--')
-str = [str, 'estimate','10exp(-2.5\beta'];
+str = [str ,'10exp(-2.5\beta'];
 legend(str)
 e = est(48,opt.xi,L,F);
 xlabel('P')
