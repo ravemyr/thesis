@@ -40,6 +40,7 @@ else
 end
 	%opt.window = 'gaussian';
 %ref = SE3P_Stokes(1:N,x,f,opt);
+rms_ref = rmse(ref);
 %% Compare solutions with changing P
 MM = 40:4:56;
 str = {};
@@ -54,15 +55,16 @@ for M = [112 MM]
 	for P = PP
     		opt.P = P;
     		u = SE3P_Stokes(1:N, x, f, opt);
-    		rms_err = [rms_err rmse(u-ref)/rmse(ref)];
+    		rms_err = [rms_err rmse(u-ref)/rms_ref];
     end
     e = est(M,opt.xi,L,F);
-    e_vec = [e_vec, e];
+    e_vec = [e_vec, e./rms_ref];
 	semilogy(PP,rms_err)
    
 	hold on
 	str = [str strcat('M = ',num2str(M))];
 end
+
 if(strcmp(opt.window,'kaiser_exact'))
 semilogy(PP,10*exp(-2.5.*PP),'--')
 str = [str ,'10exp(-2.5\beta)'];

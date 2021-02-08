@@ -30,6 +30,8 @@ for L = LL
         end
     end
 end
+aMA = mean(MA);
+MA = MA./aMA;
 plot(1:length(MA),MA,'*')
 axis([1,length(MA),0.2,0.5]);
 exportgraphics(gcf,'error_amp.png');
