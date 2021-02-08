@@ -60,7 +60,7 @@ for M = [112 MM]
 	semilogy(PP,rms_err)
    
 	hold on
-	semilogy(PP,ones(1,length(PP))*e)
+	semilogy(PP,ones(1,length(PP))*e,'bl-')
 	str = [str strcat('M = ',num2str(M))];
 end
 
