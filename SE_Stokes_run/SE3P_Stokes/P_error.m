@@ -21,7 +21,7 @@ opt.xi = 5;
 opt.betaP = 2.5;
 opt.c = sqrt(0.91);
 %opt.window = 'kaiser_exact';
-opt.window = 'gaussian';
+opt.window = 'kaiser_exact';
 opt.polynomial_degree = 9;
 % charge-neutral system
 [x, f] = SE_charged_system(N,box,'vector');
