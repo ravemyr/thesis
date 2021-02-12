@@ -52,6 +52,7 @@ est = @(M,xi,L,f) sqrt(f)*(xi^3*L^2/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2
 e_vec = [];
 F = sum(norm(f.^2));
 A = @(a,b) (1/0.3548)*sqrt(a)*b;
+disp(num2str(norm(A(F,opt.xi)-rms_ref)))
 for M = [112 MM]
 	
 	opt.M = M*[1,1,1];
@@ -61,11 +62,11 @@ for M = [112 MM]
 	for P = PP
     		opt.P = P;
     		u = SE3P_Stokes(1:N, x, f, opt);
-    		rms_err = [rms_err rmse(u-ref)/A(F,opt.xi)];
+    		rms_err = [rms_err rmse(u-ref)/rms_ref];
 		
     end
     e = est(M,opt.xi,L,F);
-    e_vec = [e_vec, e./A(F,opt.xi)];
+    e_vec = [e_vec, e./rms_ref];
 	semilogy(PP,rms_err)
    
 	hold on
