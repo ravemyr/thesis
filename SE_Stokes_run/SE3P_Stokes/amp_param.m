@@ -30,7 +30,7 @@ for L = LL
         end
     end
 end
-aMA = mean(MA);
+aMA = mean(MA)
 MA = MA./aMA;
 plot(1:length(MA),MA,'*')
 axis([1,length(MA),0.8,1.2]);
