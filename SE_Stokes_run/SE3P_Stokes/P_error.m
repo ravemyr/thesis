@@ -37,7 +37,7 @@ if(exist('refval.mat'))
 	ref = refval.refv(:,1:3);
 else
 	
-	opt.P = 10;
+	opt.P = 15;
 	opt.M = 196*[1,1,1];
 	ref = SE3P_Stokes(1:N,x,f,opt);
 %	ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
