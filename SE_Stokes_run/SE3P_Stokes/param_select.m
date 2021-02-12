@@ -8,7 +8,7 @@ N = 10; % number of source particles
 
 
 %% Parameter selection
-L = 1; % box side length
+L = 2; % box side length
 box = [L L L]; % periodic box
 opt.box = box;
 
@@ -16,7 +16,7 @@ opt.box = box;
 
 
 M0=128; % Set M0=M/L, the restu * 1+ is automatic
-opt.M = M0*opt.box;
+opt.M = M0*[1,1,1];
 opt.P = M0;
 opt.betaP = 2.5;
 
