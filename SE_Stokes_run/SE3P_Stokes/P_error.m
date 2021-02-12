@@ -38,9 +38,9 @@ if(exist('refval.mat'))
 else
 	
 	opt.P = 10;
-	opt.M = 124*[1,1,1];
+	opt.M = 196*[1,1,1];
 	ref = SE3P_Stokes(1:N,x,f,opt);
-	%ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
+%	ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
 end
 	%opt.window = 'gaussian';
 %ref = SE3P_Stokes(1:N,x,f,opt);
@@ -51,7 +51,7 @@ str = {};
 est = @(M,xi,L,f) sqrt(f)*(xi^3*L^2/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
 e_vec = [];
 F = sum(norm(f.^2));
-for M = [96 MM]
+for M = [112 MM]
 	
 	opt.M = M*[1,1,1];
 	PP = [2:1:10,10:2:32];
