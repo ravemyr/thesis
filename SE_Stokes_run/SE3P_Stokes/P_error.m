@@ -87,7 +87,8 @@ legend(str)
 xlabel('P')
 xlim([1,15])
 ylim([10^-14,1])
-grid on;
-exportgraphics(gcf,'error_P.png')
 
+exportgraphics(gcf,'error_P.png')
+grid on
+exportgraphics(gcf,'error_P_zoom.png')
 
