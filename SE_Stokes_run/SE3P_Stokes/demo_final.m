@@ -6,7 +6,7 @@ opt.window = 'kaiser_exact';
 opt.box = [L,L,L];
 [x, f] = SE_charged_system(N,opt.box,'vector');
 
-opt.xi = 5;
+opt.xi = 10;
 tolerance = 10^(-10);
 opt.N = N;
 opt.x =x;

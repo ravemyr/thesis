@@ -17,7 +17,7 @@ opt.box = box;
 
 M0 = 128; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*opt.box;
-opt.xi = 5;
+opt.xi = 25;
 opt.betaP = 2.5;
 opt.c = sqrt(0.91);
 %opt.window = 'kaiser_exact';
@@ -51,7 +51,7 @@ str = {};
 est = @(M,xi,L,f) sqrt(f)*(xi^3*L^2/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
 e_vec = [];
 F = sum(norm(f.^2));
-A = @(a,b,c) sqrt(a)*b^(3/2)/c;
+A = @(a,b,c) sqrt(a)*b^(1/2)/sqrt(c);
 disp(num2str(A(F,opt.xi,opt.box(1))/rms_ref))
 for M = [112 MM]
 	
@@ -62,8 +62,7 @@ for M = [112 MM]
 	for P = PP
     		opt.P = P;
     		u = SE3P_Stokes(1:N, x, f, opt);
-    		rms_err = [rms_err rmse(u-ref)/rms_ref];
-		
+    		rms_err = [rms_err rmse(u-ref)/rms_ref];	
     end
     e = est(M,opt.xi,L,F);
     e_vec = [e_vec, e./rms_ref];
