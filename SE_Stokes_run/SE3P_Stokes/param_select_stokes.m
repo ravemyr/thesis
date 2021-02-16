@@ -47,8 +47,6 @@ function outopt =  param_select_stokes(tol,inopt)
     outopt.box = inopt.box;
 end
 
-
-    
     %Verify that user data exists, generate if not
 function checkInopt(opt)
     assert(isfield(opt, 'box'), 'cell size box must be given in opt struct');
