@@ -7,7 +7,7 @@ function outopt =  param_select_stokes(tol,inopt)
     B = F*inopt.xi;
     kf_inside = lambertw(4*(inopt.box(1)*F)^(2/3)*inopt.xi^2/(3*pi^(10/3)*tol^(4/3)));
     M = ceil(sqrt(3)*inopt.box(1)*inopt.xi*sqrt(kf_inside)/pi);
-   outopt.h = M./inopt.box(1); 
+   outopt.h = inopt.box(1)/M; 
 %     if(lim(xi*L/M)>val)
 %        %TODO Modify selection of parameters if threshold not met 
 %     end
@@ -29,7 +29,7 @@ function outopt =  param_select_stokes(tol,inopt)
       if(fx(M/(inopt.xi*inopt.box(1)))>ceil(-log(tol/(10*B))/2.5))
       outopt.P = ceil(-log(tol/(10*B))/2.5)+5;
       else 
-          M = M + 8;
+          M = M+8;
           outopt.P = ceil(-log(tol/(10*B))/2.5)+5;
       end
       outopt.beta = outopt.betaP*outopt.P;

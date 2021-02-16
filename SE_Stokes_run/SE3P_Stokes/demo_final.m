@@ -31,6 +31,6 @@ ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
 tDirReal = toc(t);
 opt
 format long;
-fprintf('tolerance: %f \n',tolerance)
-fprintf('%f \n',(rmse(u-ref)))
-fprintf('%f \n',rmse(u-ref)/rmse(ref))
+fprintf('tolerance: %.16g \n',tolerance)
+fprintf('%.16g \n',(rmse(u-ref)))
+fprintf('%.16g \n',rmse(u-ref)/rmse(ref))
