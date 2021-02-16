@@ -25,7 +25,13 @@ function outopt =  param_select_stokes(tol,inopt)
     if strcmp(inopt.window,'kaiser_exact') ...
         || strcmp(inopt.window,'kaiser_poly')
       outopt.betaP = 2.5;      
-      outopt.P = ceil(-log(tol/(10*B))/2.5);
+      fx = @(x) 0.20*x^2 + 2.3 * x - 2.2527;
+      if(fx(M/(inopt.xi*inopt.L))>ceil(-log(tol/(10*B))/2.5))
+      outopt.P = ceil(-log(tol/(10*B))/2.5)+5;
+      else 
+          outopt.M = outpot.M + 8;
+          outopt.P = ceil(-log(tol/(10*B))/2.5)+5;
+      end
       outopt.beta = outopt.betaP*outopt.P;
       outopt.kaiser_scaling = 1/besseli(0,outopt.beta);
     end
