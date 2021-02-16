@@ -8,7 +8,7 @@ N = 10; % number of source particles
 
 
 %% Parameter selection
-L = 0.10; % box side length
+L = 1; % box side length
 box = [L L L]; % periodic box
 opt.box = box;
 
@@ -17,7 +17,7 @@ opt.box = box;
 
 M0 = 128; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*opt.box;
-opt.xi = 50;
+opt.xi = 5;
 opt.betaP = 2.5;
 opt.c = sqrt(0.91);
 %opt.window = 'kaiser_exact';
@@ -51,8 +51,8 @@ str = {};
 est = @(M,xi,L,f) sqrt(f)*(xi^3*L^2/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
 e_vec = [];
 F = sum(norm(f.^2));
-A = @(a,b) (1/0.3548)*sqrt(a)*b;
-disp(num2str(norm(A(F,opt.xi)-rms_ref)))
+A = @(a,b) sqrt(a)*b;
+disp(num2str(A(F,opt.xi)/rms_ref))
 for M = [112 MM]
 	
 	opt.M = M*[1,1,1];
