@@ -51,8 +51,8 @@ str = {};
 est = @(M,xi,L,f) sqrt(f)*(xi^3*L^2/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
 e_vec = [];
 F = sum(norm(f.^2));
-A = @(a,b) sqrt(a)*b;
-disp(num2str(A(F,opt.xi)/rms_ref))
+A = @(a,b,c) sqrt(a)*b^(3/2)/c;
+disp(num2str(A(F,opt.xi,opt.box(1))/rms_ref))
 for M = [112 MM]
 	
 	opt.M = M*[1,1,1];
@@ -85,7 +85,6 @@ for i = 1:length(e_vec)
 end
 str = [str,'estimate'];
 legend(str)
-e = est(48,opt.xi,L,F);
 xlabel('P')
 ylim([10^-14,1])
 exportgraphics(gcf,'error_P.png')
