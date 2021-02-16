@@ -86,6 +86,7 @@ str = [str,'estimate'];
 legend(str)
 xlabel('P')
 ylim([10^-14,1])
+grid on;
 exportgraphics(gcf,'error_P.png')
 
 
