@@ -2,7 +2,7 @@
 
 N = 100;
 L = 1;
-opt.window = 'gaussian';
+opt.window = 'kaiser_exact';
 opt.box = [L,L,L];
 [x, f] = SE_charged_system(N,opt.box,'vector');
 
