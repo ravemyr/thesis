@@ -85,10 +85,10 @@ end
 str = [str,'estimate'];
 legend(str)
 xlabel('P')
-xlim([1,15])
+xlim([1,32])
 ylim([10^-14,1])
-
-exportgraphics(gcf,'error_P.png')
 grid on
+exportgraphics(gcf,'error_P.png')
+xlim([1,15])
 exportgraphics(gcf,'error_P_zoom.png')
 
