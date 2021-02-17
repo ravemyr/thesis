@@ -46,7 +46,7 @@ end
 %ref = SE3P_Stokes(1:N,x,f,opt);
 rms_ref = rmse(ref);
 %% Compare solutions with changing P
-MM = 8:4:24;
+MM = 24:4:48;
 str = {};
 est = @(M,xi,L,f) sqrt(f)*(xi^3*L^2/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
 e_vec = [];
