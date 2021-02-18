@@ -8,7 +8,7 @@ N = 10; % number of source particles
 
 
 %% Parameter selection
-L = 1; % box side length
+L = 10; % box side length
 box = [L L L]; % periodic box
 opt.box = box;
 
@@ -17,7 +17,7 @@ opt.box = box;
 
 M0 = 128; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*opt.box;
-opt.xi = 20;
+opt.xi = 2;
 opt.betaP = 2.5;
 opt.c = sqrt(0.91);
 %opt.window = 'kaiser_exact';
