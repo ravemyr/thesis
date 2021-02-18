@@ -109,7 +109,7 @@ for xi = xx
     semilogy(MM./2,eee,'--*')
     str = [str,strcat('computed error, \xi =', num2str(xi))];
     str = [str, strcat('error estimate, \xi =', num2str(xi))];
-    %str = [str, strcat('second estimate, \xi =', num2str(xi))];
+    str = [str, strcat('second estimate, \xi =', num2str(xi))];
 end
 ylim([10^-14,1])
 xlim([0,73])
