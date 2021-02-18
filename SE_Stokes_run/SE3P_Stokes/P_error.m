@@ -17,11 +17,11 @@ opt.box = box;
 
 M0 = 128; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*opt.box;
-opt.xi = 15;
+opt.xi = 5;
 opt.betaP = 2.5;
 opt.c = sqrt(0.91);
 %opt.window = 'kaiser_exact';
-opt.window = 'gaussian';
+opt.window = 'kaiser_exact';
 opt.polynomial_degree = 9;
 % charge-neutral system
 [x, f] = SE_charged_system(N,box,'vector');
@@ -45,7 +45,7 @@ end
 %ref = SE3P_Stokes(1:N,x,f,opt);
 rms_ref = rmse(ref);
 %% Compare solutions with changing P
-MM = 60:4:84;
+MM = 8:4:24;
 str = {};
 %est = @(M,xi,L,f) sqrt(f)*(xi^3*L^2/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
 est = @(M,xi,L,f) sqrt(f)*(4/(3^(1/4)*L*pi))*exp(-(pi*M/(xi*L*2))^2);
