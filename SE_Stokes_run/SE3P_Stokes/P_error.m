@@ -46,12 +46,12 @@ end
 %ref = SE3P_Stokes(1:N,x,f,opt);
 rms_ref = rmse(ref);
 %% Compare solutions with changing P
-MM = 48:4:72;
+MM = 60:4:84;
 str = {};
 est = @(M,xi,L,f) sqrt(f)*(xi^3*L^2/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
 e_vec = [];
 F = sum(norm(f.^2));
-A = @(a,b,c) sqrt(a)*b^(1/2)/sqrt(c);
+A = @(a,b,c) sqrt(a)*b*(b*c);
 disp(num2str(A(F,opt.xi,opt.box(1))/rms_ref))
 for M = [112 MM]
 	
