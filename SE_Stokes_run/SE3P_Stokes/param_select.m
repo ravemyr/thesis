@@ -105,7 +105,7 @@ for xi = xx
     end
     semilogy(MM./2,err,'.-')
     hold on
-    semilogy(MM./2,ee,'.--')
+    semilogy(MM./2,ee,'--o')
     semilogy(MM./2,eee,'--*')
     str = [str,strcat('computed error, \xi =', num2str(xi))];
     str = [str, strcat('error estimate, \xi =', num2str(xi))];
