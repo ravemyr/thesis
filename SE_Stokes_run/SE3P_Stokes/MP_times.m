@@ -52,10 +52,9 @@ est = @(M,xi,L,f) sqrt(f)*(4/(3^(1/4)*L*pi))*exp(-(pi*M/(xi*L*2))^2);
 e_vec = [];
 F = sum(norm(f.^2));
 A = @(a,b,c) sqrt(a)*b*(b*c);
-disp(num2str(A(F,opt.xi,opt.box(1))/rms_ref))
 PP = [2:1:10,10:2:32];
 times = zeros(length(MM),length(PP));
-for M = [112 MM]
+for M = MM
     Midx = (find(M==MM));
 	opt.M = M*[1,1,1];
 	rms_err = [];
@@ -64,33 +63,23 @@ for M = [112 MM]
     		opt.P = P;
             t = tic;
     		u = SE3P_Stokes(1:N, x, f, opt);
-            times(Midx,Pidx) = toc-t;
+            times(Midx,Pidx) = toc(t);
     		rms_err = [rms_err rmse(u-ref)];	
     end
     e = est(M,opt.xi,L,F);
     e_vec = [e_vec, e];
-	semilogy(PP,rms_err)
-   
+    disp(length(rms_err))
+    disp(length(times(Midx,:)))
+	semilogy(times(Midx,:),rms_err)  
 	hold on
 	str = [str strcat('M = ',num2str(M))];
 end
 disp(times(1,:))
-if(strcmp(opt.window,'kaiser_exact'))
-semilogy(PP,10*exp(-2.5.*PP),'--')
-str = [str ,'10exp(-2.5\beta)'];
-else
-semilogy(PP,exp(-(pi/2)*PP*opt.c),'--')
-str = [str,'exp(-(\pi/2)Pc)'];
-end
-for i = 1:length(e_vec)
-    semilogy(PP,ones(1,length(PP))*e_vec(i),('bl-'))
-end
-str = [str,'estimate'];
 legend(str)
 xlabel('P')
 xlim([1,32])
 ylim([10^-14,1])
 grid on
-exportgraphics(gcf,'error_P.png')
-xlim([1,15])
+exportgraphics(gcf,'P-time-error.png')
+
 exportgraphics(gcf,'error_P_zoom.png')
