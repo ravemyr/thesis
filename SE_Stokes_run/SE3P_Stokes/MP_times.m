@@ -64,19 +64,17 @@ for M = MM
 	for P = PP
             Pidx = (find(P==PP));
    	    opt.P = P;
-            for i = 1:100
-	    t = tic;
-
+        t = tic;
+        for i = 1:100
     		u = SE3P_Stokes(1:N, x, f, opt);
-		if(Pidx>1)
-            times(Midx,Pidx) = toc(t) + sum(times(Midx,1:Pidx-1));
-    	    else
-		    times(Midx,Pidx) = toc(t);
-	    end	    
-	end
+        end
+        if(Pidx>1)
+             times(Midx,Pidx) = toc(t)/100 + sum(times(Midx,1:Pidx-1));
+        else
+               times(Midx,Pidx) = toc(t)/100;
+        end	 
 	    rms_err = [rms_err rmse(u-ref)/rms_ref];	
     end
-    times = times./100;
     e = est(M,opt.xi,L,F);
     e_vec = [e_vec, e];
 	semilogy(times(Midx,:),rms_err,'*')  
