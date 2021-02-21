@@ -63,8 +63,12 @@ for M = MM
     		opt.P = P;
             t = tic;
     		u = SE3P_Stokes(1:N, x, f, opt);
-            times(Midx,Pidx) = toc(t);
-    		rms_err = [rms_err rmse(u-ref)];	
+		if(Pidx>1)
+            times(Midx,Pidx) = toc(t) + sum(times(Midx,1:Pidx-1));
+    	    else
+		    times(Midx,Pidx) = toc(t);
+	    end	    
+	    rms_err = [rms_err rmse(u-ref)];	
     end
     e = est(M,opt.xi,L,F);
     e_vec = [e_vec, e];
