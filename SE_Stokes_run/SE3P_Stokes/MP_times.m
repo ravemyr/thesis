@@ -79,7 +79,7 @@ end
 disp(times(1,:))
 %legend(str)
 xlabel('time (s)')
-ylim([10^-14,1])
+%ylim([10^-14,1])
 exportgraphics(gcf,'P-time-error.png')
 
 
