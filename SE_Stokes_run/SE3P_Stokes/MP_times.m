@@ -45,7 +45,7 @@ end
 %ref = SE3P_Stokes(1:N,x,f,opt);
 rms_ref = rmse(ref);
 %% Compare solutions with changing P
-MM = 8:4:24;
+MM = 12:4:24;
 str = {};
 %est = @(M,xi,L,f) sqrt(f)*(xi^3*L^2/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
 est = @(M,xi,L,f) sqrt(f)*(4/(3^(1/4)*L*pi))*exp(-(pi*M/(xi*L*2))^2);
@@ -54,6 +54,9 @@ F = sum(norm(f.^2));
 A = @(a,b,c) sqrt(a)*b*(b*c);
 PP = [2:1:10,10:2:32];
 times = zeros(length(MM),length(PP));
+tic;
+disp('timer started')
+toc;
 for M = MM
     Midx = (find(M==MM));
 	opt.M = M*[1,1,1];
@@ -61,22 +64,26 @@ for M = MM
 	for P = PP
             Pidx = (find(P==PP));
    	    opt.P = P;
-            t = tic;
+            for i = 1:100
+	    t = tic;
+
     		u = SE3P_Stokes(1:N, x, f, opt);
 		if(Pidx>1)
             times(Midx,Pidx) = toc(t) + sum(times(Midx,1:Pidx-1));
     	    else
 		    times(Midx,Pidx) = toc(t);
 	    end	    
+	end
 	    rms_err = [rms_err rmse(u-ref)/rms_ref];	
     end
+    times = times./100;
     e = est(M,opt.xi,L,F);
     e_vec = [e_vec, e];
 	semilogy(times(Midx,:),rms_err,'*')  
 	hold on
 	str = [str strcat('M = ',num2str(M))];
 end
-disp(times(1,:))
+disp(times(:,:))
 %legend(str)
 xlabel('time (s)')
 %ylim([10^-14,1])
