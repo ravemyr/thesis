@@ -60,7 +60,7 @@ for M = MM
 	rms_err = [];
 	for P = PP
             Pidx = (find(P==PP));
-    		opt.P = P;
+   	    opt.P = P;
             t = tic;
     		u = SE3P_Stokes(1:N, x, f, opt);
 		if(Pidx>1)
