@@ -68,8 +68,8 @@ for M = MM
     end
     e = est(M,opt.xi,L,F);
     e_vec = [e_vec, e];
-    disp(length(rms_err))
-    disp(length(times(Midx,:)))
+    
+  
 	semilogy(times(Midx,:),rms_err)  
 	hold on
 	str = [str strcat('M = ',num2str(M))];
@@ -82,4 +82,4 @@ ylim([10^-14,1])
 grid on
 exportgraphics(gcf,'P-time-error.png')
 
-exportgraphics(gcf,'error_P_zoom.png')
+
