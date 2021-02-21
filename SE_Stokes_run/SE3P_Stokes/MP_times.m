@@ -56,11 +56,11 @@ disp(num2str(A(F,opt.xi,opt.box(1))/rms_ref))
 PP = [2:1:10,10:2:32];
 times = zeros(length(MM),length(PP));
 for M = [112 MM]
-    Midx = find(M,MM);
+    Midx = (find(M==MM));
 	opt.M = M*[1,1,1];
 	rms_err = [];
 	for P = PP
-            Pidx = find(P,PP);
+            Pidx = (find(P==PP));
     		opt.P = P;
             t = tic;
     		u = SE3P_Stokes(1:N, x, f, opt);
