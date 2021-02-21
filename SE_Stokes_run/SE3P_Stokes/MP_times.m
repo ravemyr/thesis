@@ -68,15 +68,13 @@ for M = MM
     end
     e = est(M,opt.xi,L,F);
     e_vec = [e_vec, e];
-    
-  
-	semilogy(times(Midx,:),rms_err)  
+	semilogy(times(Midx,:),rms_err,'*')  
 	hold on
 	str = [str strcat('M = ',num2str(M))];
 end
 disp(times(1,:))
 %legend(str)
-xlabel('times')
+xlabel('time (s)')
 ylim([10^-14,1])
 exportgraphics(gcf,'P-time-error.png')
 
