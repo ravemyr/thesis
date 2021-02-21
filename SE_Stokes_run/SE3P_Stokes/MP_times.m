@@ -68,7 +68,7 @@ for M = MM
     	    else
 		    times(Midx,Pidx) = toc(t);
 	    end	    
-	    rms_err = [rms_err rmse(u-ref)];	
+	    rms_err = [rms_err rmse(u-ref)/rms_ref];	
     end
     e = est(M,opt.xi,L,F);
     e_vec = [e_vec, e];
