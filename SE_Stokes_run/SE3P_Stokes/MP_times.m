@@ -75,11 +75,9 @@ for M = MM
 	str = [str strcat('M = ',num2str(M))];
 end
 disp(times(1,:))
-legend(str)
-xlabel('P')
-xlim([1,32])
+%legend(str)
+xlabel('times')
 ylim([10^-14,1])
-grid on
 exportgraphics(gcf,'P-time-error.png')
 
 
