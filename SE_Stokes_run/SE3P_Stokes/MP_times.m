@@ -66,15 +66,15 @@ for M = MM
    	    opt.P = P;
 	    u = SE3P_Stokes(1:N,x,f,opt);
         t = tic;
-        for i = 1:50
+        for i = 1:200
     		u = SE3P_Stokes(1:N, x, f, opt);
         end
-        times(Midx,Pidx) = toc(t)/50; 
+        times(Midx,Pidx) = toc(t)/200; 
     rms_err = [rms_err rmse(u-ref)/rms_ref];	
     end
     e = est(M,opt.xi,L,F);
     e_vec = [e_vec, e];
-	semilogy(times(Midx,:),rms_err,'*')  
+	semilogy(PP,times(Midx,:),'*')  
 	hold on
 	str = [str strcat('M = ',num2str(M))];
 end
