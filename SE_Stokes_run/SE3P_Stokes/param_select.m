@@ -8,7 +8,7 @@ N = 10; % number of source particles
 
 
 %% Parameter selection
-L = 2; % box side length
+L = 4; % box side length
 box = [L L L]; % periodic box
 opt.box = box;
 
@@ -113,7 +113,7 @@ for xi = xx
 end
 ylim([10^-14,1])
 xlim([0,73])
-legend(str{:},'Location','North East')
+legend(str{:},'Location','Best')
 
 
 % disp('error rate as M increases')
