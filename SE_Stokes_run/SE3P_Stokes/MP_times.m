@@ -4,7 +4,7 @@
 %%setup
 clear
 rng(1);
-N = 10; % number of source particles
+N = 100; % number of source particles
 
 
 %% Parameter selection
