@@ -114,7 +114,7 @@ end
 ylim([10^-14,1])
 xlim([0,73])
 legend(str{:},'Location','Best')
-
+xlabel('k_{\infty}')
 
 % disp('error rate as M increases')
 % disp(err)
