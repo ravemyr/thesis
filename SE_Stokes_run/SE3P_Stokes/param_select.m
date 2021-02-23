@@ -76,7 +76,7 @@ end
 F = sum(norm(f).^2);
 %est = @(M,xi,L,f) 2*L^2*sqrt(f)*(2*sqrt(pi)*M/2 + 3*xi*L)*exp(-((M/2)*pi/(xi*L))^2)/sqrt(pi);
 est = @(M,xi,L,f) sqrt(f)*(xi*(xi*L)^2)/(pi^4*(M/2)^(2))*exp(-(pi*(M/2)/(xi*L))^2);
-est2 = @(M,xi,L,f) sqrt(f)*(4*exp(-(pi*M/(2*xi*L))^2)/(L*pi*3^(1/2)))*((M>=2)*(xi*L)^2/(2*pi*M/2));
+est2 = @(M,xi,L,f) sqrt(f)*(4*exp(-(pi*M/(2*xi*L))^2)/(L*pi*3^(1/2)))*((M<32) + (M>=32)*(xi*L)^2/(2*pi*M/2));
 MM = [8,24,32,48,64,72,80,88,96,104];
 str = {};
 opt.window = 'kaiser_exact';
