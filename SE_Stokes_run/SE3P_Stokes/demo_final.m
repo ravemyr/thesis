@@ -34,7 +34,7 @@ format long;
 fprintf('tolerance: %.16g \n',tolerance)
 fprintf('%.16g \n',(rmse(u-ref)))
 fprintf('%.16g \n',rmse(u-ref)/rmse(ref))
-plot(opt.xi, tolerance,'*')
+semilogy(opt.xi, tolerance,'*')
 hold on
-plot(opt.xi, rmse(u-ref),'o')
+semilogy(opt.xi, rmse(u-ref),'o')
 exportgraphics(gcf,'results.png')
