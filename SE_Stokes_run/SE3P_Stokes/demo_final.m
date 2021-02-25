@@ -36,5 +36,6 @@ fprintf('%.16g \n',(rmse(u-ref)))
 fprintf('%.16g \n',rmse(u-ref)/rmse(ref))
 semilogy(opt.xi, tolerance,'*')
 hold on
-semilogy(opt.xi, rmse(u-ref),'o')
+semilogy(opt.xi, rmse(u-ref),'or')
+semilogy(opt.xi, rmse(u-ref)/rmse(ref),'ob')
 exportgraphics(gcf,'results.png')
