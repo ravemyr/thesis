@@ -2,7 +2,7 @@
 
 N = 100;
 L = 1;
-opt.window = 'kaiser_exact';
+opt.window = 'kaiser_poly';
 opt.box = [L,L,L];
 [x, f] = SE_charged_system(N,opt.box,'vector');
 
@@ -34,3 +34,7 @@ format long;
 fprintf('tolerance: %.16g \n',tolerance)
 fprintf('%.16g \n',(rmse(u-ref)))
 fprintf('%.16g \n',rmse(u-ref)/rmse(ref))
+plot(opt.xi, tolerance,'*')
+hold on
+plot(opt.xi, rmse(u-ref),'o')
+exportgraphics(gcf,'results.png')
