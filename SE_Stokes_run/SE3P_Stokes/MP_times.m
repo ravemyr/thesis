@@ -62,15 +62,15 @@ for M = MM
 	opt.M = M*[1,1,1];
 	rms_err = [];
 	for P = PP
-            Pidx = (find(P==PP));
-   	    opt.P = P;
-	    u = SE3P_Stokes(1:N,x,f,opt);
+        Pidx = (find(P==PP));
+        opt.P = P;
+        u = SE3P_Stokes(1:N,x,f,opt);
         t = tic;
         for i = 1:200
-    		u = SE3P_Stokes(1:N, x, f, opt);
+            u = SE3P_Stokes(1:N, x, f, opt);
         end
         times(Midx,Pidx) = toc(t)/200; 
-    rms_err = [rms_err rmse(u-ref)/rms_ref];	
+        rms_err = [rms_err rmse(u-ref)/rms_ref];	
     end
     e = est(M,opt.xi,L,F);
     e_vec = [e_vec, e];
@@ -80,7 +80,8 @@ for M = MM
 end
 disp(times(:,:))
 %legend(str)
-xlabel('time (s)')
+xlabel('P')
+ylabel('\epsilon_{rms}')
 %ylim([10^-14,1])
 exportgraphics(gcf,'P-time-error.png')
 
