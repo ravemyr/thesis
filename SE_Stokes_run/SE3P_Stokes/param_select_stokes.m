@@ -3,10 +3,8 @@ function outopt =  param_select_stokes(tol,inopt)
     %given, select N =10 if not given
     checkInopt(inopt);
     outopt.xi = inopt.xi;
-    F = sqrt(sum(norm((inopt.f).^2)));
-    B = F*inopt.xi;
-%     kf_inside = lambertw(4*(inopt.box(1)*F)^(2/3)*inopt.xi^2/(3*pi^(10/3)*tol^(4/3)));
-%     M = ceil(sqrt(3)*inopt.box(1)*inopt.xi*sqrt(kf_inside)/pi);
+    F = sum(norm((inopt.f).^2));
+    B = sqrt(F)*inopt.xi;
     est_in = 8*F/(3*pi^2*inopt.box(1)*tol^2);
     M = ceil(2*sqrt((inopt.xi*inopt.box(1))^2/(2*pi^2)*lambertw(est_in)));
    outopt.h = inopt.box(1)/M; 
@@ -27,14 +25,13 @@ function outopt =  param_select_stokes(tol,inopt)
     if strcmp(inopt.window,'kaiser_exact') ...
         || strcmp(inopt.window,'kaiser_poly')
       outopt.betaP = 2.5;   
-     
       fx = @(x) 0.30*x^2 + 1.73 * x - 1.62;
-	if(fx(M/(inopt.xi*inopt.box(1)))>ceil(-log(tol/(10*B))/2.5))
-      	outopt.P = ceil(-log(tol/(10*B))/2.5)+5;
-      else
-	 disp('Increasing M')     
-         M = M+4;
-         outopt.P = ceil(-log(tol/(10*B))/2.5)+5;
+      if(fx(M/(inopt.xi*inopt.box(1)))>ceil(-log(tol/(10*B))/2.5))
+            outopt.P = ceil(-log(tol/(10*B))/2.5);
+        else
+        disp('Increasing M')     
+        M = M+4;
+        outopt.P = ceil(-log(tol/(10*B))/2.5)+5;
       end
       outopt.beta = outopt.betaP*outopt.P;
       outopt.kaiser_scaling = 1/besseli(0,outopt.beta);
