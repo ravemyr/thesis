@@ -3,7 +3,7 @@
 %%setup
 clear
 rng(1);
-NN = [10,100,400,1000,5000,10000,50000]; % number of source particles
+NN = [10,100,1000]; % number of source particles
 
 
 %% Parameter selection
@@ -16,6 +16,7 @@ timings = [];
 
 for N = NN
     opt.N = N;
+    opt.box = sqrt(10)*opt.box;
     [x, f] = SE_charged_system(N,opt.box,'vector');    
     opt.x =x;
     opt.f = f;

@@ -1,12 +1,12 @@
 %demo final
 
 N = 100;
-L = 1;
+L = 2;
 opt.window = 'kaiser_poly';
 opt.box = [L,L,L];
 [x, f] = SE_charged_system(N,opt.box,'vector');
 
-opt.xi = 10;
+opt.xi = 15;
 tolerance = 10^(-10);
 opt.N = N;
 opt.x =x;
