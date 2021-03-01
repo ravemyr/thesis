@@ -10,8 +10,8 @@ NN = [10,100,400,1000,5000,10000,50000]; % number of source particles
 L = 1;
 opt.window = 'kaiser_poly';
 opt.box = [L,L,L];
-opt.xi = 10;
-tolerance = 10^(-10);
+opt.xi = 20;
+tolerance = 10^(-12);
 
 
 
@@ -35,4 +35,6 @@ end
 loglog(NN,timings)
 hold on
 loglog(NN,NN.*log(NN),'--')
+loglog(NN,NN,'-.')
 exportgraphics(gcf,'complexity.png')
+disp(timings)
