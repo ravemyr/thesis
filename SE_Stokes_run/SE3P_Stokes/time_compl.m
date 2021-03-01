@@ -32,4 +32,6 @@ for N = NN
     timings = [timings ti/it];
 end
 loglog(NN,timings)
+hold on
+loglog(NN,NN.*log(NN),'--')
 exportgraphics(gcf,'complexity.png')
