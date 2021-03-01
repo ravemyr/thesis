@@ -8,7 +8,7 @@ N = 100; % number of source particles
 
 
 %% Parameter selection
-L = 1; % box side length
+L = 2; % box side length
 box = [L L L]; % periodic box
 opt.box = box;
 
@@ -27,7 +27,7 @@ opt.betaP = 2.5;
 opt.box = box;
 refv = [];
 rms_ev = [];
-xx = (4:4:12)*pi;
+xx = [5,(4:4:12)*pi];
 
     %% Direct solution
 if(exist('refval.mat'))
