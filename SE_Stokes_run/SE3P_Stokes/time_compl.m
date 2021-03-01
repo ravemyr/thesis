@@ -13,15 +13,15 @@ opt.box = [L,L,L];
 opt.xi = 10;
 tolerance = 10^(-10);
 
-t = tic();
 
-t_par = toc(t);
-t = tic();
-u = SE3P_Stokes(1:N, x, f, opt);
-tSE = toc(t);
+
+
+
+timings = [];
+
 for N = NN
     opt.N = N;
-    [x, f] = SE_charged_system(N,box,'vector');    
+    [x, f] = SE_charged_system(N,opt.box,'vector');    
     opt.x =x;
     opt.f = f;
     opt = param_select_stokes(tolerance, opt);
