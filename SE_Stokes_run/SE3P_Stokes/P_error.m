@@ -84,6 +84,7 @@ for i = 1:length(e_vec)
     semilogy(PP,ones(1,length(PP))*e_vec(i),('bl-'))
 end
 str = [str,'estimate'];
+opt
 legend(str)
 xlabel('P')
 xlim([1,32])
