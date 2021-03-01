@@ -17,7 +17,7 @@ opt.box = box;
 
 M0=256; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*[1,1,1];
-opt.P = 20;
+opt.P = 32;
 opt.betaP = 2.5;
 
 % charge-neutral system
@@ -41,7 +41,7 @@ if(exist('refval.mat'))
             disp('Generating reference solution')
             for xi = xx
                 opt.xi = xi;
-                opt.P = 20;
+                opt.P = 32;
                 u = SE3P_Stokes(1:N, x, f, opt);
                 rms_e = rmse(u);
                 rms_ev =[rms_ev, rms_e];
@@ -53,7 +53,7 @@ if(exist('refval.mat'))
         disp('Generating reference solution')
         for xi = xx
             opt.xi = xi;
-            opt.P = 20;
+            opt.P = 32;
             u = SE3P_Stokes(1:N, x, f, opt);
             rms_e = rmse(u);
             rms_ev =[rms_ev, rms_e];
@@ -65,7 +65,7 @@ else
         disp('Generating reference solution')
         for xi = xx
             opt.xi = xi;
-            opt.P = 20;
+            opt.P = 32;
             u = SE3P_Stokes(1:N, x, f, opt);
             rms_e = rmse(u);
             rms_ev = [rms_ev,rms_e];
