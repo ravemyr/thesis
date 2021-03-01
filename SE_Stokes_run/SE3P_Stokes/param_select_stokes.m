@@ -32,7 +32,7 @@ function outopt =  param_select_stokes(tol,inopt)
 		if(mod(M,2)==0) M = M+12; else M = M+13; end
         outopt.P = ceil(-log(tol/(10*B))/2.5)+16;
 	else
-		if( mod(M,2)!=0) M = M+11; else M = M+10; end
+		if(mod(M,2)==0) M = M+10; else M = M+11; end
 	outopt.P = ceil(-log(tol/(10*B))/2.5)+10;
 	end
       end
