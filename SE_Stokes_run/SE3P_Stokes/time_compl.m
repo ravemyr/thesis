@@ -25,8 +25,11 @@ timings = [];
 for N = NN
     [x, f] = SE_charged_system(N,box,'vector');
     t = tic;
-    u = SE3P_Stokes(1:N, x, f, opt);
-    timings = [timings toc(t)];
+    for it = 1:10
+    	u = SE3P_Stokes(1:N, x, f, opt);
+    end
+    ti = toc(t);
+    timings = [timings ti/it];
 end
 loglog(NN,timings)
 exportgraphics(gcf,'complexity.png')
