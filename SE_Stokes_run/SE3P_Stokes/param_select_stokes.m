@@ -20,7 +20,6 @@ function outopt =  param_select_stokes(tol,inopt)
         outopt.m = 0.95*sqrt(pi*outopt.P);  
         outopt.eta = (2*outopt.w*outopt.xi/outopt.m)^2;
         outopt.c = 2*outopt.xi^2/outopt.eta;
-        
     end
     if strcmp(inopt.window,'kaiser_exact') ...
         || strcmp(inopt.window,'kaiser_poly')
@@ -28,7 +27,7 @@ function outopt =  param_select_stokes(tol,inopt)
       fx = @(x) 0.30*x^2 + 1.73 * x - 1.62;
       if(fx(M/(inopt.xi*inopt.box(1)))>ceil(-log(tol/(10*B))/2.5))
             outopt.P = ceil(-log(tol/(10*B))/2.5);
-        else
+      else
         disp('Increasing M')     
         M = M+4;
         outopt.P = ceil(-log(tol/(10*B))/2.5)+5;
@@ -57,7 +56,5 @@ function checkInopt(opt)
         if(~isfield(opt,'N')) opt.N = 10; end
         [opt.x, opt.f] = SE_charged_system(opt.N,opt.box,'vector'); 
     end
-    
-
     % Half-support of window
 end

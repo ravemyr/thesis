@@ -41,7 +41,7 @@ else
 	ref = SE3P_Stokes(1:N,x,f,opt);
 %	ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
 end
-	%opt.window = 'gaussian';
+%opt.window = 'gaussian';
 %ref = SE3P_Stokes(1:N,x,f,opt);
 rms_ref = rmse(ref);
 %% Compare solutions with changing P
