@@ -7,7 +7,7 @@ function outopt =  param_select_stokes(tol,inopt)
     B = sqrt(F)*inopt.xi;
     est_in = 8*F/(3*(pi*inopt.box(1)*tol)^2);
     M = ceil(2*sqrt((inopt.xi*inopt.box(1))^2/(2*pi^2)*lambertw(est_in)));
-   outopt.h = inopt.box(1)/M; 
+   
 %     if(lim(xi*L/M)>val)
 %        %TODO Modify selection of parameters if threshold not met 
 %     end
@@ -33,7 +33,7 @@ function outopt =  param_select_stokes(tol,inopt)
         outopt.P = ceil(-log(tol/(10*B))/2.5)+16;
 	else
 	M = M+9;
-	outopt.P = ceil(-log(tol/(10*B))/2.5)+10
+	outopt.P = ceil(-log(tol/(10*B))/2.5)+10;
 	end
       end
       outopt.beta = outopt.betaP*outopt.P;
@@ -48,6 +48,7 @@ function outopt =  param_select_stokes(tol,inopt)
       outopt.p_half = (outopt.P-1)/2;
     end
     outopt.M = [M,M,M];
+    outopt.h = inopt.box(1)/M; 
     outopt.box = inopt.box;
 end
 
