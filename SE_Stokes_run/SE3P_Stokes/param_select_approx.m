@@ -8,7 +8,7 @@ N = 100; % number of source particles
 
 
 %% Parameter selection
-L = 2; % box side length
+L = 1; % box side length
 box = [L L L]; % periodic box
 opt.box = box;
 
