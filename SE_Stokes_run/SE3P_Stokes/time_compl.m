@@ -11,12 +11,7 @@ L = 1;
 opt.window = 'kaiser_poly';
 opt.box = [L,L,L];
 opt.xi = 20;
-tolerance = 10^(-12);
-
-
-
-
-
+tolerance = 10^(-14);
 timings = [];
 
 for N = NN

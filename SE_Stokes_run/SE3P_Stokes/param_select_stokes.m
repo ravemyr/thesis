@@ -5,7 +5,7 @@ function outopt =  param_select_stokes(tol,inopt)
     outopt.xi = inopt.xi;
     F = sum(norm((inopt.f).^2));
     B = sqrt(F)*inopt.xi;
-    est_in = 8*F/(3*pi^2*inopt.box(1)*tol^2);
+    est_in = 8*F/(3*(pi*inopt.box(1)*tol)^2);
     M = ceil(2*sqrt((inopt.xi*inopt.box(1))^2/(2*pi^2)*lambertw(est_in)));
    outopt.h = inopt.box(1)/M; 
 %     if(lim(xi*L/M)>val)
