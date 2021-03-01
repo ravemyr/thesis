@@ -3,7 +3,7 @@
 %%setup
 clear
 rng(1);
-NN = [10,20,50,100,200,400,1000,2000,5000,10000]; % number of source particles
+NN = [10,100,400,1000,5000,10000,50000]; % number of source particles
 
 
 %% Parameter selection
