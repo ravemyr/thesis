@@ -20,7 +20,7 @@ opt.P = 32;
 opt.betaP = 2.5;
 opt.xi = xi;
 opt.P = 32;
-opt.window = 'kaiser_poly';
+opt.window = 'kaiser_exact';
 timings = [];
 for N = NN
     [x, f] = SE_charged_system(N,box,'vector');
@@ -28,4 +28,5 @@ for N = NN
     u = SE3P_Stokes(1:N, x, f, opt);
     timings = [timings toc(t)];
 end
-plot(NN,timings)
+loglog(NN,timings)
+exportgraphics(gcf,'complexity.png')
