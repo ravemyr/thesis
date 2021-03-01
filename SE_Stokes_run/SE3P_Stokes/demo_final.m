@@ -31,8 +31,9 @@ tDirReal = toc(t);
 opt
 format long;
 fprintf('tolerance: %.16g \n',tolerance)
-fprintf('%.16g \n',(rmse(u-ref)))
-fprintf('%.16g \n',rmse(u-ref)/rmse(ref))
+fprintf('Absolute error: %.16g \n',(rmse(u-ref)))
+fprintf('Relative error: %.16g \n',rmse(u-ref)/rmse(ref))
+fprintf('Approximate relative error: %.16g \n',rmse(u-ref)/sqrt(f)*opt.xi)
 semilogy(opt.xi, tolerance,'*')
 hold on
 semilogy(opt.xi, rmse(u-ref),'or')
