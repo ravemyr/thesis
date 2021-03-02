@@ -1,6 +1,6 @@
 %demo final
 
-N = 100;
+N = 100000;
 L = 2;
 opt.window = 'kaiser_poly';
 opt.box = [L,L,L];
