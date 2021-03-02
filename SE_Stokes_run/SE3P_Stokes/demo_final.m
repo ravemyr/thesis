@@ -18,6 +18,7 @@ t_par = toc(t);
 t = tic();
 u = SE3P_Stokes(1:N, x, f, opt);
 tSE = toc(t);
+opt
 fprintf('parameter selection time: %f (s) \n',t_par)
 fprintf('computation time: %f (s) \n', tSE)
 ED_opt.layers = (opt.M(1)-1)/2;
@@ -26,9 +27,11 @@ ED_opt.box = opt.box;
 %%
 % Direct computation for reference
 t = tic();
-ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
+opt.M = 196*[1,1,1];
+opt.P = 32;
+ref = SE3P_Stokes(1:N,x,f,opt);
 tDirReal = toc(t);
-opt
+
 format long;
 fprintf('tolerance: %.16g \n',tolerance)
 fprintf('Absolute error: %.16g \n',(rmse(u-ref)))
