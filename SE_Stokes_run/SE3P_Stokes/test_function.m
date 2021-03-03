@@ -21,7 +21,7 @@ function [res, t_par, tSE, tDirReal] = test_function(N,xi,L,tol)
     
     %%
     % Direct computation for reference
-    opt.M = 280*[1,1,1];
+    opt.M = 350*[1,1,1];
     opt.P = 32;
     t = tic();
 
