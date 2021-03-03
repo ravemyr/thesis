@@ -2,7 +2,7 @@
 
 N_vals = [100];
 xi_vals = [15,20];
-L_vals = [1,2];
+L_vals = [2,4];
 tol_vals = [10^-6, 10^-8, 10^-10, 10^-12];
 r = [];
 tt = [];
@@ -18,5 +18,6 @@ for n = N_vals
         end
     end
 end
+figure
 semilogy(tt,r,'*')
 exportgraphics(gcf,'testimg.png')
