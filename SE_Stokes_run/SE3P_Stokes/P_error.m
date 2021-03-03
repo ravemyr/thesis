@@ -36,8 +36,8 @@ if(exist('refval.mat'))
 	refval = load('refval.mat');
 	ref = refval.refv(:,1:3);
 else
-	opt.P = 25;
-	opt.M = 196*[1,1,1];
+	opt.P = 32;
+	opt.M = 300*[1,1,1];
 	ref = SE3P_Stokes(1:N,x,f,opt);
 %	ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
 end
@@ -45,7 +45,7 @@ end
 %ref = SE3P_Stokes(1:N,x,f,opt);
 rms_ref = rmse(ref);
 %% Compare solutions with changing P
-MM = 80:4:104;
+MM = 188:4:200;
 str = {};
 %est = @(M,xi,L,f) sqrt(f)*(xi^3*L^2/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
 %est = @(M,xi,L,f) sqrt(f)*(4/(3^(1/4)*L*pi))*exp(-(pi*M/(xi*L*2))^2);
@@ -54,7 +54,7 @@ e_vec = [];
 F = sum(norm(f.^2));
 A = @(a,b,c) sqrt(a)*b*(b*c)^0;
 disp(num2str(A(F,opt.xi,opt.box(1))/rms_ref))
-for M = [140 MM]
+for M = [252 MM]
 	
 	opt.M = M*[1,1,1];
 	PP = [2:1:10,10:2:32];
