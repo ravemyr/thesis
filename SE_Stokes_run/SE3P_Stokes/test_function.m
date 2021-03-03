@@ -1,5 +1,5 @@
 function [res, t_par, tSE, tDirReal] = test_function(N,xi,L,tol)
-    
+    opt.box = [L,L,L];    
     opt.window = 'kaiser_poly';
     [x, f] = SE_charged_system(N,opt.box,'vector');
     F = norm(f.^2);
@@ -9,7 +9,7 @@ function [res, t_par, tSE, tDirReal] = test_function(N,xi,L,tol)
     opt.x =x;
     opt.f = f;
     opt.xi = xi;
-    opt.box = [L,L,L];
+    
     
     t = tic();
     opt = param_select_stokes(tolerance, opt);
@@ -21,7 +21,7 @@ function [res, t_par, tSE, tDirReal] = test_function(N,xi,L,tol)
     
     %%
     % Direct computation for reference
-    opt.M = 196*[1,1,1];
+    opt.M = 280*[1,1,1];
     opt.P = 32;
     t = tic();
 
