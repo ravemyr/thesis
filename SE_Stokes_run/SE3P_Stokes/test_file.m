@@ -10,10 +10,10 @@ for n = N_vals
     for x = xi_vals
         for L = L_vals
             for tol = tol_vals
-                t = test_function(n,x,L,tol);	
-                assert(t(1)<tol,'N =%g, xi = %g, L = %f, tol = %g' ,n,x,L,tol)
-                r = [r, t(1)];
-                tt = [tt, t(3)];
+                [res, par, SE,~ ] = test_function(n,x,L,tol);	
+                assert(res<tol,'N =%g, xi = %g, L = %f, tol = %g' ,n,x,L,tol)
+                r = [r, res];
+                tt = [tt, SE];
             end
         end
     end
