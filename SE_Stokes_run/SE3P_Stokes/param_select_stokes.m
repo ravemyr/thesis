@@ -16,7 +16,8 @@ function outopt =  param_select_stokes(tol,inopt)
         %Compute P from error estimate here
         c = sqrt(0.91);
         outopt.P = ceil(-log(tol/(2*B))/(2*pi*c));
-        outopt.w = outopt.h*outopt.P/2;
+        outopt.h = inopt.box(1)/M;
+	outopt.w = outopt.h*outopt.P/2;
         outopt.m = 0.95*sqrt(pi*outopt.P);  
         outopt.eta = (2*outopt.w*outopt.xi/outopt.m)^2;
         outopt.c = 2*outopt.xi^2/outopt.eta;
@@ -30,10 +31,10 @@ function outopt =  param_select_stokes(tol,inopt)
             outopt.P = ceil(-log(tol/(10*B))/2.5)+5;
       else
 	if(inopt.xi*inopt.box(1)>25)
-		if(mod(ceil(1.2*M),2)==0) M = ceil(1.2*M+6); else M = ceil(1.2*M+7); end
-        M = M+ceil(0.8*inopt.xi*inopt.box(1));
+		if(mod(ceil(M),2)==0) M = ceil(M+4); else M = ceil(M+5); end
+        M = M+ceil(0.6*inopt.xi*inopt.box(1));
 	else	
-		if(mod(ceil(1.2*M),2)==0) M = ceil(1.2*M+2); else M = ceil(1.2*M+3); end
+		if(mod(ceil(M),2)==0) M = ceil(M)+8; else M = ceil(M)+9; end
 		end
 	outopt.P = ceil(-log(tol/(10*B))/2.5)+16;    
      disp(M)  	

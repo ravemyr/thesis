@@ -1,9 +1,9 @@
 %SE Tests
 
-N_vals = [100];
-xi_vals = [15,20];
-L_vals = [2,4];
-tol_vals = [10^-6, 10^-8, 10^-10, 10^-12];
+N_vals = [1000];
+xi_vals = [30,40];
+L_vals = [1,2,4];
+tol_vals = [10^-6, 10^-8];
 r = [];
 tt = [];
 for n = N_vals

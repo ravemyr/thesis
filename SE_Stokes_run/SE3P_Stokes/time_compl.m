@@ -3,15 +3,15 @@
 %%setup
 clear
 rng(1);
-NN = [10,100,1000]; % number of source particles
+NN = [10,100]; % number of source particles
 
 
 %% Parameter selection
 L = 1;
 opt.window = 'kaiser_poly';
 opt.box = [L,L,L];
-opt.xi = 20;
-tolerance = 10^(-14);
+opt.xi = 5;
+tolerance = 10^(-10);
 timings = [];
 
 for N = NN
