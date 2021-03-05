@@ -69,6 +69,6 @@ disp(times)
 figure
 loglog(MM,times,'*')
 hold on
-loglog(MM,MM.*log(MM))
+loglog(MM,MM.^3.*log(MM.^3))
 exportgraphics(gcf,'MP_complexity.png')
 disp(timings)
