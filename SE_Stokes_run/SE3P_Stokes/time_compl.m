@@ -63,7 +63,7 @@ for it = 1:20
     u = SE3P_Stokes(1:N,x,f,opt);
 end
 tt = toc(t);
-times = [times tt];
+times = [times tt/it];
 end
 disp(times)
 figure
