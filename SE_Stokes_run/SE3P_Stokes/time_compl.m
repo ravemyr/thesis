@@ -67,7 +67,8 @@ times = [times tt];
 end
 disp(times)
 figure
-plot(MM,times,'*')
-
+loglog(MM,times,'*')
+hold on
+loglog(MM,MM.*log(MM))
 exportgraphics(gcf,'MP_complexity.png')
 disp(timings)
