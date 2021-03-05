@@ -66,6 +66,7 @@ tt = toc(t);
 times = [times tt];
 end
 disp(times)
+figure
 plot(MM,times,'*')
 
 exportgraphics(gcf,'MP_complexity.png')
