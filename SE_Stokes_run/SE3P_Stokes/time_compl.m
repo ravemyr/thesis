@@ -31,7 +31,7 @@ for N = NN
     ti = toc(t);
     timings = [timings ti/it];
 end
-loglog(NN,timings)
+loglog(NN,timings,'*')
 hold on
 loglog(NN,NN.*log(NN),'--')
 
