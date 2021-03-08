@@ -16,7 +16,7 @@ timings = [];
 
 for N = NN
     opt.N = N;
-    opt.box = 3^(1/3)*opt.box;
+    opt.box = 2^(1/3)*opt.box;
     [x, f] = SE_charged_system(N,opt.box,'vector');    
     opt.x =x;
     opt.f = f;
