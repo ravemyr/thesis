@@ -3,7 +3,7 @@
 %%setup
 clear
 rng(1);
-NN = 10*2.^[0:1:12]; % number of source particles
+NN = 10*2.^[0:1:11]; % number of source particles
 
 
 %% Parameter selection
@@ -34,7 +34,7 @@ end
 loglog(NN,timings,'-*')
 hold on
 loglog(NN,NN.*log(NN),'--')
-legend('SE-time','N log(N)')
+legend('SE-time','N log(N)','Location','Best')
 
 exportgraphics(gcf,'complexity.png')
 disp(timings)
