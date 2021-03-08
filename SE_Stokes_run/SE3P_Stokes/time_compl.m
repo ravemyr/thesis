@@ -34,6 +34,7 @@ end
 loglog(NN,timings,'-*')
 hold on
 loglog(NN,NN.*log(NN),'--')
+legend('SE-time','N log(N)')
 
 exportgraphics(gcf,'complexity.png')
 disp(timings)
