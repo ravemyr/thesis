@@ -53,7 +53,7 @@ opt.x =x;
 opt.f = f;
 times = [];
 opt.betaP = 2.5;
-MM = 10:10:200;
+MM = 10:10:300;
 for M = MM
 opt.M = M*[1,1,1];
 opt.window = 'kaiser_exact';
@@ -74,5 +74,5 @@ loglog(MM,MM.^3.*log(MM.^3))
 legend('SE','M^3log(M^3)','Location','Best')
 exportgraphics(gcf,'MP_complexity.png')
 disp(timings)
-P =polyfit(MM.^3.*log(MM.^3),times,1)
+P = polyfit(MM.^3.*log(MM.^3),times,1)
 
