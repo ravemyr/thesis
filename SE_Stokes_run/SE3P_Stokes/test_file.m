@@ -25,4 +25,5 @@ ll = length(N_vals)*length(xi_vals)*length(L_vals)*length(tol_vals);
 semilogy(1:ll,r,'*')
 hold on
 semilogy(1:ll,tols,'o')
+legend('SE-errors','Tolerance','Location','Best')
 exportgraphics(gcf,'testimg.png')
