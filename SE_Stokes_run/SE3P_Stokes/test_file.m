@@ -14,10 +14,14 @@ for n = N_vals
                 assert(res<tol,'N =%g, xi = %g, L = %f, tol = %g' ,n,x,L,tol)
                 r = [r, res];
                 tt = [tt, SE];
+                tols = [tols, tol];
             end
         end
     end
 end
 figure
-semilogy(tt,r,'*')
+ll = length(N_vals)*length(xi_vals)*length(L_vals)*length(tol_vals);
+semilogy(1:ll,r,'*')
+hold on
+semilogy(1:ll,tols,'o')
 exportgraphics(gcf,'testimg.png')
