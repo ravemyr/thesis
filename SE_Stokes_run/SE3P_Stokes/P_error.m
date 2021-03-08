@@ -83,8 +83,8 @@ semilogy(PP,exp(-(pi/2)*PP*opt.c),'--')
 str = [str,'exp(-(\pi/2)Pc)'];
 end
 for i = 1:length(e_vec)
-    semilogy(PP,ones(1,length(PP))*e_vec(i),('bl-'))
-    semilogy(PP,ones(1,length(PP))*ee_vec(i),'r-')
+    semilogy(PP,ones(1,length(PP))*e_vec(i),('bl--'))
+    semilogy(PP,ones(1,length(PP))*ee_vec(i),'r--')
 end
 str = [str,'estimate'];
 opt
