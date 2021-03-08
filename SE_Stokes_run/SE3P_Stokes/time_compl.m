@@ -3,7 +3,7 @@
 %%setup
 clear
 rng(1);
-NN = 10*3.^[0:1:8]; % number of source particles
+NN = 10*2.^[0:1:10]; % number of source particles
 
 
 %% Parameter selection
@@ -31,7 +31,7 @@ for N = NN
     ti = toc(t);
     timings = [timings ti/it];
 end
-loglog(NN,timings,'*')
+loglog(NN,timings,'-*')
 hold on
 loglog(NN,NN.*log(NN),'--')
 
