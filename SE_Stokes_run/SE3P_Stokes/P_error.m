@@ -47,10 +47,11 @@ rms_ref = rmse(ref);
 %% Compare solutions with changing P
 MM = 8:4:20;
 str = {};
-%est = @(M,xi,L,f) sqrt(f)*(xi^3*L^2/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
+est_old = @(M,xi,L,f) sqrt(f)*(xi^3*L^2/(pi^4*(M/2)^(3/2)))*exp(-(pi*(M/2)/(xi*L))^2);
 %est = @(M,xi,L,f) sqrt(f)*(4/(3^(1/4)*L*pi))*exp(-(pi*M/(xi*L*2))^2);
-est = @(M,xi,L,F) 2*sqrt(F)*(xi*L)^2*exp(-(pi*M/(2*xi*L))^2)/(sqrt(3)*pi^2*L*(M/2));
+est = @(M,xi,L,F) 2*sqrt(F)*(xi*L)^2*exp(-(pi*(M/2)/(xi*L))^2)/(sqrt(3)*pi^2*L*(M/2));
 e_vec = [];
+ee_vec = [];
 F = sum(norm(f.^2));
 A = @(a,b,c) sqrt(a)*b*(b*c)^0;
 disp(num2str(A(F,opt.xi,opt.box(1))/rms_ref))
@@ -68,7 +69,8 @@ for M = [112 MM]
     e = est(M,opt.xi,L,F);
     e_vec = [e_vec, e];
 	semilogy(PP,rms_err)
-   
+    ee = est_old(M,opt.xi,L,F);
+    ee_vec = [ee_vec ee];
 	hold on
 	str = [str strcat('M = ',num2str(M))];
 end
@@ -82,6 +84,7 @@ str = [str,'exp(-(\pi/2)Pc)'];
 end
 for i = 1:length(e_vec)
     semilogy(PP,ones(1,length(PP))*e_vec(i),('bl-'))
+    semilogy(PP,ones(1,length(PP))*ee_vec(i),'r-')
 end
 str = [str,'estimate'];
 opt
