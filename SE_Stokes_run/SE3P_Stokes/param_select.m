@@ -28,7 +28,7 @@ ED_opt.layers = (opt.M(1)-1)/2;
 ED_opt.box = box;
 refv = [];
 rms_ev = [];
-xx = [5,(4:4:12)*pi];
+xx = (4:4:12)*pi;
 
     %% Direct solution
 if(exist('refval.mat'))
