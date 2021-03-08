@@ -3,7 +3,7 @@
 %%setup
 clear
 rng(1);
-NN = 10*2.^[0:1:11]; % number of source particles
+NN = 10*2.^[0:1:1]; % number of source particles
 
 
 %% Parameter selection
@@ -71,5 +71,6 @@ figure
 loglog(MM,times,'*')
 hold on
 loglog(MM,MM.^3.*log(MM.^3))
+legend('SE','M^3log(M^3)','Location','Best')
 exportgraphics(gcf,'MP_complexity.png')
 disp(timings)
