@@ -74,3 +74,5 @@ loglog(MM,MM.^3.*log(MM.^3))
 legend('SE','M^3log(M^3)','Location','Best')
 exportgraphics(gcf,'MP_complexity.png')
 disp(timings)
+P =polyfit(MM.^3.*log(MM.^3),times,1)
+
