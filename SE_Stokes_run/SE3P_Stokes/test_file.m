@@ -1,11 +1,12 @@
 %SE Tests
 
-N_vals = [1000];
-xi_vals = [30,40];
-L_vals = [1,2,4];
+N_vals = [100,1000];
+xi_vals = [5,10];
+L_vals = [1,2];
 tol_vals = [10^-6, 10^-8];
 r = [];
 tt = [];
+tols = [];
 for n = N_vals
     for x = xi_vals
         for L = L_vals
