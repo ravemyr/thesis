@@ -3,7 +3,7 @@
 %%setup
 clear
 rng(1);
-NN = 10*2.^[0:1:1]; % number of source particles
+NN = 10*2.^[0:1:11]; % number of source particles
 
 
 %% Parameter selection
@@ -33,7 +33,7 @@ for N = NN
 end
 loglog(NN,timings,'-*')
 hold on
-loglog(NN,NN.*log(NN),'--')
+loglog(NN,10^-3*NN.*log(NN),'--')
 legend('SE-time','N log(N)','Location','Best')
 
 exportgraphics(gcf,'complexity.png')
@@ -53,7 +53,7 @@ opt.x =x;
 opt.f = f;
 times = [];
 opt.betaP = 2.5;
-MM = 10:10:300;
+MM = 10:10:200;
 for M = MM
 opt.M = M*[1,1,1];
 opt.window = 'kaiser_exact';
