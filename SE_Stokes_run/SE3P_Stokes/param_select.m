@@ -8,7 +8,7 @@ N = 20; % number of source particles
 
 
 %% Parameter selection
-L = 4; % box side length
+L = 1; % box side length
 box = [L L L]; % periodic box
 opt.box = box;
 
@@ -105,7 +105,7 @@ for xi = xx
     end
     semilogy(MM./2,err,'.-')
     hold on
-    %semilogy(MM./2,ee,'--o')
+    semilogy(MM./2,ee,'--o')
     semilogy(MM./2,eee,'--*')
     str = [str,strcat('computed error, \xi =', num2str(xi))];
     str = [str, strcat('2D-estimate, \xi =', num2str(xi))];
