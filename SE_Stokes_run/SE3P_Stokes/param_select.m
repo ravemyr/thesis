@@ -75,7 +75,7 @@ end
 
 F = sum(norm(f).^2);
 %est = @(M,xi,L,f) 2*L^2*sqrt(f)*(2*sqrt(pi)*M/2 + 3*xi*L)*exp(-((M/2)*pi/(xi*L))^2)/sqrt(pi);
-%est = @(M,xi,L,f) sqrt(f)*(xi*(xi*L)^2)/(pi^4*(M/2)^(2))*exp(-(pi*(M/2)/(xi*L))^2);
+est = @(M,xi,L,f) sqrt(f)*(xi*(xi*L)^2)/(pi^4*(M/2)^(2))*exp(-(pi*(M/2)/(xi*L))^2);
 est2 = @(M,xi,L,f) sqrt(f)*(4*exp(-(pi*M/(2*xi*L))^2)/(L*pi*3^(1/2)))*( (M>=2)*(xi*L)^2/(2*pi*M/2));
 MM = [8,24,32,48,64,72,80,88,96,104];
 str = {};
@@ -98,8 +98,8 @@ for xi = xx
         %u = SE3P_Stokes(1:N, x, f, opt);
         u = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
         err = [err rmse(u-ref)/rms_e];
-       % esti = est(opt.M(1),xi,L,F)/rms_e;
-        %ee = [ee, esti];
+        esti = est(opt.M(1),xi,L,F)/rms_e;
+        ee = [ee, esti];
         esti2 = est2(opt.M(1),xi,L,F)/rms_e;
         eee = [eee esti2];
     end
@@ -108,8 +108,8 @@ for xi = xx
     %semilogy(MM./2,ee,'--o')
     semilogy(MM./2,eee,'--*')
     str = [str,strcat('computed error, \xi =', num2str(xi))];
-    str = [str, strcat('error estimate, \xi =', num2str(xi))];
-    %str = [str, strcat('new estimate, \xi =', num2str(xi))];
+    str = [str, strcat('2D-estimate, \xi =', num2str(xi))];
+    str = [str, strcat('3D-estimate, \xi =', num2str(xi))];
 end
 ylim([10^-14,1])
 xlim([0,73])
