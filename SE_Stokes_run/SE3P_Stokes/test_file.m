@@ -1,7 +1,7 @@
 %SE Tests
 
 N_vals = [100,1000];
-xi_vals = [5,10];
+xi_vals = [15,20];
 L_vals = [1,2];
 tol_vals = [10^-6, 10^-8];
 r = [];
