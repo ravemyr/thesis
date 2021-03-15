@@ -31,12 +31,12 @@ function outopt =  param_select_stokes(tol,inopt)
             outopt.P = ceil(-log(tol/(10*B))/2.5)+5;
       else
 	if(inopt.xi*inopt.box(1)>2)
-		if(mod(ceil(M),2)==0) M = ceil(M+4); else M = ceil(M+5); end
+		if(mod(ceil(M),2)==0) M = ceil(M); else M = ceil(M); end
         M = M+ceil(0.6*inopt.xi*inopt.box(1));
 	else	
 		if(mod(ceil(M),2)==0) M = ceil(M)+8; else M = ceil(M)+9; end
 		end
-	outopt.P = ceil(-log(tol/(10*B))/2.5)+16;    
+	outopt.P = ceil(-log(tol/(10*B))/2.5)+10;    
      disp(M)  	
       end
       outopt.beta = outopt.betaP*outopt.P;
