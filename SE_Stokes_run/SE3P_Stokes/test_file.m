@@ -1,8 +1,8 @@
 %SE Tests
 
 N_vals = [100,1000];
-xi_vals = [20,30];
-L_vals = [2,3];
+xi_vals = [5,10];
+L_vals = [1,2];
 tol_vals = [10^-8, 10^-10];
 r = [];
 tt = [];
