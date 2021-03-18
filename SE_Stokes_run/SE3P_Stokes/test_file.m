@@ -1,23 +1,20 @@
 %SE Tests
 
-N_vals = [100,1000];
-xi_vals = [5,10];
-L_vals = [1,2];
-tol_vals = [10^-8, 10^-10];
+N_vals = [100,50000];
+xi_vals = [25,30];
+L_vals = [3,4];
+tol_vals = [10^-6 10^-8, 10^-10];
 r = [];
 tt = [];
 tols = [];
-if(~exists('testdata.txt'))
-    fileid = fopen('testdata.txt','w');
-else
-    fileid = fopen('testdata.txt','a');
-end
+fileid = fopen('testdata.txt','a');
+
 for n = N_vals
     for x = xi_vals
         for L = L_vals
             for tol = tol_vals
                 [res, par, SE,~ ] = test_function(n,x,L,tol);	
-                fprintf(fileid,'%5i %2.1f %3i %.16g %.16g \n',N,L,x,tol,res);
+                fprintf(fileid,'%5i %2.1f %3i %.16g %.16g \n',n,L,x,tol,res);
                 assert(res<tol,'N =%g, xi = %g, L = %f, tol = %g' ,n,x,L,tol)
                 r = [r, res];
                 tt = [tt, SE];
