@@ -12,7 +12,11 @@ function [res, t_par, tSE, tDirReal] = test_function(N,xi,L,tol)
     
     
     t = tic();
-    opt = param_select_stokes(tolerance, opt);
+    varg = {};
+    varg{1} = tolerance;
+    varg{2} = opt;
+    varg{3} = 'Relative';
+    opt = param_select_stokes(varg);
     t_par = toc(t);
     
     t = tic();
