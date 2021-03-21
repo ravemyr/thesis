@@ -1,6 +1,6 @@
 function [res, t_par, tSE, tDirReal] = test_function(N,xi,L,tol)
     opt.box = [L,L,L];    
-    opt.window = 'kaiser_poly';
+    opt.window = 'gaussian';
     [x, f] = SE_charged_system(N,opt.box,'vector');
     F = norm(f.^2);
     
@@ -12,10 +12,10 @@ function [res, t_par, tSE, tDirReal] = test_function(N,xi,L,tol)
     
     
     t = tic();
-    varg = {};
-    varg{1} = tolerance;
-    varg{2} = opt;
-    varg{3} = 'Relative';
+    varg = {tolerance, opt, 'Relative'};
+    %varg{1} = tolerance;
+    %varg{2} = opt;
+    %varg{3} = 'Relative';
     opt = param_select_stokes(varg);
     t_par = toc(t);
     

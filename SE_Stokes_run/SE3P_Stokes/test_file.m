@@ -1,13 +1,13 @@
 %SE Tests
 
-N_vals = [100,50000];
-xi_vals = [25,30];
-L_vals = [3,4];
+N_vals = [100,1000];
+xi_vals = [5,10];
+L_vals = [1,2];
 tol_vals = [10^-6 10^-8, 10^-10];
 r = [];
 tt = [];
 tols = [];
-fileid = fopen('testdata.txt','a');
+fileid = fopen('testdata_gauss.txt','a');
 
 for n = N_vals
     for x = xi_vals
