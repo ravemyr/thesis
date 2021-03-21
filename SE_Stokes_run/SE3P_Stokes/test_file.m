@@ -17,7 +17,7 @@ for n = N_vals
                 fprintf(fileid,'%5i %2.1f %3i %.16g %.16g \n',n,L,x,tol,res);
                 assert(res<tol,'N =%g, xi = %g, L = %f, tol = %g' ,n,x,L,tol)
                 r = [r, res];
-                tt = [tt, SE];
+                tt = [tt, SE+par];
                 tols = [tols, tol];
             end
         end
