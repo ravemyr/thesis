@@ -1,16 +1,16 @@
-function outopt =  param_select_stokes(varargin) %tol,inopt)%,ErrorType
+function outopt =  param_select_stokes(tol,inopt)%,ErrorType
     %Control that at least L and xi are given, compute x and f if not
     %given, select N =10 if not given
-    tol = varargin{1};
-    inopt = varargin{2};
-    ErrorType = varargin{3};
-    checkInopt(inopt);
+%     tol = varargin{1};
+%     inopt = varargin{2};
+%     ErrorType = varargin{3};
+%     checkInopt(inopt);
     outopt.xi = inopt.xi;
     F = sum(norm((inopt.f).^2));
     B = sqrt(F)*inopt.xi;
-    if(strcmp(ErrorType,'Relative'))
-       tol = tol/B;
-    end
+%     if(strcmp(ErrorType,'Relative'))
+%        tol = tol/B;
+%     end
     est_in = 8*F/(3*(pi*inopt.box(1)*tol)^2);
     M = ceil(2*sqrt((inopt.xi*inopt.box(1))^2/(2*pi^2)*lambertw(est_in)));
    
