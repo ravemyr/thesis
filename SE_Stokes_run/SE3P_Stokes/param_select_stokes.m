@@ -13,41 +13,33 @@ function outopt =  param_select_stokes(tol,inopt)%,ErrorType
 %     end
     est_in = 8*F/(3*(pi*inopt.box(1)*tol)^2);
     M = ceil(2*sqrt((inopt.xi*inopt.box(1))^2/(2*pi^2)*lambertw(est_in)));
-   
-%     if(lim(xi*L/M)>val)
-%        %TODO Modify selection of parameters if threshold not met 
-%     end
     if ~isfield(inopt,'window'), inopt.window = 'gaussian'; outopt.window=inopt.window; end
     if(strcmp(inopt.window,'gaussian'))
         %Compute P from error estimate here
         c = sqrt(0.91);
-        outopt.P = ceil(-2*log(tol)/(pi*c));
-        %outopt.h = inopt.box(1)/M;
-        %outopt.w = outopt.h*outopt.P/2;
-        %outopt.m = 0.95*sqrt(pi*outopt.P);  
-        %outopt.eta = (2*outopt.w*outopt.xi/outopt.m)^2;
-        %outopt.c = 2*outopt.xi^2/outopt.eta;
+        outopt.P = ceil(-2*log(tol)/(pi*c)) + 7;
+        if(inopt.xi*inopt.box(1)>30)
+            if(mod(ceil(M),2)==0) M = ceil(M); else M = ceil(M); end
+            M = M+ceil(0.75*inopt.xi*inopt.box(1));
+            %M = M + ceil(-log10(tol)/2);
+        else	
+        M = M + ceil(0.5*inopt.xi*inopt.box(1));%+max(ceil(-log10(tol)/2-3),0);
+        end
     end
     if strcmp(inopt.window,'kaiser_exact') ...
         || strcmp(inopt.window,'kaiser_poly')
-      outopt.betaP = 2.5;   
-      fx = @(x) 0.30*x^2 + 1.73 * x - 1.62;
-      
-      if(fx(M/(inopt.xi*inopt.box(1)))>ceil(-log(tol/(10*B))/2.5))
-            outopt.P = ceil(-log(tol/(10*B))/2.5)+5;
-      else
-	if(inopt.xi*inopt.box(1)>30)
-		if(mod(ceil(M),2)==0) M = ceil(M); else M = ceil(M); end
-        M = M+ceil(0.75*inopt.xi*inopt.box(1));
-        %M = M + ceil(-log10(tol)/2);
-	else	
-	M = M + ceil(0.5*inopt.xi*inopt.box(1));%+max(ceil(-log10(tol)/2-3),0);
-	end
+        outopt.betaP = 2.5;   
+        if(inopt.xi*inopt.box(1)>30)
+            if(mod(ceil(M),2)==0) M = ceil(M); else M = ceil(M); end
+            M = M+ceil(0.75*inopt.xi*inopt.box(1));
+            %M = M + ceil(-log10(tol)/2);
+        else	
+        M = M + ceil(0.5*inopt.xi*inopt.box(1));%+max(ceil(-log10(tol)/2-3),0);
+        end
 	outopt.P = ceil(-log(tol/(10*B))/2.5)+14;
-     disp(M)  	
-      end
-      outopt.beta = outopt.betaP*outopt.P;
-      outopt.kaiser_scaling = 1/besseli(0,outopt.beta);
+    disp(M)  	
+    outopt.beta = outopt.betaP*outopt.P;
+    outopt.kaiser_scaling = 1/besseli(0,outopt.beta);
     end
     if strcmp(inopt.window,'kaiser_poly')
       outopt.polynomial_degree = min(outopt.P/2 +2,9);
