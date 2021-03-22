@@ -17,7 +17,7 @@ function outopt =  param_select_stokes(tol,inopt)%,ErrorType
     if(strcmp(inopt.window,'gaussian'))
         %Compute P from error estimate here
         c = sqrt(0.91);
-        outopt.P = ceil(-2*log(tol)/(pi*c)) + 7;
+        outopt.P = ceil(-2*log(tol)/(pi*c)) + 11;
         if(inopt.xi*inopt.box(1)>30)
             if(mod(ceil(M),2)==0) M = ceil(M); else M = ceil(M); end
             M = M+ceil(0.75*inopt.xi*inopt.box(1));
