@@ -26,7 +26,7 @@ function outopt =  param_select_stokes(tol,inopt)%,ErrorType
         outopt.w = outopt.h*outopt.P/2;
         outopt.m = 0.95*sqrt(pi*outopt.P);  
         outopt.eta = (2*outopt.w*outopt.xi/outopt.m)^2;
-        outopt.c = 2*outopt.xi^2/outopt.eta;
+        %outopt.c = 2*outopt.xi^2/outopt.eta;
     end
     if strcmp(inopt.window,'kaiser_exact') ...
         || strcmp(inopt.window,'kaiser_poly')
