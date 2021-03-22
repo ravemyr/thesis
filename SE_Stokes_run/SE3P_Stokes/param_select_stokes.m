@@ -22,10 +22,10 @@ function outopt =  param_select_stokes(tol,inopt)%,ErrorType
         %Compute P from error estimate here
         c = sqrt(0.91);
         outopt.P = ceil(-2*log(tol)/(pi*c));
-        outopt.h = inopt.box(1)/M;
-        outopt.w = outopt.h*outopt.P/2;
-        outopt.m = 0.95*sqrt(pi*outopt.P);  
-        outopt.eta = (2*outopt.w*outopt.xi/outopt.m)^2;
+        %outopt.h = inopt.box(1)/M;
+        %outopt.w = outopt.h*outopt.P/2;
+        %outopt.m = 0.95*sqrt(pi*outopt.P);  
+        %outopt.eta = (2*outopt.w*outopt.xi/outopt.m)^2;
         %outopt.c = 2*outopt.xi^2/outopt.eta;
     end
     if strcmp(inopt.window,'kaiser_exact') ...
