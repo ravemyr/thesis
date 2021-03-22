@@ -22,7 +22,7 @@ function [res, t_par, tSE, tDirReal] = test_function(N,xi,L,tol)
     t = tic();
     u = SE3P_Stokes(1:N, x, f, opt);
     tSE = toc(t);
-    
+    disp(opt)
     %%
     % Direct computation for reference
     opt.M = 350*[1,1,1];
@@ -37,6 +37,7 @@ function [res, t_par, tSE, tDirReal] = test_function(N,xi,L,tol)
     fprintf('Absolute error: %.16g \n',(rmse(u-ref)))
     fprintf('Relative error: %.16g \n',rmse(u-ref)/rmse(ref))
     fprintf('Approximate relative error: %.16g \n',rmse(u-ref)/(sqrt(F)*opt.xi))
+    
     semilogy(opt.xi, tolerance,'*')
     hold on
     semilogy(opt.xi, rmse(u-ref),'or')
