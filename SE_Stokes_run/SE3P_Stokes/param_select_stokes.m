@@ -31,12 +31,12 @@ function outopt =  param_select_stokes(tol,inopt)%,ErrorType
         outopt.betaP = 2.5;   
         if(inopt.xi*inopt.box(1)>30)
             if(mod(ceil(M),2)==0) M = ceil(M); else M = ceil(M); end
-            M = M+ceil(0.75*inopt.xi*inopt.box(1));
+            %M = M+ceil(0.75*inopt.xi*inopt.box(1));
             %M = M + ceil(-log10(tol)/2);
         else	
-        M = M + ceil(0.5*inopt.xi*inopt.box(1));%+max(ceil(-log10(tol)/2-3),0);
+        %M = M + ceil(0.5*inopt.xi*inopt.box(1));%+max(ceil(-log10(tol)/2-3),0);
         end
-	outopt.P = ceil(-log(tol/(10*B))/2.5)+14;
+	outopt.P = -ceil(log(tol/10)/2.5);
     disp(M)  	
     outopt.beta = outopt.betaP*outopt.P;
     outopt.kaiser_scaling = 1/besseli(0,outopt.beta);
