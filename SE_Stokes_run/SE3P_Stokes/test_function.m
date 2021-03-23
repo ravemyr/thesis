@@ -1,6 +1,6 @@
 function [res, t_par, tSE, tDirReal] = test_function(N,xi,L,tol)
     opt.box = [L,L,L];    
-    opt.window = 'gaussian';
+    opt.window = 'kaiser_poly';
     [x, f] = SE_charged_system(N,opt.box,'vector');
     F = norm(f.^2);
     
