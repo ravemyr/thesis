@@ -1,5 +1,5 @@
 close all;
-td = load('testdata.txt');
+td = load('testdata9.txt');
 [td_tols, idx] = sort(td(:,4));
 td_errs = td(idx,5);
 semilogx(flip(td_tols),1:length(td(:,1)),'ro')

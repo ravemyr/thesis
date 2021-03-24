@@ -11,7 +11,7 @@ function outopt =  param_select_stokes(tol,inopt)%,ErrorType
 %     if(strcmp(ErrorType,'Relative'))
 %        tol = tol/B;
 %     end
-    est_in = 8*F/(3*(pi*inopt.box(1)*tol)^2);
+    est_in = 8*F*inopt.xi^2/(3*(pi*inopt.box(1)*tol)^2);
     M = ceil(2*sqrt((inopt.xi*inopt.box(1))^2/(2*pi^2)*lambertw(est_in)));
     if ~isfield(inopt,'window'), inopt.window = 'gaussian'; outopt.window=inopt.window; end
     if(strcmp(inopt.window,'gaussian'))
