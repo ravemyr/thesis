@@ -7,7 +7,7 @@ tol_vals = [10^-6 10^-8, 10^-10];
 r = [];
 tt = [];
 tols = [];
-fileid = fopen('testdata9.txt','a');
+fileid = fopen('testdata_tol.txt','a');
 
 for n = N_vals
     for x = xi_vals

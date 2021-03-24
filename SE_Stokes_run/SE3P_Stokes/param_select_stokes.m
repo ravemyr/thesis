@@ -11,7 +11,7 @@ function outopt =  param_select_stokes(tol,inopt)%,ErrorType
 %     if(strcmp(ErrorType,'Relative'))
 %        tol = tol/B;
 %     end
-    est_in = 8*F*inopt.xi^2/(3*(pi*inopt.box(1)*tol)^2);
+    est_in = 8*F*inopt.xi^2/(3*(pi*tol)^2);
     M = ceil(2*sqrt((inopt.xi*inopt.box(1))^2/(2*pi^2)*lambertw(est_in)));
     if ~isfield(inopt,'window'), inopt.window = 'gaussian'; outopt.window=inopt.window; end
     if(strcmp(inopt.window,'gaussian'))
@@ -36,8 +36,8 @@ function outopt =  param_select_stokes(tol,inopt)%,ErrorType
         else	
         %M = M + ceil(0.5*inopt.xi*inopt.box(1));%+max(ceil(-log10(tol)/2-3),0);
         end
-	outopt.P = -ceil(log(tol/10)/2.5)+8;
-	M = ceil(1.75*M);
+	outopt.P = -ceil(log(tol/10)/2.5);%+8;
+	%M = ceil(1.75*M);
     disp(M)  	
     outopt.beta = outopt.betaP*outopt.P;
     outopt.kaiser_scaling = 1/besseli(0,outopt.beta);
