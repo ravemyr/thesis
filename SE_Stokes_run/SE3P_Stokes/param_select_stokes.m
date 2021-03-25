@@ -28,7 +28,7 @@ function outopt =  param_select_stokes(tol,inopt)%,ErrorType
     end
     if strcmp(inopt.window,'kaiser_exact') ...
         || strcmp(inopt.window,'kaiser_poly')
-        outopt.betaP = 2.5;   
+        
         if(inopt.xi*inopt.box(1)>30)
             if(mod(ceil(M),2)==0) M = ceil(M); else M = ceil(M); end
             %M = M+ceil(0.75*inopt.xi*inopt.box(1));
@@ -39,17 +39,23 @@ function outopt =  param_select_stokes(tol,inopt)%,ErrorType
 	outopt.P = ceil(-log(tol/10)/2.5)+4;
 	M = ceil(1.25*M);
     disp(M)  	
-    outopt.beta = outopt.betaP*outopt.P;
-    outopt.kaiser_scaling = 1/besseli(0,outopt.beta);
+    %outopt.beta = outopt.betaP*outopt.P;
+    %outopt.kaiser_scaling = 1/besseli(0,outopt.beta);
     end
     if strcmp(inopt.window,'kaiser_poly')
-      outopt.polynomial_degree = min(outopt.P/2 +2,9);
+      outopt.polynomial_degree = min(ceil(outopt.P/2 +2),9);
+      if(mod(outopt.P,2)~=0&&outopt.P<16)
+	outopt.P = outopt.P +1;
+      else
+        outopt.P = 16;
+	disp('Kaiser poly supports upto P=16 in this version')
+	end	
     end
-    if mod(outopt.P,2)==0
-      outopt.p_half = outopt.P/2;
-    else
-      outopt.p_half = (outopt.P-1)/2;
-    end
+
+
+
+   
+    outopt.window = inopt.window;
     outopt.M = [M,M,M];
     outopt.box = inopt.box;
 end
@@ -60,7 +66,7 @@ function checkInopt(opt)
     assert(isfield(opt, 'xi'), 'Ewald parameter xi must be given in opt struct');
     if(~isfield(opt,'x'))
         if(~isfield(opt,'N')) opt.N = 10; end
-        [opt.x, opt.f] = SE_charged_system(opt.N,opt.box,'vector'); 
+        %[opt.x, opt.f] = SE_charged_system(opt.N,opt.box,'vector'); 
     end
     % Half-support of window
 end

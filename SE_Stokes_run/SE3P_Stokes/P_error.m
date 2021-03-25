@@ -66,6 +66,9 @@ for M = [112 MM]
     		opt.P = P;
     		u = SE3P_Stokes(1:N, x, f, opt);
     		rms_err = [rms_err rmse(u-ref)];
+		if(P==14)
+			disp(rmse(u-ref))
+		end
 
 
          end

@@ -1,12 +1,12 @@
 function [res, t_par, tSE, tDirReal] = test_function(N,xi,L,tol)
     opt.box = [L,L,L];    
-    opt.window = 'kaiser_exact';
+    opt.window = 'kaiser_poly';
     [x, f] = SE_charged_system(N,opt.box,'vector');
-    
+    F = sqrt(sum(norm(f.^2)));
     
     tolerance = tol;
-    opt.N = N;
-    opt.x =x;
+    %opt.N = N;
+    %opt.x =x;
     opt.f = f;
     opt.xi = xi;
     
@@ -18,11 +18,11 @@ function [res, t_par, tSE, tDirReal] = test_function(N,xi,L,tol)
     %varg{3} = 'Relative';
     opt = param_select_stokes(tolerance, opt);
     t_par = toc(t);
-    
+    disp(opt); 
     t = tic();
     u = SE3P_Stokes(1:N, x, f, opt);
     tSE = toc(t);
-    disp(opt)
+    
     %%
     % Direct computation for reference
     opt.M = 350*[1,1,1];
