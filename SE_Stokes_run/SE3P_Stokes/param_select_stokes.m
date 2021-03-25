@@ -36,8 +36,8 @@ function outopt =  param_select_stokes(tol,inopt)%,ErrorType
         else	
         %M = M + ceil(0.5*inopt.xi*inopt.box(1));%+max(ceil(-log10(tol)/2-3),0);
         end
-	outopt.P = ceil(-log(tol/10)/2.5)+4;
-	M = ceil(1.25*M);
+	outopt.P = ceil(-log(tol/10)/2.5);%+4;
+	%M = ceil(1.25*M);
     disp(M)  	
     %outopt.beta = outopt.betaP*outopt.P;
     %outopt.kaiser_scaling = 1/besseli(0,outopt.beta);

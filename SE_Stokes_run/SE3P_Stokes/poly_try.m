@@ -1,9 +1,10 @@
+N = 1000;
 opt.box = [1,1,1];    
 opt.window = 'kaiser_poly';
 [x, f] = SE_charged_system(N,opt.box,'vector');
 
 
-tolerance = 10-10;
+tolerance = 10^-10;
 opt.f = f;
 opt.xi = 20;
 
@@ -25,7 +26,7 @@ disp(opt)
 opt.M = 350*[1,1,1];
 opt.P = 32;
 t = tic();
-
+opt.window = 'kaiser_exact';
 ref = SE3P_Stokes(1:N,x,f,opt);
 tDirReal = toc(t);
 res = rmse(u-ref);
