@@ -1,13 +1,13 @@
 %SE Tests
 
 N_vals = [1000,10000];
-xi_vals = [25,30];
-L_vals = [3,4];
+xi_vals = [15,20];
+L_vals = [1,2];
 tol_vals = [10^-6 10^-8, 10^-10];
 r = [];
 tt = [];
 tols = [];
-fileid = fopen('testdata3.txt','a');
+fileid = fopen('testdata5.txt','a');
 
 for n = N_vals
     for x = xi_vals

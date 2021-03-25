@@ -8,7 +8,7 @@ N = 1000; % number of source particles
 
 
 %% Parameter selection
-L = 2; % box side length
+L = 1; % box side length
 box = [L L L]; % periodic box
 opt.box = box;
 
@@ -17,15 +17,14 @@ opt.box = box;
 
 M0 = 128; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*[1,1,1];
-opt.xi = 10;
+opt.xi = 20;
 opt.betaP = 2.5;
 opt.c = sqrt(0.91);
 %opt.window = 'kaiser_exact';
-opt.window = 'kaiser_exact';
+opt.window = 'kaiser_poly';
 opt.polynomial_degree = 9;
 % charge-neutral system
 [x, f] = SE_charged_system(N,box,'vector');
-
 % parameters for (reference) direct Ewald sum
 ED_opt.layers = (opt.M(1)-1)/2;
 ED_opt.xi = opt.xi;
@@ -66,7 +65,9 @@ for M = [112 MM]
 	for P = PP
     		opt.P = P;
     		u = SE3P_Stokes(1:N, x, f, opt);
-    		rms_err = [rms_err rmse(u-ref)];	
+    		rms_err = [rms_err rmse(u-ref)];
+
+
          end
     e = est(M,opt.xi,L,F);
     e_vec = [e_vec, e];
@@ -79,7 +80,7 @@ for M = [112 MM]
 	str = [str strcat('M = ',num2str(M))];
 end
 
-if(strcmp(opt.window,'kaiser_exact'))
+if(strcmp(opt.window,'kaiser_exact')||strcmp(opt.window,'kaiser_poly'))
 semilogy(PP,10*exp(-2.5.*PP),'--')
 str = [str ,'10exp(-2.5\beta)'];
 else
