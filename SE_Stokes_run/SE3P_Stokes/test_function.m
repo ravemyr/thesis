@@ -1,8 +1,8 @@
 function [res, t_par, tSE, tDirReal] = test_function(N,xi,L,tol)
     opt.box = [L,L,L];    
-    opt.window = 'kaiser_poly';
+    opt.window = 'kaiser_exact';
     [x, f] = SE_charged_system(N,opt.box,'vector');
-    F = norm(f.^2);
+    
     
     tolerance = tol;
     opt.N = N;
