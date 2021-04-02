@@ -114,7 +114,8 @@ end
 ylim([10^-8,1])
 xlim([0,73])
 legend(str{:},'Location','Best','FontSize',14)
-xlabel('k_{\infty}')
+xlabel('k_{\infty}','FontSize',14)
+%ylabel('\epsilon','FontSize',14)
 
 % disp('error rate as M increases')
 % disp(err)
