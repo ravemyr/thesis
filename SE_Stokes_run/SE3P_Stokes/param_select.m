@@ -8,7 +8,7 @@ N = 20; % number of source particles
 
 
 %% Parameter selection
-L = 4; % box side length
+L = 2; % box side length
 box = [L L L]; % periodic box
 opt.box = box;
 
@@ -111,7 +111,7 @@ for xi = xx
     %str = [str, strcat('2D-estimate, \xi =', num2str(xi))];
     str = [str, strcat('3P-estimate, \xi =', num2str(xi))];
 end
-ylim([10^-8,1])
+ylim([10^-14,1])
 xlim([0,73])
 legend(str{:},'Location','Best','FontSize',14)
 xlabel('k_{\infty}','FontSize',14)

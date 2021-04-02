@@ -97,8 +97,8 @@ for i = 1:length(e_vec)
 end
 str = [str,'estimate'];
 opt
-legend(str)
-xlabel('P')
+legend(str,'FontSize',14)
+xlabel('P','FontSize',14)
 xlim([1,32])
 ylim([10^-14,1])
 grid on
