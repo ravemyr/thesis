@@ -63,18 +63,18 @@ for M = [112 MM]
 	rms_err = [];
     
 	for P = PP
-    		if(~(P==M))
+   	
 			opt.P = P;
     			u = SE3P_Stokes(1:N, x, f, opt);
-    			rms_err = [rms_err rmse(u-ref)];
-		end
+   			rms_err = [rms_err rmse(u-ref)];
+
 	end
     e = est(M,opt.xi,L,F);
     e_vec = [e_vec, e];
     if(~(P==M))
     	semilogy(PP,rms_err)
     else
-	semilogy(PP(1:end-1),rms_err)
+	    semilogy(PP(1:end-2),rms_err(1:end-2))
     end
     ee = est_old(M,opt.xi,L,F);
     ee_vec = [ee_vec ee];
