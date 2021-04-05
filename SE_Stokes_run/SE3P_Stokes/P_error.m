@@ -97,7 +97,7 @@ for i = 1:length(e_vec)
 end
 str = [str,'estimate'];
 opt
-legend(str,'FontSize',14)
+legend(str,'FontSize',14,'Location','SouthWest')
 xlabel('P','FontSize',14)
 xlim([1,32])
 ylim([10^-14,1])
