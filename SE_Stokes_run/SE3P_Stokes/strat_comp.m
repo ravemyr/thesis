@@ -1,6 +1,6 @@
 % Time comparison for strategies
-N = 1000;
-xi = 15;
+N = 10000;
+xi = 20;
 L = 1;
 rng(1);
 
@@ -35,7 +35,7 @@ for i = 1:2
             opt.P = opt.P+2;
         end
         t = tic;
-        for it = 1:50
+        for it = 1:100
             u = SE3P_Stokes(1:N,x,f,opt);
         end
         tt = toc(t);
@@ -44,9 +44,9 @@ for i = 1:2
     end
 end
 disp(times)
-semilogy(times(1,:),errors(1,:))
+semilogy(times(1,:),errors(1,:),'.-')
 hold on
-semilogy(times(2,:),errors(2,:))
+semilogy(times(2,:),errors(2,:),'-.')
 legend('Strategy 3','Strategy 4','Location','Best')
 xlabel('time (s)')
 exportgraphics(gcf, 'strat_comparison.png')
