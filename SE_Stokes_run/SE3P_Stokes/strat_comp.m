@@ -5,35 +5,50 @@ L = 1;
 
 opt.window = 'kaiser_poly';
 opt.box = [L,L,L];
-tolerance = 10.^[-4.-6,-8,-10];
+tolerance = 10.^[-4,-6,-8,-10];
 timings = [];
 opt.N = N;
 opt.xi = xi;
 opt.L = L;
-[x, f] = SE_charged_system(N,opt.box,'vector');    
+[x, f] = SE_charged_system(N,opt.box,'vector');
+ropt.M = [1,1,1].* 100;
+ropt.P = 28;
+ropt.window = 'gaussian';
+ropt.box = opt.box; ropt.xi = xi;
+ref = SE3P_Stokes(1:N,x,f,ropt);
 opt.x =x;
-opt.f = f;
-times = zeroes(2,length(tolerance));
+
+times = zeros(2,length(tolerance));
+errors = zeros(2,length(tolerance));
 opt.betaP = 2.5;
-for i = 1:2 
+for i = 1:2
+       disp(i)	
     k=0;
     for tol = tolerance
-        k = k+1;
+        opt.f = f;
+	k = k+1;
         opt = param_select_stokes(tol, opt);
         if(i==1)
-            M = M*1.1;
-            P = P+4;
+            opt.M = opt.M.*1.1;
+            opt.P = opt.P+4;
         else
-            M = M*1.18;
-            P = P+2;
+            opt.M = opt.M.*1.18;
+            opt.P = opt.P+2;
         end
         t = tic;
         for it = 1:20
             u = SE3P_Stokes(1:N,x,f,opt);
         end
+	errors(1,k) = rmse(u-ref);
         tt = toc(t);
         times(i,k);
     end
 end
 disp(times)
-semilogy(
+semilogy(times(1,:),errors(1,:))
+hold on
+semilogy(times(2,:),errors(2,:))
+legend('Strategy 3','Strategy 4','Location','Best')
+xlabel('time (s)')
+ylabel('Error')
+exportgraphics(gcf, 'strat_comparison.png')
