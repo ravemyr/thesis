@@ -39,9 +39,9 @@ for i = 1:2
         for it = 1:20
             u = SE3P_Stokes(1:N,x,f,opt);
         end
-        tt = toc(t);
         errors(i,k) = rmse(u-ref)
-        times(i,k) = tt/it;
+        tt = toc(t);
+        times(i,k);
     end
 end
 disp(times)
