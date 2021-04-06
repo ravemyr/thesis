@@ -17,7 +17,7 @@ opt.box = box;
 
 M0 = 128; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*[1,1,1];
-opt.xi = 20;
+opt.xi = 15;
 opt.betaP = 2.5;
 opt.c = sqrt(0.91);
 %opt.window = 'kaiser_exact';
@@ -38,6 +38,8 @@ else
 	opt.P = 32;
 	opt.M = 300*[1,1,1];
 	ref = SE3P_Stokes(1:N,x,f,opt);
+
+	save('refmat.mat','ref');
 %	ref = SE3P_Stokes_direct_fd_mex(1:N,x,f,ED_opt);
 end
 	%opt.window = 'gaussian';

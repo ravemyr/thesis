@@ -6,21 +6,21 @@ L = 1;
 
 opt.box = [L,L,L];
 tolerance = 10.^[-4,-6,-8,-10];
-timings = [];
-opt.N = N;
+opt.betaP = 2.5;
 opt.xi = xi;
 opt.L = L;
 [x, f] = SE_charged_system(N,opt.box,'vector');
-ropt.M = [1,1,1].* 100;
-ropt.P = 28;
-ropt.window = 'kaiser_exact';
-ropt.box = opt.box; ropt.xi = xi;
-ref = SE3P_Stokes(1:N,x,f,ropt);
+%opt.M = [1,1,1]*200;
+%opt.P = 32;
+%opt.window = 'kaiser_exact';
+%ref = SE3P_Stokes(1:N,x,f,opt);
+load('refmat.mat')
+ref = refmat.ref;
 opt.x =x;
+opt.N = N;
 opt.window = 'kaiser_poly';
 times = zeros(2,length(tolerance));
 errors = zeros(2,length(tolerance));
-opt.betaP = 2.5;
 for i = 1:2
        disp(i)	
     k=0;
@@ -36,7 +36,7 @@ for i = 1:2
             opt.P = opt.P+2;
         end
         t = tic;
-        for it = 1:20
+        for it = 1:50
             u = SE3P_Stokes(1:N,x,f,opt);
         end
         tt = toc(t);
@@ -50,5 +50,4 @@ hold on
 semilogy(times(2,:),errors(2,:))
 legend('Strategy 3','Strategy 4','Location','Best')
 xlabel('time (s)')
-ylabel('Error')
 exportgraphics(gcf, 'strat_comparison.png')
