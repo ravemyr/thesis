@@ -13,7 +13,7 @@ opt.L = L;
 [x, f] = SE_charged_system(N,opt.box,'vector');
 ropt.M = [1,1,1].* 100;
 ropt.P = 28;
-ropt.window = 'gaussian';
+ropt.window = 'kaiser_exact';
 ropt.box = opt.box; ropt.xi = xi;
 ref = SE3P_Stokes(1:N,x,f,ropt);
 opt.x =x;
@@ -39,7 +39,7 @@ for i = 1:2
         for it = 1:20
             u = SE3P_Stokes(1:N,x,f,opt);
         end
-	errors(1,k) = rmse(u-ref);
+	errors(i,k) = rmse(u-ref)
         tt = toc(t);
         times(i,k);
     end
