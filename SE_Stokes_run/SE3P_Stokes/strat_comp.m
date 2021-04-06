@@ -5,7 +5,7 @@ L = 1;
 rng(1);
 
 opt.box = [L,L,L];
-tolerance = 10.^[-4,-6,-8,-9,-10];
+tolerance = 10.^[-4,-6,-8,-10];
 opt.betaP = 2.5;
 opt.xi = xi;
 opt.L = L;
@@ -38,7 +38,7 @@ for i = 1:2
 		opt.P = 16;
 	end
         t = tic;
-        for it = 1:100
+        for it = 1:200
             u = SE3P_Stokes(1:N,x,f,opt);
         end
         tt = toc(t);
