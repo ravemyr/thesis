@@ -2,7 +2,7 @@
 N = 1000;
 xi = 15;
 L = 1;
-
+rng(1);
 
 opt.box = [L,L,L];
 tolerance = 10.^[-4,-6,-8,-10];
@@ -15,7 +15,6 @@ opt.L = L;
 %opt.window = 'kaiser_exact';
 %ref = SE3P_Stokes(1:N,x,f,opt);
 load('refmat.mat')
-ref = refmat.ref;
 opt.x =x;
 opt.N = N;
 opt.window = 'kaiser_poly';
@@ -29,10 +28,10 @@ for i = 1:2
 	k = k+1;
         opt = param_select_stokes(tol, opt);
         if(i==1)
-            opt.M = opt.M.*1.1;
+            opt.M = ceil(opt.M.*1.1);
             opt.P = opt.P+4;
         else
-            opt.M = opt.M.*1.18;
+            opt.M = ceil(opt.M.*1.18);
             opt.P = opt.P+2;
         end
         t = tic;
