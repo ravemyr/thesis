@@ -71,7 +71,7 @@ for i = 1:2
         k = k+1;
         opt.P = P;
         t = tic;
-        for it = 1:20
+        for it = 1:40
             u = SE3P_Stokes(1:N, x, f, opt);
         end
         tt = toc(t);
@@ -81,7 +81,7 @@ for i = 1:2
     semilogy(time,rms_err)
 end
 
-legend(str,'Location','Best')
+legend('Gaussian','Kaiser_poly','Location','Best')
 ylim([10^-14,1])
 exportgraphics(gcf,'winf_comp.png')
 
