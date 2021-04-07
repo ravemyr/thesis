@@ -56,7 +56,7 @@ A = @(a,b,c) sqrt(a)*b*(b*c)^0;
 disp(num2str(A(F,opt.xi,opt.box(1))/rms_ref))
 
 opt.M = 112*[1,1,1];
-PP = [2:2:10,10:2:16];
+PP = [2:2:16];
 rms_err = [];
 time = zeros(2,length(PP));
 for i = 1:2
@@ -81,7 +81,7 @@ for i = 1:2
     semilogy(time,rms_err)
 end
 
-legend('Gaussian','Kaiser_poly','Location','Best')
+legend('Gaussian','Kaiser\_poly','Location','Best')
 ylim([10^-14,1])
 exportgraphics(gcf,'winf_comp.png')
 
