@@ -56,11 +56,12 @@ A = @(a,b,c) sqrt(a)*b*(b*c)^0;
 disp(num2str(A(F,opt.xi,opt.box(1))/rms_ref))
 
 opt.M = 112*[1,1,1];
-PP = [2:1:10,10:2:16];
+PP = [2:2:10,10:2:16];
 rms_err = [];
-time = zeros(2,length(PP);
+time = zeros(2,length(PP));
 for i = 1:2
     k=0;
+    rms_err = [];
     if(i==1)
         opt.window = 'gaussian';
     else
@@ -70,12 +71,12 @@ for i = 1:2
         k = k+1;
         opt.P = P;
         t = tic;
-        for it = 1:100
+        for it = 1:20
             u = SE3P_Stokes(1:N, x, f, opt);
         end
-        tt = toc;
+        tt = toc(t);
         rms_err = [rms_err rmse(u-ref)];
-        time = [i,k]
+        time(i,k) = tt/it;
     end
     semilogy(time,rms_err)
 end
