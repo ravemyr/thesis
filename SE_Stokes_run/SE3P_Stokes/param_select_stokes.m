@@ -26,8 +26,8 @@ function outopt =  param_select_stokes(tol,inopt)%,ErrorType
 %         M = M + ceil(0.5*inopt.xi*inopt.box(1));%+max(ceil(-log10(tol)/2-3),0);
 %         end end
     if (strcmp(inopt.window,'kaiser_exact') || strcmp(inopt.window,'kaiser_poly'))
-	outopt.P = ceil(-log(tol/10)/2.5);
-	%M = ceil(1.35*M);
+	outopt.P = ceil(-log(tol/10)/2.5)+4;
+	M = ceil(1.1*M);
     disp(M)  	
     end
     if strcmp(inopt.window,'kaiser_poly')
