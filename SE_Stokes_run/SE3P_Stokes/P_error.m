@@ -4,7 +4,7 @@
 %%setup
 clear
 rng(1);
-N = 100000; % number of source particles
+N = 10000; % number of source particles
 
 
 %% Parameter selection
@@ -17,7 +17,7 @@ opt.box = box;
 
 M0 = 128; % Set M0=M/L, the restu * 1+ is automatic
 opt.M = M0*[1,1,1];
-opt.xi = 30;
+opt.xi = 40;
 opt.betaP = 2.5;
 opt.c = sqrt(0.91);
 %opt.window = 'kaiser_exact';
