@@ -38,7 +38,7 @@ for i = 1:2
 		opt.P = 16;
 	end
         t = tic;
-        for it = 1:100
+        for it = 1:110
             u = SE3P_Stokes(1:N,x,f,opt);
         end
         tt = toc(t);
