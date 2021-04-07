@@ -1,6 +1,6 @@
 % Time comparison for strategies
 N = 10000;
-xi = 20;
+xi = 30;
 L = 1;
 rng(1);
 
@@ -38,7 +38,7 @@ for i = 1:2
 		opt.P = 16;
 	end
         t = tic;
-        for it = 1:200
+        for it = 1:100
             u = SE3P_Stokes(1:N,x,f,opt);
         end
         tt = toc(t);
