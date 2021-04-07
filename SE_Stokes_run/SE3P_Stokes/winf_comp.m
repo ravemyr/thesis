@@ -36,7 +36,7 @@ if(exist('refval.mat'))
 	ref = refval.refv(:,1:3);
 else
 	opt.P = 32;
-	opt.M = 300*[1,1,1];
+	opt.M = 200*[1,1,1];
 	ref = SE3P_Stokes(1:N,x,f,opt);
 
 	save('refmat.mat','ref');
@@ -71,7 +71,7 @@ for i = 1:2
         k = k+1;
         opt.P = P;
         t = tic;
-        for it = 1:40
+        for it = 1:60
             u = SE3P_Stokes(1:N, x, f, opt);
         end
         tt = toc(t);
