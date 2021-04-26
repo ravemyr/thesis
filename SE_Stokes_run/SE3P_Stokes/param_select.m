@@ -105,16 +105,16 @@ for xi = xx
     end
     semilogy(MM./2,err,'.-')
     hold on
-    %semilogy(MM./2,ee,'--o')
+    semilogy(MM./2,ee,'--o')
     semilogy(MM./2,eee,'--*')
     str = [str,strcat('computed error, \xi =', num2str(xi))];
-    %str = [str, strcat('2D-estimate, \xi =', num2str(xi))];
+    str = [str, strcat('2D-estimate, \xi =', num2str(xi))];
     str = [str, strcat('3P-estimate, \xi =', num2str(xi))];
     
 end
 ylim([10^-14,1])
 xlim([0,73])
-legend(str{:},'Location','NorthEast','FontSize',13)
+legend(str{:},'Location','Best','FontSize',13)
 ylabel('Absolute Error','FontSize',14)
 xlabel('k_{\infty}','FontSize',14)
 %ylabel('\epsilon','FontSize',14)
