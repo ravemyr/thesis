@@ -51,5 +51,6 @@ semilogy(times(1,:),errors(1,:),'.-')
 hold on
 semilogy(times(2,:),errors(2,:),'.-')
 legend('Strategy 3','Strategy 4','Location','Best')
-xlabel('time (s)')
+xlabel('Time (s)')
+ylabel('Absolute error')
 exportgraphics(gcf, 'strat_comparison.png')
