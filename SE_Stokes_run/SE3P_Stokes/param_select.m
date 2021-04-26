@@ -115,7 +115,7 @@ end
 ylim([10^-14,1])
 xlim([0,73])
 legend(str{:},'Location','NorthEast','FontSize',13)
-ylabel('Absolute Error','FontSize','14')
+ylabel('Absolute Error','FontSize',14)
 xlabel('k_{\infty}','FontSize',14)
 %ylabel('\epsilon','FontSize',14)
 
