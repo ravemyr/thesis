@@ -110,11 +110,12 @@ for xi = xx
     str = [str,strcat('computed error, \xi =', num2str(xi))];
     %str = [str, strcat('2D-estimate, \xi =', num2str(xi))];
     str = [str, strcat('3P-estimate, \xi =', num2str(xi))];
+    
 end
 ylim([10^-14,1])
 xlim([0,73])
-legend(str{:},'Location','Best','FontSize',14)
-ylabel('Absolute Error')
+legend(str{:},'Location','NorthEast','FontSize',13)
+ylabel('Absolute Error','FontSize','14')
 xlabel('k_{\infty}','FontSize',14)
 %ylabel('\epsilon','FontSize',14)
 
@@ -125,7 +126,7 @@ xlabel('k_{\infty}','FontSize',14)
 % 
 % legend('relative error','error estimate','Location','North East')
 exportgraphics(gcf,'error_kplot.png')
-hgexport(fig,'kplot')
+print('kplot',fig)
 %semilogy(MM./2,ee)
 %exportgraphics(gcf,'error_est.png','Resolution',1500)
 
