@@ -1,6 +1,6 @@
 % Time comparison for strategies
 N = 10000;
-xi = 40;
+xi = 20;
 L = 1;
 rng(1);
 
