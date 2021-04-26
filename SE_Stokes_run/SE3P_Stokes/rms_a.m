@@ -47,5 +47,6 @@ for N = [10,50,100]
 	exportgraphics(gcf,'rms_a.png')
     end
 end
-
+ylabel('rms(u)/A')
+xlabel('Test Cases')
 exportgraphics(gcf,'rms_a.png')

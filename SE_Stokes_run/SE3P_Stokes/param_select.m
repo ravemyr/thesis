@@ -8,7 +8,7 @@ N = 20; % number of source particles
 
 
 %% Parameter selection
-L = 2; % box side length
+L = 1; % box side length
 box = [L L L]; % periodic box
 opt.box = box;
 
@@ -114,6 +114,7 @@ end
 ylim([10^-14,1])
 xlim([0,73])
 legend(str{:},'Location','Best','FontSize',14)
+ylabel('Absolute Error')
 xlabel('k_{\infty}','FontSize',14)
 %ylabel('\epsilon','FontSize',14)
 
@@ -124,6 +125,7 @@ xlabel('k_{\infty}','FontSize',14)
 % 
 % legend('relative error','error estimate','Location','North East')
 exportgraphics(gcf,'error_kplot.png')
+hgexport(fig,'kplot')
 %semilogy(MM./2,ee)
 %exportgraphics(gcf,'error_est.png','Resolution',1500)
 
