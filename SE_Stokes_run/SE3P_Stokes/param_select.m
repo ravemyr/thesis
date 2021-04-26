@@ -8,7 +8,7 @@ N = 20; % number of source particles
 
 
 %% Parameter selection
-L = 2; % box side length
+L = 4; % box side length
 box = [L L L]; % periodic box
 opt.box = box;
 
@@ -92,7 +92,7 @@ for xi = xx
     for i = MM
         M0 = i;
         opt.M = M0*[1,1,1];
-        opt.P = M0/2;
+        opt.P = 32;
         ED_opt.layers = (opt.M(1)-1)/2;
         ED_opt.xi = xi;
         %u = SE3P_Stokes(1:N, x, f, opt);
@@ -113,7 +113,7 @@ for xi = xx
     
     
 end
-ylim([10^-14,1])
+ylim([10^-10,1])
 xlim([0,73])
 legend(str{:},'Location','Best','FontSize',12)
 ylabel('Absolute Error','FontSize',14)
