@@ -83,6 +83,8 @@ end
 
 legend('Gaussian','Kaiser\_poly','Location','Best')
 ylim([10^-14,1])
+ylabel('Absolute error')
+xlabel('Time (s)')
 exportgraphics(gcf,'winf_comp.png')
 
 

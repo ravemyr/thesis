@@ -31,8 +31,8 @@ ED_opt.xi = opt.xi;
 ED_opt.box = box;
 
 %% Direct solution
-if(exist('refval.mat'))
-	refval = load('refval.mat');
+if(exist('refmat.mat'))
+	refval = load('refmat.mat');
 	ref = refval.refv(:,1:3);
 else
 	opt.P = 32;
@@ -96,7 +96,7 @@ end
 for i = 1:length(e_vec)
     semilogy(PP,ones(1,length(PP))*e_vec(i),('bl--'))
 %    semilogy(PP,ones(1,length(PP))*ee_vec(i),'r--')
-    semilogy(PP,ones(1,length(PP))*eee_vec(i),'g--')
+%    semilogy(PP,ones(1,length(PP))*eee_vec(i),'g--')
 end
 str = [str,'estimate'];
 opt
