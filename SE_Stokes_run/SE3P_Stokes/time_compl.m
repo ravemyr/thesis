@@ -35,7 +35,8 @@ loglog(NN,timings,'-*')
 hold on
 loglog(NN,10^-3*NN.*log(NN),'--')
 legend('SE-time','N log(N)','Location','Best')
-
+xlabel('N')
+ylabel('Time (s)')
 exportgraphics(gcf,'complexity.png')
 disp(timings)
 
@@ -75,4 +76,3 @@ legend('SE','M^3log(M^3)','Location','Best')
 exportgraphics(gcf,'MP_complexity.png')
 disp(timings)
 P = polyfit(MM.^3.*log(MM.^3),times,1)
-
