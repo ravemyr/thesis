@@ -116,8 +116,8 @@ end
 ylim([10^-10,1])
 xlim([0,73])
 legend(str{:},'Location','Best','FontSize',12)
-ylabel('Absolute Error','FontSize',14)
-xlabel('k_{\infty}','FontSize',14)
+ylabel('Absolute Error','FontSize',16)
+xlabel('k_{\infty}','FontSize',16)
 %ylabel('\epsilon','FontSize',14)
 
 % disp('error rate as M increases')
@@ -127,7 +127,7 @@ xlabel('k_{\infty}','FontSize',14)
 % 
 % legend('relative error','error estimate','Location','North East')
 exportgraphics(gcf,'error_kplot.png')
-print('kplot',fig)
+
 %semilogy(MM./2,ee)
 %exportgraphics(gcf,'error_est.png','Resolution',1500)
 
