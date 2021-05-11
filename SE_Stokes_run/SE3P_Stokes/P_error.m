@@ -101,8 +101,8 @@ end
 str = [str,'estimate'];
 opt
 legend(str,'FontSize',14,'Location','SouthWest')
-xlabel('P','FontSize',16)
-ylabel('Absolute error', 'FontSize',16)
+xlabel('P','FontSize',18)
+ylabel('Absolute error', 'FontSize',18)
 xlim([1,32])
 ylim([10^-14,1])
 grid on
